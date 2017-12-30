@@ -58,4 +58,12 @@
             在“用于存档的文件”中填写需要存档的文件名，可以使用通配符。比如上面我配置了app/build/outputs/apk/*.apk，构建完之后在任务首页可以下载存档的文件
          2、配置Editable Email Notification 发送邮件    
             在“Triggers”中，设置邮件发送时机及收件人地址         
-            
+
+配置Jenkins文档：
+
+	http://blog.csdn.net/mabeijianxi/article/details/52680283
+	https://www.jianshu.com/p/38b2e17ced73/ 
+
+配置邮件步骤：
+
+	http://blog.csdn.net/leonranri/article/details/49306663           
