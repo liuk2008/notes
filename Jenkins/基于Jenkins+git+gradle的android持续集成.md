@@ -50,7 +50,7 @@
        3、构建触发器：Poll SCM：定时检查源码变更（根据SCM软件的版本号），如果有更新就checkout最新code下来，然后执行构建动作。
        4、构建：选择Invoke Gradle Script构建，配置gradle命令。选择Invoke Gradle script之后可以选Invoke Gradle和Use Gradle Wrapper。
           1、选择Invoke Gradle就是调用本地安装配置好的Gradle，此时需要指定Gradle路径。使用Invoke Gradle构建，命令配置在task下
-          2、为了方便所有开发者同意Gradle版本，一般都使用Gradle Wrapper。使用Gradle Wrapper构建，命令配置在Switches下
+          2、为了方便所有开发者统一Gradle版本，一般都使用Gradle Wrapper。使用Gradle Wrapper构建，命令配置在Switches下
 		     1、clean build  --stacktrace --debug
              2、clean assemble${PRODUCT_FLAVORS}${BUILD_TYPE}
        5、构建后操作
