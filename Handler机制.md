@@ -7,6 +7,8 @@
 	3.Message msg2 = handler.obtainMessage();  handler.obtainMessage最终也是调用了Message的obtain方法
     
   Handler实例化过程
+		
+    Android 应用启动的时候会创建 UI 主线程的 Looper 对象，它存在于整个应用的生命周期，用于处理消息队列里的 Message。
 
     1.在线程的run()方法里调用Looper.prepare()，实例化一个Handler对象，调用Looper.loop()使线程进入消息循环。
       Handler对象的实例话必须在Looper.prepare()之后。
