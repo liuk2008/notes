@@ -56,3 +56,4 @@
 
     2、数组转化为List或Set时需要借助Arrays的asList方法，它将数组转化成一个List，可以用这个List构造Set。
        Set set = new HashSet(Arrays.asList(array));
+
