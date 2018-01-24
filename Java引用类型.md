@@ -23,3 +23,4 @@
     与软引用和弱引用不同的是，虚引用必须关联一个引用队列。
 
 https://www.cnblogs.com/dolphin0520/p/3784171.html
+
