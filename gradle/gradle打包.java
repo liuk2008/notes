@@ -205,5 +205,3 @@ dependencies {
  3、构建productFlavor下的所有渠道的版本：gradlew assembleDebug允许构建指定buildType的所有APK，
     Flavor1Debug和Flavor2Debug两个Variant版本。
 
-
- realm，rxjava，retrofit2，materialdrawer kotlin
