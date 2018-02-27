@@ -96,3 +96,9 @@
 	HandlerThread拥有自己的消息队列，它不会干扰或阻塞UI线程。对于网络IO操作，HandlerThread并不适合，因为它只有一个线程，还得排队一个一个等着。
 		
 	博客链接：http://www.jianshu.com/p/b7fec0545368
+
+
+* 检测当前线程是否为主线程
+
+	1、Looper.myLooper() == Looper.getMainLooper();
+	2、Looper.getMainLooper().getThread() == Thread.currentThread()
