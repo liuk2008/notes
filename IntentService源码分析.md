@@ -91,3 +91,4 @@ onReceiveResult回调。若是handler不为空，就用handler来post。
 	        onReceiveResult(mResultCode, mResultData);
 	    }
 	}
+
