@@ -1,6 +1,6 @@
-# IntentService源码分析
+## IntentService源码分析 ##
 
-  IntentService，可以看做是Service和HandlerThread的结合体，在完成了使命之后会自动停止，适合需要在工作线程处理UI无关任务的场景。IntentService使用队列的方式将请求加入队列，然后开启worker thread(线程)来处理队列中的请求。
+**IntentService可以看做是Service和HandlerThread的结合体，在完成了使命之后会自动停止，适合需要在工作线程处理UI无关任务的场景。IntentService使用队列的方式将请求加入队列，然后开启worker thread(线程)来处理队列中的请求。**
 
   1、IntentService在OnCreate方法会创建HandlerThread线程并开启子线程，获取子线程中的looper，同时创建子线程的handler对象。
 
@@ -42,10 +42,9 @@
     }
 
 
-# Android中ResultReceiver使用
+## Android中ResultReceiver使用
 
-  使用ResultReceiver在Activity与Service之间进行通信，流程如下：
-  Activity在启动service时传递ResultReceiver实例给service，然后service执行结束后，调用resulrReceiver.send(); 然后在onReceiveResult里面处理回调逻辑。
+**使用ResultReceiver在Activity与Service之间进行通信，流程如下：Activity在启动service时传递ResultReceiver实例给service，然后service执行结束后，调用resulrReceiver.send(); 然后在onReceiveResult里面处理回调逻辑。**
 
   1、通过构造函数创建ResultReceiver对象，只需要传入一个Handler并且这个Handler是可以为null的。这个Handler的作用只有一个，就是控制回调函数执行在创建Handler的
 线程。如果在Activity主线程创建的handler实例，则回调也会在主线程执行。就可以直接在回调中操作UI。 
