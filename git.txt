@@ -1,0 +1,10 @@
+
+
+1、从服务器remote/master分支上创建本地master分支
+2、依据本地master分支创建本地A分支
+3、切换到本地A分支，添加test文件
+4、将本地A分支push到服务器，创建remote/testA分支-----此时远程testA分支存在test文件
+5、从服务器remote/testA分支上创建本地testA分支
+6、切换到本地testA分支，删除test文件
+7、将本地testA分支push到服务器，此时remote/testA分支、本地testA分支不存在test文件
+8、切换到本地A分支，发现test文件存在，从remote/testA分支pull代码后，test文件不存在
