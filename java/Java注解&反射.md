@@ -1,10 +1,10 @@
-## 自定义注解 ##
+## 注解&反射 ##
 
 **自定义注解（掌握）**
 	
 	1.自定义的注解的语法，属性要怎么声明？会看其他的注解使用。
 	2.定义类使用class关键字，定义接口使用interface，定义自定义的注解，使用关键字 @interface，注解的名称。
-		* 例子：public @interface Anno1{}	，声明的注解没有任何含义。
+		* 例子：public @interface Anno1{}	声明的注解没有任何含义。
 		* 在某个方法或者类上使用，@Anno1	使用Anno1注解，没有任何含义。
 	
 	3.声明注解的属性
@@ -22,13 +22,14 @@
 			* 如果指定了默认值，属性就不用赋值了。
 
 		* 如果注解中有属性的名称是value，那么在使用注解的时候，@Anno3(value=值)，那么value=就可以省略不写了
-		* 
+		* 但是如果同时存在value与其他属性，value= 必须存在
+		
 	3.声明注解的运行周期及使用范围，JDK提供的元注解
 		* 注解默认存在的阶段，在编译后的阶段。但是咱们可以设置存放哪个阶段？
 			* 使用JDK提供的元注解，Retention可以设置内容。
-				* @Retention(value=RetentionPolicy.RUNTIME)  -- 运行阶段
-				* @Retention(value=RetentionPolicy.CLASS)    -- class文件阶段
-				* @Retention(value=RetentionPolicy.SOURCE)   -- 源码阶段
+				* @Retention(RetentionPolicy.SOURCE) 1、自定义注解类只会在源码中出现，当源码编译成字节码时注解信息会被清除
+ 				* @Retention(RetentionPolicy.CLASS) 2、自定义注解类被编译在字节码中，当虚拟机加载该字节码时注解信息会被清除
+ 				* @Retention(RetentionPolicy.RUNTIME) 3、自定义注解类会被加载到虚拟机中
 				
 		* 使用JDK提供的元注解，Target可以设置制当前自定义注解类作用的范围
 				* @Target		-- 规定注解编写在方法、变量、类上？
@@ -42,4 +43,19 @@
 		* 属性也可以定义默认值
 			* 类型 属性名称 () default 值;
 		* 如果属性是名称是value，那么value就可以省略不写了	
+
+**反射**
+
+	1、反射的本质：获取类的class文件对象后，反向获取对象中的属性信息
+	2、反射的核心：JVM在运行时才动态加载类或调用方法/访问属性，它不需要事先（写代码的时候或编译期）知道运行对象是谁。
+	3、反射的作用：
+		* 通过反射创建对象：1、通过Class对象的newInstance创建对应类的实例  2、通过Class对象获取指定的Constructor对像创建
+		* 通过反射运行配置文件的内容
+		* 通过反射越过泛型检查,泛型在编译时有效，在运行时会跳过检查
+		* 动态代理，通过反射生成一个代理对象
+	4、Java对象运行
+		* 1、通过new关键字创建一个对象后，编译生成class文件
+		* 2、类加载器将class文件加载到JVM内存中，生成Class对象
+		* 3、Class对象是在加载类时由Java虚拟机以及通过调用类加载器中的defineClass方法自动构造的。一个类只产生一个Class对象
+		* 4、jvm创建对象前，会先检查类是否加载，寻找类对应的class对象，若加载好，则为你的对象分配内存，初始化也就是代码:new Object()。
 
