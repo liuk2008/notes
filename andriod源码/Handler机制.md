@@ -1,13 +1,65 @@
-* Android之Handler机制
+## Android之Handler机制 ##
 
-  1、Handler机制   
+**UI线程中Handler、Looper、MessageQueue三者之间的关系**
 
-    Android系统中的Looper负责管理线程的消息队列和消息循环。通过Looper.myLooper()得到当前线程的Looper对象，
-    通过Looper.getMainLooper()得到当前进程的主线程的Looper对象。
+* 1、Android应用启动的时候会创建 UI主线程 的 Looper 对象，它存在于整个应用的生命周期，用于处理消息队列里的 Message。
 
-    前面提到，Android的消息队列和消息循环都是针对具体线程的，一个线程可以存在一个消息队列和消息循环，特定线程的消息只能分发给本线程，
-    不能跨线程和跨进程通讯。但是创建的工作线程默认是没有消息队列和消息循环的，如果想让工作线程具有消息队列和消息循环，就需要在线程中
-    先调用Looper.prepare()来创建消息队列，然后调用Looper.loop()进入消息循环
+* 2、Android的消息队列和消息循环都是针对具体线程的，一个线程可以存在一个消息队列和消息循环，特定线程的消息只能分发给本线程，
+不能跨线程和跨进程通讯。但是创建的工作线程默认是没有消息队列和消息循环的，如果想让工作线程具有消息队列和消息循环，就需要在线程中
+先调用Looper.prepare()来创建消息队列，然后调用Looper.loop()进入消息循环
+	
+**Loop类**
+
+* 1、通过Looper.prepare()来创建消息队列
+	* 1、通过hreadLocal判断当前线程是否已经绑定Looper对象，已存在抛出异常
+	* 2、当前线程不存在Looper对象时，创建Looper对象，通过ThreadLocal将当前线程与Looper对象进行绑定
+		
+		    public static void prepare() {
+		        prepare(true);
+		    }
+	
+			// 先判断当前线程是否已经绑定Looper对象
+		    private static void prepare(boolean quitAllowed) {
+		        if (sThreadLocal.get() != null) {
+		            throw new RuntimeException("Only one Looper may be created per thread");
+		        }
+		        sThreadLocal.set(new Looper(quitAllowed));
+		    }
+	
+	* 3、在创建Looper对象时，底层实际创建MessageQueue对象，获取当前线程对象
+			
+		    private Looper(boolean quitAllowed) {
+		        mQueue = new MessageQueue(quitAllowed);
+		        mThread = Thread.currentThread();
+		    }
+
+* 2、通过Looper.loop()进入消息循环
+	* 1、先获取当前线程的Looper对象，如果为空，抛出异常，提示未调用Looper.prepare()，同时获取Looper对象中的MessageQueue对象
+	
+		    final Looper me = myLooper();
+	        if (me == null) {
+	            throw new RuntimeException("No Looper; Looper.prepare() wasn't called on this thread.");
+	        }
+			final MessageQueue queue = me.mQueue;
+
+	* 2、开启死循环，遍历消息队列。通过MessageQueue对象取出Message对象，如果为空，继续等待
+
+		  	for (;;) {
+	            Message msg = queue.next(); // might block
+	            if (msg == null) {
+	                // No message indicates that the message queue is quitting.
+	                return;
+	            }
+	
+	            msg.target.dispatchMessage(msg);
+	
+	            msg.recycleUnchecked();
+	        }
+
+
+
+
+
 
   2、创建Message对象的时候，有三种方式，分别为：
 
@@ -17,7 +69,6 @@
     
   4、Handler实例化过程
 		
-    Android 应用启动的时候会创建 UI 主线程的 Looper 对象，它存在于整个应用的生命周期，用于处理消息队列里的 Message。
 
     1.在线程的run()方法里调用Looper.prepare()，实例化一个Handler对象，调用Looper.loop()使线程进入消息循环。
       Handler对象的实例话必须在Looper.prepare()之后。
@@ -95,7 +146,6 @@
 	但是由于每一个任务都将以队列的方式逐个被执行到，一旦队列中有某个任务执行时间过长，那么会导致后续的任务都会被延迟处理。
 	HandlerThread拥有自己的消息队列，它不会干扰或阻塞UI线程。对于网络IO操作，HandlerThread并不适合，因为它只有一个线程，还得排队一个一个等着。
 		
-	博客链接：http://www.jianshu.com/p/b7fec0545368
 
 
 * 检测当前线程是否为主线程

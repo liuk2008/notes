@@ -1,0 +1,134 @@
+studio插件 
+  gsonformat
+  adbidea
+  butterknife 需要导包
+	   1.Project的build.gradle文件中增加classpath
+	     classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+	   2.在Module的build.gradle文件中增加plugin
+	     apply plugin: 'com.neenbedankt.android-apt'
+	   3.在Dependencies中增加下面两句
+	     compile 'com.jakewharton:butterknife:8.0.1'
+	     apt 'com.jakewharton:butterknife-compiler:8.0.1
+	     compile 'io.reactivex:rxjava:1.1.5'
+开源控件
+  NoHttp
+  OkHttp  需要okio  文档，源码分析，demo
+  Retrofit 
+  RxJava  文档，源码分析，demo
+	  RxBus RxBinding
+  Glide   加载图片
+  realm
+  REST
+
+设计模式
+   外观模式
+   
+   策略模式  高内聚低耦合，可扩展行，OCP原则 
+
+		1、定义一个策略接口 interface Strategy
+
+		2、策略的具体实现类 class StrategyImp Implements Strategy
+
+		3、策略的应用场景，其实就是将策略接口传递进去使用，包装策略
+
+		4、具体使用策略的类，其实就是调用策略的应用场景
+
+   代理模式 Proxy Pattern
+
+		抽象角色：通过接口或抽象类声明真实角色实现的业务方法
+		真实角色：实现抽象角色，定义真实角色所要实现的业务逻辑，供代理角色调用。
+		代理角色：实现抽象角色，是真实角色的代理，通过真实角色的业务逻辑方法来实现抽象方法，并可以附件自己的操作。
+
+		代理模式主要使用了Java的多态，干活的是被代理类，代理类主要是接活，使用同一个接口
+
+   工厂模式
+   观察者模式
+   单例模式
+   Builder模式
+
+material design
+
+      1、FloatingActionButton
+         Snackbar
+
+      2、TextInputLayout
+
+      3、* CoordinatorLayout 与 AppBarLayout、Toolbar、TabLayout 结合
+         * 视图滚动时，Toolbar会隐藏
+
+         使 Toolbar 具有滑动效果 
+         1、CoordinatorLayout作为布局的父布局容器
+         2、给需要滑动的组件设置 app:layout_scrollFlags="scroll|enterAlways" 属性，
+	    比如 Toolbar     app:layout_scrollFlags="scroll|enterAlways"
+         3、给滑动的组件设置 app:layout_behavior 属性，
+	    比如 ViewPager   app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+         设置  app:layout_scrollFlags="scroll|enterAlways" 
+         scroll：设置View可以滚动
+         enterAlways:向下的滚动会导致该view变为可见
+         enterAlwaysCollapsed：
+         exitUntilCollapsed：
+      
+      4、DrawerLayout 与 NavigationView 结合使用，侧边栏滑动
+	
+	 可以设置侧滑栏的头部和菜单选项，位置
+	 *   app:headerLayout="@layout/head_view"
+	 *   app:menu="@menu/menu"
+	 *   android:layout_gravity="start"
+	
+      5、CoordinatorLayout 与 CollapsingToolbarLayout 结合实现Toolbar折叠效果
+      
+          CollapsingToolbarLayout实现折叠效果
+          1、AppBarLayout高度固定
+          2、CollapsingToolbarLayout子视图设置 layout_collapseMode 属性 
+	     比如 Toolbar，ImageView
+          3、关联悬浮视图时设置 app:layout_anchor app:layout_anchorGravity 属性
+	     比如 FloatActionButton，将FloatingActionButton和AppbarLayout关联
+	          app:layout_anchor="@id/appbar"
+                  app:layout_anchorGravity="bottom|right|end"
+          4、给滑动的组件设置 app:layout_behavior 属性，
+	    比如 NestedScrollView  app:layout_behavior="@string/appbar_scrolling_view_behavior"
+           
+
+          app:layout_collapseParallaxMultiplier  CollapsingToolbarLayout滑动时,子视图的视觉差
+                app:layout_collapseParallaxMultiplier="0.8" 数值越大,视察越大 比如 ImageView
+          app:layout_collapseMode 子视图的折叠模式
+                parallax：视差模式,在折叠的时候有个视察折叠效果，比如 ImageView
+                pin：固定模式,在折叠的时候最后固定在顶端，比如 Toolbar
+          
+	  可以设置 CollapsingToolbarLayout 相关属性
+	  app:contentScrim:Toolbar被折叠到顶部固定后的背景
+          app:expandedTitleMarginStart 显示折叠前字体间距
+          app:expandedTitleMarginEnd 显示折叠后字体间距
+
+	android.support.v7.widget.RecyclerView
+	android.support.v7.widget.Toolbar
+	android.support.v7.widget.CardView             
+	android.support.v4.widget.SwipeRefreshLayout 
+	android.support.v4.widget.DrawerLayout
+	android.support.v4.widget.NestedScrollView
+
+
+ * MVC模型-->Model，Controller，View。View层通过Model层获取响应的数据。Controller层控制View和Model
+   MVC，MVP，MVVM中的Model层，通常作用是获取数据源
+   
+   Layout-----View---------ListView
+   Activity---Controller---Adapter
+   数据源-----Model--------数据源
+
+ * 存在问题：Activity存在业务相关和界面相关。
+ * 解决办法：业务拆分---MVP模型（Model，View，Present）
+ *           界面拆分---MVVM模型（Model，View，ViewModel）
+ * MVP：通过Present层关联View层和Model层
+	MVP模型-->View层，Activity只处理和界面相关的问题。
+	MVP模型-->Presenter层，连接Model层和View层，将业务进行分离，Activity只处理界面相关，使View层不再直接通过Model层获取数据
+ * MVVM：Model：业务逻辑 View：视图 VM：ViewModel 将前者联系起来的对象
+         通过Binding工具将View和对象的field绑定，当对象的field更新时，framework收到通知，view自动更新 
+ * Data Binding 一种工具，将View和对象的field绑定，当对象的field更新时，framework收到通知，view自动更新
+
+
+
+MVP模型 
+   View：Activity，Fragment，ViewGroup
+   Presenter：Presenter关联View和Model
+   Model：获取数据，通过RxJava观察使用Retrofit获取的数据
