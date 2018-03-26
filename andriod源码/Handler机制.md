@@ -8,211 +8,175 @@
 不能跨线程和跨进程通讯。但是创建的工作线程默认是没有消息队列和消息循环的，如果想让工作线程具有消息队列和消息循环，就需要在线程中
 先调用Looper.prepare()来创建消息队列，然后调用Looper.loop()进入消息循环
 	
+		public void run(){  
+		   Looper.prepare();  
+		   handler=new MyHandler();  
+		   Looper.loop();  
+		} 
+	
+		Handler handler = new Handler();那么这个会默认用当前线程的looper
+	    Handler handler = new Handler(Looper.getMainLooper());若是实例化的时候用Looper.getMainLooper()就表示放到主UI线程去处理。
+
+		* 检测当前线程是否为主线程
+
+		1、Looper.myLooper() == Looper.getMainLooper();
+		2、Looper.getMainLooper().getThread() == Thread.currentThread() 
+	
 **Loop类**
 
 * 1、通过Looper.prepare()来创建消息队列，并将当前线程与Looper对象进行绑定
-	* 1、通过hreadLocal判断当前线程是否已经绑定Looper对象，已存在抛出异常
-	* 2、当前线程不存在Looper对象时，创建Looper对象，通过ThreadLocal将当前线程与Looper对象进行绑定
+
+		* 1、通过hreadLocal判断当前线程是否已经绑定Looper对象，已存在抛出异常
+		* 2、当前线程不存在Looper对象时，创建Looper对象，通过ThreadLocal将当前线程与Looper对象进行绑定
 		
-		    public static void prepare() {
-		        prepare(true);
-		    }
-	
+			public static void prepare() {
+			    prepare(true);
+			}
 			// 先判断当前线程是否已经绑定Looper对象，一个线程只能绑定一个Looper对象
-		    private static void prepare(boolean quitAllowed) {
-		        if (sThreadLocal.get() != null) {
-		            throw new RuntimeException("Only one Looper may be created per thread");
-		        }
-		        sThreadLocal.set(new Looper(quitAllowed));
-		    }
-	
-	* 3、在创建Looper对象时，底层实际创建MessageQueue对象，获取当前线程对象
-			
+			private static void prepare(boolean quitAllowed) {
+			    if (sThreadLocal.get() != null) {
+			        throw new RuntimeException("Only one Looper may be created per thread");
+			    }
+			    sThreadLocal.set(new Looper(quitAllowed));
+			}
+
+		* 3、在创建Looper对象时，底层实际创建MessageQueue对象，获取当前线程对象
+		
 		    private Looper(boolean quitAllowed) {
 		        mQueue = new MessageQueue(quitAllowed);
 		        mThread = Thread.currentThread();
 		    }
 
 * 2、通过Looper.loop()进入消息循环，处理消息，底层实际上调用Handler对象dispatchMessage处理消息
-	* 1、先获取当前线程的Looper对象，如果为空，抛出异常，提示未调用Looper.prepare()，同时获取Looper对象中的MessageQueue对象
-	
-		    final Looper me = myLooper();
-	        if (me == null) {
-	            throw new RuntimeException("No Looper; Looper.prepare() wasn't called on this thread.");
-	        }
-			final MessageQueue queue = me.mQueue;
 
-	* 2、开启死循环，遍历消息队列。通过MessageQueue对象取出Message对象，获取Message对象中的Handler对象，调用Handler对象dispatchMessage处理消息
-	 
-			// 开启死循环，遍历消息队列
-		  	for (;;) {
-	            Message msg = queue.next(); // might block
-	            if (msg == null) {
-	                // No message indicates that the message queue is quitting.
-	                return;
-	            }
-				// 获取Message对象中的Handler对象，调用Handler对象dispatchMessage处理消息
-	            msg.target.dispatchMessage(msg);
-				// 从消息池中释放消息
-	            msg.recycleUnchecked();
-	        }
+		* 1、先获取当前线程的Looper对象，如果为空，抛出异常，提示未调用Looper.prepare()，同时获取Looper对象中的MessageQueue对象
+	
+			    final Looper me = myLooper();
+		        if (me == null) {
+		            throw new RuntimeException("No Looper; Looper.prepare() wasn't called on this thread.");
+		        }
+				final MessageQueue queue = me.mQueue;
+	
+		* 2、开启死循环，遍历消息队列。通过MessageQueue对象取出Message对象，获取Message对象中的Handler对象，调用Handler对象dispatchMessage处理消息
+		 
+				// 开启死循环，遍历消息队列
+			  	for (;;) {
+		            Message msg = queue.next(); // might block
+		            if (msg == null) {
+		                // No message indicates that the message queue is quitting.
+		                return;
+		            }
+					// 获取Message对象中的Handler对象，调用Handler对象dispatchMessage处理消息
+		            msg.target.dispatchMessage(msg);
+					// 从消息池中释放消息
+		            msg.recycleUnchecked();
+		        }
 
 * 3、调用Looper对象的quitSafely和quit方法底层实际是调用MessageQueue对象的方法，退出消息队列
 
 **Handler类**
 
-* 1、创建Handler对象，通过构造方法传入Looper对象，底层获取MessageQueue对象
-	* 1、先传入Looper对象，底层实际调用另一个构造方法。同时获取Looper对象上绑定的MessageQueue对象
+* 1、创建Handler对象，通过构造方法传入Looper对象，底层获取MessageQueue对象。传入Looper对象，底层实际调用另一个构造方法。同时获取Looper对象上绑定的MessageQueue对象
 	
-			public Handler(Looper looper) {
-		        this(looper, null, false);
+		public Handler(Looper looper) {
+	        this(looper, null, false);
+	    }
+		
+		public Handler(Looper looper, Callback callback, boolean async) {
+	        mLooper = looper;
+	        mQueue = looper.mQueue;
+	        mCallback = callback;
+	        mAsynchronous = async;
+	    }
+
+* 2、通过Handler对象发送消息，底层实际调用sendMessageAtTime()方法。
+	
+		* 当存在Message对象时，底层实际调用sendMessageDelayed()方法。
+		
+			public final boolean sendMessage(Message msg){
+		        return sendMessageDelayed(msg, 0);
+		    }
+	
+		* 当不存在Message对象时，发送空消息时，Handler底层会主动创建消息，然后调用sendMessageDelayed()方法
+		   
+			public final boolean sendEmptyMessageDelayed(int what, long delayMillis) {
+		        Message msg = Message.obtain();
+		        msg.what = what;
+		        return sendMessageDelayed(msg, delayMillis);
 		    }
 			
-			public Handler(Looper looper, Callback callback, boolean async) {
-		        mLooper = looper;
-		        mQueue = looper.mQueue;
-		        mCallback = callback;
-		        mAsynchronous = async;
+			创建Message对象的时候，有三种方式，分别为：
+			Message msg = new Message();  直接初始化一个Message对象
+			Message msg1 = Message.obtain(); 从整个Messge池中返回一个新的Message实例，消息池中那些已经创建但不再使用的对象。 
+			Message msg2 = handler.obtainMessage();  handler.obtainMessage最终也是调用了Message的obtain方法
+       
+		* sendMessageDelayed()方法底层实际调用sendMessageAtTime()方法发送消息
+		
+			public final boolean sendMessageDelayed(Message msg, long delayMillis){
+		        if (delayMillis < 0) {
+		            delayMillis = 0;
+		        }
+		        return sendMessageAtTime(msg, SystemClock.uptimeMillis() + delayMillis);
+			}
+
+		* sendMessageAtTime()方法底层首先获取到MessageQueue对象，然后调用enqueueMessage()方法处理消息
+		
+			public boolean sendMessageAtTime(Message msg, long uptimeMillis) {
+		        MessageQueue queue = mQueue;
+		        if (queue == null) {
+		            RuntimeException e = new RuntimeException(
+		                    this + " sendMessageAtTime() called with no mQueue");
+		            Log.w("Looper", e.getMessage(), e);
+		            return false;
+		        }
+		        return enqueueMessage(queue, msg, uptimeMillis);
 		    }
 
-	* 2、通过Handler对象发送消息，底层实际调用sendMessageAtTime()方法。
-	
-			* 当存在Message对象时，底层实际调用sendMessageDelayed()方法。
-			
-				public final boolean sendMessage(Message msg){
-			        return sendMessageDelayed(msg, 0);
-			    }
+		* enqueueMessage()底层实际上是将Handler对象与Message对象进行绑定，然后调用MessageQueue对象的enqueueMessage()方法将Msg添加至消息队列中
 		
-			* 当不存在Message对象时，发送空消息时，Handler底层会主动创建消息，然后调用sendMessageDelayed()方法
-			   
-				public final boolean sendEmptyMessageDelayed(int what, long delayMillis) {
-			        Message msg = Message.obtain();
-			        msg.what = what;
-			        return sendMessageDelayed(msg, delayMillis);
-			    }
-				
-				创建Message对象的时候，有三种方式，分别为：
-				Message msg = new Message();  直接初始化一个Message对象
-				Message msg1 = Message.obtain(); 从整个Messge池中返回一个新的Message实例，消息池中那些已经创建但不再使用的对象。 
-				Message msg2 = handler.obtainMessage();  handler.obtainMessage最终也是调用了Message的obtain方法
-	       
-			* sendMessageDelayed()方法底层实际调用sendMessageAtTime()方法发送消息
+			private boolean enqueueMessage(MessageQueue queue, Message msg, long uptimeMillis) {
+				// 将Handler对象与Message对象进行绑定
+		        msg.target = this;
+		        if (mAsynchronous) {
+		            msg.setAsynchronous(true);
+		        }
+				// 将Msg添加至消息队列中
+		        return queue.enqueueMessage(msg, uptimeMillis);
+		    }
+
+* 3、Loop对象在检测MessageQueue时，获取到Msg，通过Message对象获取到Handler对象，调用dispatchMessage处理消息
 			
-				public final boolean sendMessageDelayed(Message msg, long delayMillis){
-			        if (delayMillis < 0) {
-			            delayMillis = 0;
-			        }
-			        return sendMessageAtTime(msg, SystemClock.uptimeMillis() + delayMillis);
-				}
-	
-			* sendMessageAtTime()方法底层首先获取到MessageQueue对象，然后调用enqueueMessage()方法处理消息
-			
-				public boolean sendMessageAtTime(Message msg, long uptimeMillis) {
-			        MessageQueue queue = mQueue;
-			        if (queue == null) {
-			            RuntimeException e = new RuntimeException(
-			                    this + " sendMessageAtTime() called with no mQueue");
-			            Log.w("Looper", e.getMessage(), e);
-			            return false;
-			        }
-			        return enqueueMessage(queue, msg, uptimeMillis);
-			    }
-	
-			* enqueueMessage()底层实际上是将Handler对象与Message对象进行绑定，然后调用MessageQueue对象的enqueueMessage()方法将Msg添加至消息队列中
-			
-				private boolean enqueueMessage(MessageQueue queue, Message msg, long uptimeMillis) {
-			        msg.target = this;
-			        if (mAsynchronous) {
-			            msg.setAsynchronous(true);
-			        }
-			        return queue.enqueueMessage(msg, uptimeMillis);
-			    }
+		public void dispatchMessage(Message msg) {
+	        if (msg.callback != null) {
+	            handleCallback(msg);
+	        } else {
+	            if (mCallback != null) {
+	                if (mCallback.handleMessage(msg)) {
+	                    return;
+	                }
+	            }
+				// 底层实际调用 handleMessage() 方法处理消息
+	            handleMessage(msg);
+	        }
+	    }
 
 
+* Message里的消息池问题      
 
-    
-  4、Handler实例化过程
-		
-
-    1.在线程的run()方法里调用Looper.prepare()，实例化一个Handler对象，调用Looper.loop()使线程进入消息循环。
-      Handler对象的实例话必须在Looper.prepare()之后。
-      public void run(){  
-		   Looper.prepare();  
-		   handler=new MyHandler();  
-		   Looper.loop();  
-	  } 
-	
-	2.当我们要给具有消息循环的线程发送消息时，我们先要获得具有消息循环的线程的 Handler 对象（或者先获取具有消息循环
-      的线程的Looper对象，再使用这个Looper对象构造Handler对象），构造一个Message对象，然后调用Handler对象的sendMessage方法
-    
-	3.Message里的消息池问题
-		public static Message obtain() {  
-		    synchronized (sPoolSync) {  
-		        if (sPool != null) {  
-		            Message m = sPool;  
-		            sPool = m.next;  
-		            m.next = null;  
-		            sPoolSize--;  
-		            return m;  
-		        }  
-		    }  
-		    return new Message();  
-		}  
-      在这个类中sPool代表这个消息池的头消息，sPoolSize表示消息池中可用的消息的个数即没有被使用的Message对象的个数，next表示下一个可用的消息Message对象。
-      可以看到obtain()方法说会从全局消息池中取消息，假设是第一次获得一个Message对象，那么sPool肯定为null，也就说第一次获取消息Message对象时是还没有消息
-      池的，必须通过Message的构造方法获取一个Message对象的，Message的构造方法为空。
-
-
-	  在Looper的loop()方法的最后调用了Message对象msg的recycle()方法来回收这个Message对象，通过recycle()将这个
-      Message对象的数据清空然后链接到消息池中（采用的头插法）。
-
-  5、Handler一定要在主线程实例化吗?
-
-  new Handler()和new Handler(Looper.getMainLooper())的区别
-	
-	如果你不带参数的实例化：Handler handler = new Handler();那么这个会默认用当前线程的looper
-    Handler handler = new Handler(Looper.getMainLooper());若是实例化的时候用Looper.getMainLooper()就表示放到主UI线程去处理。 
-	
-	一般而言，如果你的Handler是要来刷新操作UI的，那么就需要在主线程下跑。情况:
-
-	1.要刷新UI，handler要用到主线程的looper。那么在主线程 Handler handler = new Handler();，
-      如果在其他线程，也要满足这个功能的话，要Handler handler = new Handler(Looper.getMainLooper());
-
-	2.不用刷新ui,只是处理消息。 当前线程如果是主线程的话，Handler handler = new Handler();
-      如果不是主线程的话，因为只有UI线程默认Loop.prepare();Loop.loop();过，其他线程需要手动调用这两个，否则会报错。
-      Looper.prepare(); Handler handler = new Handler();Looper.loop();
-
-  6、message.what,message.arg1,message.arg2,message.obj，他们在之间有什么区别呢？
-	
-	what就是一般用来区别消息的，比如你传进去的时候msg.what = 3; 然后处理的时候判断msg.what == 3是不是成立的，
-    是的话，表示这个消息是干嘛干嘛的（自己能区别开）
-	
-	至于arg1,arg2，其实也就是两个传递数据用的，两个int值，看你自己想要用它干嘛咯。如果你的数据只是简单的int值，那么用这两个，比较方便。 
-    其实这里你还少说了个，setData(Bundle),上面两个arg是传递简单int的，这个是传递复杂数据的。
-	
-	msg.obj呢，这个就是传递数据了，msg中能够携带对象，在handleMessage的时候，可以把这个数据取出来做处理了。
-    不过呢，如果是同一个进程，最好用上面的setData就行了，这个一般是Messenger类来用来跨进程传递可序列化的对象的，这个比起上面的来，更消耗性能一些。
-	
-
-* HandlerThread的特点
-
-    Android 提供了一个线程类 HanderThread 类，HanderThread类继承了Thread类并封装了 Looper 对象，在用到 HandlerThread 时，同样必须调用start方法。
-    这个类能方便的开启一个包含looper的线程，这个looper也能被用来创建一个handler对象（意思就是把looper以参数形式传递到handler的构造器），
-
-    MessageQueue是在Looper的私有构造函数Looper()中实例化的；
-
-    HandlerThread是被显式地通过new创建的实例，而与它绑定在一起的Looper是在HandlerThread的执行过程中被实例化的，相应的MessageQueue也是在这个过程中实例化的。
-    looper.loop实际上就是一个while(true)的死循环，MessageQueue是Looper保留的一份引用，通过它的next()[序列1]获取MessageQueue中的下一个要处理的消息，
-    这个过程中如果没有相应的消息，执行它的线程会用this.wait()释放它所拥有的MessageQueue的对象锁而等待。
-
-    HandlerThread将loop转到子线程中处理，说白了就是将分担MainLooper的工作量，降低了主线程的压力，使主界面更流畅。
-    开启一个线程起到多个线程的作用。处理任务是串行执行，按消息发送顺序进行处理。HandlerThread本质是一个线程，在线程内部，代码是串行处理的。
-	但是由于每一个任务都将以队列的方式逐个被执行到，一旦队列中有某个任务执行时间过长，那么会导致后续的任务都会被延迟处理。
-	HandlerThread拥有自己的消息队列，它不会干扰或阻塞UI线程。对于网络IO操作，HandlerThread并不适合，因为它只有一个线程，还得排队一个一个等着。
-		
-
-
-* 检测当前线程是否为主线程
-
-	1、Looper.myLooper() == Looper.getMainLooper();
-	2、Looper.getMainLooper().getThread() == Thread.currentThread()
+		在这个类中sPool代表这个消息池的头消息，sPoolSize表示消息池中可用的消息的个数即没有被使用的Message对象的个数，next表示下一个可用的消息Message对象。
+		可以看到obtain()方法说会从全局消息池中取消息，假设是第一次获得一个Message对象，那么sPool肯定为null，也就说第一次获取消息Message对象时是还没有消息
+    	池的，必须通过Message的构造方法获取一个Message对象的，Message的构造方法为空。
+			public static Message obtain() {  
+			    synchronized (sPoolSync) {  
+			        if (sPool != null) {  
+			            Message m = sPool;  
+			            sPool = m.next;  
+			            m.next = null;  
+			            sPoolSize--;  
+			            return m;  
+			        }  
+			    }  
+			    return new Message();  
+			}  
+		在Looper的loop()方法的最后调用了Message对象msg的recycle()方法来回收这个Message对象，通过recycle()将这个
+	    Message对象的数据清空然后链接到消息池中（采用的头插法）。
