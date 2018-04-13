@@ -7,6 +7,26 @@
 	注意：不要试图对一个死亡的线程调用start方法使它重新启动，死亡就是死亡，该线程不可能再次作为线程执行。
 	（如果重新启动的话，运行之后将引发IllegalThreadStateException异常，这表明处于死亡状态的线程无法再次运行了。）
 
+**FutureTask&&Callable**
+
+	1、通过实现 Callable 接口，创建线程任务，可以返回任务执行结果。
+	2、调用 FutureTask 类，传递 Callable 任务，开启线程执行任务。
+	3、在主线程中调用 FutureTask 类的 get() 获取任务执行完毕后的结果，但是会阻塞主线程。
+	4、在 FutureTask 类中，线程执行完毕以及取消任务后，done()方法会被调用。
+	   * 1、可以在done()方法中调用get()获取到任务执行结果，且不会阻塞当前线程，done()方法执行在工作线程中
+	   * 2、调用 FutureTask 类 cancel() 方法后，会抛出 CancellationException 异常，可以在done()方法中捕获进行处理。此时done()方法执行在主线程中
+	  
+		MyCallable<String> callable = new MyCallable();
+		MyFutureTask<String> task = new MyFutureTask<>(callable);
+		new Thread(task).start();
+		String result = task.get();  // 调用get()阻塞当前
+
+	不同点：
+    	* 1、实现Callable接口的任务线程能返回执行结果；而实现Runnable接口的任务线程不能返回结果
+   		* 2、Callable接口的call()方法允许抛出异常；而Runnable接口的run()方法的异常只能在内部消化，不能继续上抛
+		* 3、Callable接口支持返回执行结果，此时需要调用FutureTask.get()方法实现，此方法会阻塞当前直到获取结果
+ 
+
 **2、scheduleAtFixedRate与scheduleWithFixedDelay区别**
 
 	// 1、创建线程池
@@ -26,71 +46,61 @@
         }
     }
 	
-
-  * 以上述代码为例：
+	以上述代码为例：
 	
-  * 1、scheduleAtFixedRate(Runnable command,long initialDelay,long period,TimeUnit unit)	
+	1、scheduleAtFixedRate(Runnable command,long initialDelay,long period,TimeUnit unit)	
+	* 1、initialDelay：在initialDelay时间后，首次执行任务
+	* 2、period：从任务首次开始执行完成时，period为一个周期，开始执行任务
+		* 当任务执行周期时长 > period周期时：当前任务执行完毕后，立即执行下一次任务
+		*   修改参数为：threadPoolExecutor.scheduleAtFixedRate(task, 2, 2, TimeUnit.SECONDS)
+		*   修改参数为：SystemClock.sleep(5000);
+			03-15 11:21:49.528 Pid:25291,main-> onResume() 
+			03-15 11:21:51.529 Pid:25291,pool-6-thread-1-> run() ====begin=====
+			03-15 11:21:56.529 Pid:25291,pool-6-thread-1-> run() ====end=====
+			03-15 11:21:56.530 Pid:25291,pool-6-thread-1-> run() ====begin=====
+			03-15 11:22:01.530 Pid:25291,pool-6-thread-1-> run() ====end=====
+		* 当任务执行周期时长 < period周期时：当前任务执行完毕后，等待时间为：period周期-任务执行周期，然后开始下一次任务
+		* 	修改参数为：threadPoolExecutor.scheduleAtFixedRate(task, 5, 5, TimeUnit.SECONDS)
+		*   修改参数为：SystemClock.sleep(3000);
+			03-15 11:27:56.599 Pid:30732,main-> onResume()
+			03-15 11:28:01.601 Pid:30732,pool-7-thread-1-> run() ====begin=====
+			03-15 11:28:04.602 Pid:30732,pool-7-thread-1-> run() ====end=====
+			03-15 11:28:06.601 Pid:30732,pool-7-thread-1-> run() ====begin=====
+			03-15 11:28:09.602 Pid:30732,pool-7-thread-1-> run() ====end===== 
 	
-		* 1、initialDelay：在initialDelay时间后，首次执行任务
-		 
-		* 2、period：从任务首次开始执行完成时，period为一个周期，开始执行任务
-		
-			* 当任务执行周期时长 > period周期时：当前任务执行完毕后，立即执行下一次任务
-			*   修改参数为：threadPoolExecutor.scheduleAtFixedRate(task, 2, 2, TimeUnit.SECONDS)
-			*   修改参数为：SystemClock.sleep(5000);
-				03-15 11:21:49.528 Pid:25291,main-> onResume() 
-				03-15 11:21:51.529 Pid:25291,pool-6-thread-1-> run() ====begin=====
-				03-15 11:21:56.529 Pid:25291,pool-6-thread-1-> run() ====end=====
-				03-15 11:21:56.530 Pid:25291,pool-6-thread-1-> run() ====begin=====
-				03-15 11:22:01.530 Pid:25291,pool-6-thread-1-> run() ====end=====
-
-			* 当任务执行周期时长 < period周期时：当前任务执行完毕后，等待时间为：period周期-任务执行周期，然后开始下一次任务
-			* 	修改参数为：threadPoolExecutor.scheduleAtFixedRate(task, 5, 5, TimeUnit.SECONDS)
-			*   修改参数为：SystemClock.sleep(3000);
-				03-15 11:27:56.599 Pid:30732,main-> onResume()
-				03-15 11:28:01.601 Pid:30732,pool-7-thread-1-> run() ====begin=====
-				03-15 11:28:04.602 Pid:30732,pool-7-thread-1-> run() ====end=====
-				03-15 11:28:06.601 Pid:30732,pool-7-thread-1-> run() ====begin=====
-				03-15 11:28:09.602 Pid:30732,pool-7-thread-1-> run() ====end===== 
-	
-  * 2、scheduleWithFixedDelay(Runnable command,long initialDelay,long delay,TimeUnit unit)
-		
-		* 1、initialDelay：在initialDelay时间后，首次执行任务
-		 
-		* 2、period：从任务首次开始执行完成时，period为一个周期，开始执行任务
-		
-			* 当任务执行周期时长 > period周期时：当前任务执行完毕后，等待时间为：period周期，然后开始下一次任务
-			*   修改参数为：threadPoolExecutor.scheduleWithFixedDelay(task, 2, 2, TimeUnit.SECONDS)
-			*   修改参数为：SystemClock.sleep(5000);
-				03-15 13:52:55.083 Pid:3833,main-> onResume() 
-				03-15 13:52:57.085 Pid:3833,pool-7-thread-1-> run() ====begin=====
-				03-15 13:53:02.086 Pid:3833,pool-7-thread-1-> run() ====end=====
-				03-15 13:53:04.086 Pid:3833,pool-7-thread-1-> run() ====begin=====
-				03-15 13:53:09.088 Pid:3833,pool-7-thread-1-> run() ====end=====
-
-			* 当任务执行周期时长 < period周期时：当前任务执行完毕后，等待时间为：period周期，然后开始下一次任务
-			* 	修改参数为：threadPoolExecutor.scheduleWithFixedDelay(task, 5, 5, TimeUnit.SECONDS)
-			*   修改参数为：SystemClock.sleep(3000);
-				03-15 13:48:03.578 Pid:31542,main-> onResume() 
-				03-15 13:48:08.579 Pid:31542,pool-6-thread-1-> run() ====begin=====
-				03-15 13:48:11.579 Pid:31542,pool-6-thread-1-> run() ====end=====
-				03-15 13:48:16.581 Pid:31542,pool-6-thread-1-> run() ====begin=====
-				03-15 13:48:19.582 Pid:31542,pool-6-thread-1-> run() ====end=====
+	2、scheduleWithFixedDelay(Runnable command,long initialDelay,long delay,TimeUnit unit)
+	* 1、initialDelay：在initialDelay时间后，首次执行任务
+	* 2、period：从任务首次开始执行完成时，period为一个周期，开始执行任务
+		* 当任务执行周期时长 > period周期时：当前任务执行完毕后，等待时间为：period周期，然后开始下一次任务
+		*   修改参数为：threadPoolExecutor.scheduleWithFixedDelay(task, 2, 2, TimeUnit.SECONDS)
+		*   修改参数为：SystemClock.sleep(5000);
+			03-15 13:52:55.083 Pid:3833,main-> onResume() 
+			03-15 13:52:57.085 Pid:3833,pool-7-thread-1-> run() ====begin=====
+			03-15 13:53:02.086 Pid:3833,pool-7-thread-1-> run() ====end=====
+			03-15 13:53:04.086 Pid:3833,pool-7-thread-1-> run() ====begin=====
+			03-15 13:53:09.088 Pid:3833,pool-7-thread-1-> run() ====end=====
+		* 当任务执行周期时长 < period周期时：当前任务执行完毕后，等待时间为：period周期，然后开始下一次任务
+		* 	修改参数为：threadPoolExecutor.scheduleWithFixedDelay(task, 5, 5, TimeUnit.SECONDS)
+		*   修改参数为：SystemClock.sleep(3000);
+			03-15 13:48:03.578 Pid:31542,main-> onResume() 
+			03-15 13:48:08.579 Pid:31542,pool-6-thread-1-> run() ====begin=====
+			03-15 13:48:11.579 Pid:31542,pool-6-thread-1-> run() ====end=====
+			03-15 13:48:16.581 Pid:31542,pool-6-thread-1-> run() ====begin=====
+			03-15 13:48:19.582 Pid:31542,pool-6-thread-1-> run() ====end=====
 
 
 **3、ThreadPoolExecutor详细说明**
 
-  * ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler)
+	* ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler)
 
-		* corePoolSize: 核心线程数，能够同时执行的任务数量。默认情况下核心线程会一直存活，即使处于闲置状态也不会受存keepAliveTime限制。
-						除非将allowCoreThreadTimeOut设置为true。
-	
-		* maximumPoolSize: 除去缓冲队列中等待的任务，最大能容纳的任务数。线程池所能容纳的最大线程数。超过这个数的线程将被阻塞。
-		                   当任务队列为没有设置大小的LinkedBlockingDeque时，这个值无效。
-	
-		* keepAliveTime: 超出workQueue的等待任务的存活时间。非核心线程的闲置超时时间，超过这个时间就会被回收。
-	
-		* unit: 时间单位。当将allowCoreThreadTimeOut设置为true时对corePoolSize生效。
+	* corePoolSize:
+		核心线程数，能够同时执行的任务数量。默认情况下核心线程会一直存活，即使处于闲置状态也不会受存keepAliveTime限制。除非将allowCoreThreadTimeOut设置为true。
+	* maximumPoolSize: 
+		除去缓冲队列中等待的任务，最大能容纳的任务数。线程池所能容纳的最大线程数。超过这个数的线程将被阻塞。当任务队列为没有设置大小的LinkedBlockingDeque时，这个值无效。
+	* keepAliveTime: 
+		超出workQueue的等待任务的存活时间。非核心线程的闲置超时时间，超过这个时间就会被回收。
+	* unit: 时间单位。
+		当将allowCoreThreadTimeOut设置为true时对corePoolSize生效。
 	
 		* workQueue: 线程池中的任务队列.常用的有三种队列，SynchronousQueue,LinkedBlockingDeque,ArrayBlockingQueue。
 	                 阻塞等待线程的队列，一般使用new LinkedBlockingDeque<Runnable>()这个，如果不指定容量，会一直往里边添加，没有限制
