@@ -2,6 +2,8 @@
 
 **UI线程中Handler、Looper、MessageQueue三者之间的关系**
 
+* ActivityThread中会在main()方法创建Looper对象
+
 * 1、Android应用启动的时候会创建 UI主线程 的 Looper 对象，它存在于整个应用的生命周期，用于处理消息队列里的 Message。
 
 * 2、Android的消息队列和消息循环都是针对具体线程的，一个线程可以存在一个消息队列和消息循环，特定线程的消息只能分发给本线程，
