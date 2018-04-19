@@ -54,14 +54,15 @@
 	* yield():将当前正在执行的线程退让出去，以让就绪队列中的其他线程有更大的几率被cpu调度。即强制自己放弃cpu，并将自己放入就绪队列。
 	* join():等待该线程终止。当线程调用start()方法后，调用此方法join()方法，则此线程执行完毕后，后面的线程才能执行 
  	* setDaemon(boolean on):守护线程（后台线程）当前台线程消失后，后台线程也消失，当正在运行的线程都是守护线程时，Java 虚拟机退出。 
- 	* ThreadLocal 为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立地改变自己的副本，而不会影响其它线程所对应的副本。
- 	* 原子类 AtomicInteger
+ 	* ThreadLocal：为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立地改变自己的副本，而不会影响其它线程所对应的副本。
+ 	* AtomicInteger：原子类 
+ 	* synchronized：Java语言的关键字，可用来给方法或者代码块加锁。这个锁就是任意对象，也就是对象监视器
 
 	多线程处理资源共享问题：
 	* 1、使用同步锁 synchronized
 		 * 同步方法的锁对象是：this
 		 * 静态同步方法的锁对象是：当前类的字节码文件对象。
-		 * 普通块同步，锁是synchronize里面配置的对象
+		 * 普通块同步，锁是synchronized里面配置的对象
 	* 2、使用信号量 Semaphore，每次控制一个线程执行
 		 * Semaphore semaphore = new Semaphore(1)
 		 * semaphore.acquire(); // 获取一把锁
@@ -71,11 +72,57 @@
 		 * 2、ReadLock锁
 		 * 3、WriteLock锁
 		 * 4、Condition 
+	* 4、死锁问题：
+		 * 死锁：是指两个或者两个以上的线程在执行的过程中，因争夺资源产生的一种互相等待现象
+				public void run() {
+					if (flag) {
+						synchronized (MyLock.objA) {
+							System.out.println("if objA"); // CPU的执行权没有了
+							synchronized (MyLock.objB) {
+								System.out.println("if objB");
+							}
+						}
+					} else {
+						synchronized (MyLock.objB) {
+							System.out.println("else objB");
+							synchronized (MyLock.objA) {
+								System.out.println("else objA");
+							}
+						}
+					}   
+				}
 		 
-	死锁问题：
-	* 死锁：是指两个或者两个以上的线程在执行的过程中，因争夺资源产生的一种互相等待现象
-	* 生产者消费者问题
+	生产者消费者问题：
+	* 1、产生条件：
+		* 1、一个生产者线程，一个消费者线程，一个共享对象
+		* 2、两个线程操作中存在多条语句操作共享对象，设置同步代码保证数据
+		* 3、通过等待唤醒机制，生产者线程与消费者线程交替运行
+	* 2、使用synchronized、wait()、notify()：
+		* 1、调用obj的wait()、notify()前，必须获得obj锁，也就是必须写在synchronized(obj) {...} 代码段内。
+		* 2、调用obj.wait()后，线程A就释放了obj的锁，否则线程B无法获得obj锁，也就无法在synchronized(obj) {...} 代码段内唤醒A。
+		* 3、当obj.wait()方法返回后，线程A需要再次获得obj锁，才能继续执行。
+		* 4、如果A1,A2,A3都在obj.wait()，则B调用obj.notify()只能唤醒A1,A2,A3中的一个（具体哪一个由JVM决定）。
+		* 5、obj.notifyAll()则能全部唤醒A1,A2,A3，但是要继续执行obj.wait()的下一条语句，必须获得obj锁，因此，A1,A2,A3只有一个有机会获得锁继续执行
+	 	* 6、当B调用obj.notify()时，B正持有obj锁，因此A1,A2虽被唤醒但仍无法获得obj锁。直到B退出synchronized块，释放obj锁后，A1,A2中的一个才有机会获得锁继续执行。
+	* 3、使用Lock锁、Condition对象，Condition中的await()、signal()
 	
+https://www.cnblogs.com/lirenzhujiu/p/5927241.html
+https://www.cnblogs.com/princessd8251/articles/4008366.html
+https://blog.csdn.net/htofly/article/details/51711797
+
+
+
+	常见问题：
+	* wait 和 sleep 区别？
+		* 1、wait可以指定时间也可以不指定。sleep必须指定时间。
+		* 2、在同步中时，对cpu的执行权和锁的处理不同。
+			 wait：释放执行权，释放锁。
+			 sleep:释放执行权，不释放锁。
+	* 为什么操作线程的方法wait notify notifyAll定义在了Object类中？ 
+		* 因为这些方法是监视器的方法。监视器其实就是锁。锁可以是任意的对象，任意的对象调用的方式一定定义在Object类中。
+		* wait()，notify()和notifyall()方法是java.lang.Object类为线程提供的用于实现线程间通信的同步控制方法。
+
+		 	
 **2、FutureTask&&Callable**
 
 	* 1、通过实现 Callable 接口，创建线程任务，可以返回任务执行结果。
