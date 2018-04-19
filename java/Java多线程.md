@@ -54,25 +54,28 @@
 	* yield():将当前正在执行的线程退让出去，以让就绪队列中的其他线程有更大的几率被cpu调度。即强制自己放弃cpu，并将自己放入就绪队列。
 	* join():等待该线程终止。当线程调用start()方法后，调用此方法join()方法，则此线程执行完毕后，后面的线程才能执行 
  	* setDaemon(boolean on):守护线程（后台线程）当前台线程消失后，后台线程也消失，当正在运行的线程都是守护线程时，Java 虚拟机退出。 
+ 	* ThreadLocal 为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立地改变自己的副本，而不会影响其它线程所对应的副本。
+ 	* 原子类 AtomicInteger
 
 	多线程处理资源共享问题：
 	* 1、使用同步锁 synchronized
 		 * 同步方法的锁对象是：this
 		 * 静态同步方法的锁对象是：当前类的字节码文件对象。
+		 * 普通块同步，锁是synchronize里面配置的对象
 	* 2、使用信号量 Semaphore，每次控制一个线程执行
 		 * Semaphore semaphore = new Semaphore(1)
 		 * semaphore.acquire(); // 获取一把锁
 		 * semaphore.release(); // 释放一把锁 
-	* 3、使用lock锁
-		 * Lock lock = new ReentrantLock();
-		 * lock.lock();
-		 * lock.unlock();
-
+	* 3、使用lock锁，释放锁需放在finally里面 *****
+		 * 1、Lock锁
+		 * 2、ReadLock锁
+		 * 3、WriteLock锁
+		 * 4、Condition 
+		 
 	死锁问题：
 	* 死锁：是指两个或者两个以上的线程在执行的过程中，因争夺资源产生的一种互相等待现象
+	* 生产者消费者问题
 	
-
-
 **2、FutureTask&&Callable**
 
 	* 1、通过实现 Callable 接口，创建线程任务，可以返回任务执行结果。
