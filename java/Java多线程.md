@@ -56,7 +56,6 @@
  	* setDaemon(boolean on):守护线程（后台线程）当前台线程消失后，后台线程也消失，当正在运行的线程都是守护线程时，Java 虚拟机退出。 
  	* ThreadLocal：为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立地改变自己的副本，而不会影响其它线程所对应的副本。
  	* AtomicInteger：原子类 
- 	* synchronized：Java语言的关键字，可用来给方法或者代码块加锁。这个锁就是任意对象，也就是对象监视器
 
 	多线程处理资源共享问题：
 	* 1、使用同步锁 synchronized
@@ -91,22 +90,30 @@
 						}
 					}   
 				}
-		 
+
+	synchronized注意事项：
+	* synchronized：Java语言的关键字，可用来给方法或者代码块加锁。这个锁就是任意对象，也就是对象监视器
+ 	* wait(),notify(),notifyAll()都必须使用在同步中，因为要对持有监视器(锁)的线程操作。所以要使用在同步中，因为只有同步才具有锁。
+	* 为什么这些操作线程的方法要定义在object类中呢？
+	* 因为等待和唤醒必须是同一个锁。而锁可以是任意对象，所以可以被任意对象调用的方法是定义在object类中。
+
+	Lock锁使用方法：
+	* lock、unlock
+	 
 	生产者消费者问题：
 	* 1、产生条件：
 		* 1、一个生产者线程，一个消费者线程，一个共享对象
 		* 2、两个线程操作中存在多条语句操作共享对象，设置同步代码保证数据
 		* 3、通过等待唤醒机制，生产者线程与消费者线程交替运行
 	* 2、使用synchronized、wait()、notify()：
-		* 1、调用obj的wait()、notify()前，必须获得obj锁，也就是必须写在synchronized(obj) {...} 代码段内。
+		* 1、调用obj.wait()、notify()前，必须获得obj锁，也就是这两个方法必须写在synchronized(obj) {...} 代码段内。
 		* 2、调用obj.wait()后，线程A就释放了obj的锁，否则线程B无法获得obj锁，也就无法在synchronized(obj) {...} 代码段内唤醒A。
 		* 3、当obj.wait()方法返回后，线程A需要再次获得obj锁，才能继续执行。
 		* 4、如果A1,A2,A3都在obj.wait()，则B调用obj.notify()只能唤醒A1,A2,A3中的一个（具体哪一个由JVM决定）。
 		* 5、obj.notifyAll()则能全部唤醒A1,A2,A3，但是要继续执行obj.wait()的下一条语句，必须获得obj锁，因此，A1,A2,A3只有一个有机会获得锁继续执行
-	 	* 6、当B调用obj.notify()时，B正持有obj锁，因此A1,A2虽被唤醒但仍无法获得obj锁。直到B退出synchronized块，释放obj锁后，A1,A2中的一个才有机会获得锁继续执行。
+	 	* 6、当B调用obj.notify()时，B正持有obj锁，A1,A2虽被唤醒但无法获得obj锁。直到B退出synchronized块，释放obj锁后，A1,A2中的一个才有机会获得锁继续执行。
 	* 3、使用Lock锁、Condition对象，Condition中的await()、signal()
 	
-https://www.cnblogs.com/lirenzhujiu/p/5927241.html
 https://www.cnblogs.com/princessd8251/articles/4008366.html
 https://blog.csdn.net/htofly/article/details/51711797
 
