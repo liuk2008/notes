@@ -35,7 +35,7 @@
 		* 用户线程：由应用进程利用线程库创建和管理，不依赖操作系统的核心，不需要用户态/内核态的切换，速度快，操作系统内核不知道
 		* 用户线程加轻量级进程混合实现：
 
-**1、线程概念**
+**线程概念**
 	
 	生命周期：
 		* 新建状态：创建一个线程对象，未调用start()方法
@@ -55,22 +55,21 @@
 	* join():等待该线程终止。当线程调用start()方法后，调用此方法join()方法，则此线程执行完毕后，后面的线程才能执行 
  	* setDaemon(boolean on):守护线程（后台线程）当前台线程消失后，后台线程也消失，当正在运行的线程都是守护线程时，Java 虚拟机退出。 
  	* ThreadLocal：为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立地改变自己的副本，而不会影响其它线程所对应的副本。
- 	* AtomicInteger：原子类 
+ 	* 原子性：当存在多个线程时，保证一段代码在任意时刻只有一个线程在执行。AtomicInteger：原子类
 
 	多线程处理资源共享问题：
 	* 1、使用同步锁 synchronized
 		 * 同步方法的锁对象是：this
-		 * 静态同步方法的锁对象是：当前类的字节码文件对象。
-		 * 普通块同步，锁是synchronized里面配置的对象
+		 * 静态同步方法的锁对象是：当前类的字节码文件对象。Object.class
+		 * 普通块同步，锁是synchronized里面配置的对象 new Object()
 	* 2、使用信号量 Semaphore，每次控制一个线程执行
 		 * Semaphore semaphore = new Semaphore(1)
 		 * semaphore.acquire(); // 获取一把锁
 		 * semaphore.release(); // 释放一把锁 
-	* 3、使用lock锁，释放锁需放在finally里面 *****
+	* 3、使用lock锁，释放锁需放在finally里面 
 		 * 1、Lock锁
 		 * 2、ReadLock锁
 		 * 3、WriteLock锁
-		 * 4、Condition 
 	* 4、死锁问题：
 		 * 死锁：是指两个或者两个以上的线程在执行的过程中，因争夺资源产生的一种互相等待现象
 				public void run() {
@@ -91,31 +90,45 @@
 					}   
 				}
 
-	synchronized注意事项：
-	* synchronized：Java语言的关键字，可用来给方法或者代码块加锁。这个锁就是任意对象，也就是对象监视器
- 	* wait(),notify(),notifyAll()都必须使用在同步中，因为要对持有监视器(锁)的线程操作。所以要使用在同步中，因为只有同步才具有锁。
-	* 为什么这些操作线程的方法要定义在object类中呢？
-	* 因为等待和唤醒必须是同一个锁。而锁可以是任意对象，所以可以被任意对象调用的方法是定义在object类中。
+	线程同步问题：
+	* 1、synchronized的意思在于标识一段代码是同步执行
+
+	Lock锁&synchronized关键字
+	
+	* synchronized：
+	* 1、Java中每个对象都有一个内置锁，当程序运行到同步方法上时，自动获得与正在执行代码类的当前实例（this实例）有关的锁。获得一个对象的锁也称为获取锁、锁定对象、在对象上锁定或在对象上同步。
+	* 当程序运行到synchronized同步方法或代码块时该对象锁才起作用。
+	* 2、线程同步方法是通过锁来实现，每个对象都有切仅有一个锁，这个锁与一个特定的对象关联，线程一旦获取了对象锁，其他访问该对象的线程就无法再访问该对象的其他同步方法。
+
+	* 释放锁是指持锁线程退出了synchronized同步方法或代码块。
+		
+	* 1、synchronized注意事项：
+		* 保证了多线程并发时，线程间的互斥行、代码块的原子性、变量的可见性 
+		* 可用来给方法或者代码块加锁。这个锁就是任意对象，也就是对象监视器
+		* java的每个对象都有一个内置锁，线程可以使用synchronized关键字来获取对象上的锁。
+		* 
+			* wait(),notify(),notifyAll()都必须使用在同步中，因为要对持有监视器(锁)的线程操作。所以要使用在同步中，因为只有同步才具有锁。
+		* 为什么这些操作线程的方法要定义在object类中呢？
+		* 因为等待和唤醒必须是同一个锁。而锁可以是任意对象，所以可以被任意对象调用的方法是定义在object类中。
+		* 注意1:对于一个对象，某一时刻只能有一个线程拥有该对象的监视器。 
+		* 
+	* 2、
+
+
+
+每个对象都有一个叫做互斥锁标记的资源
+多个线程申请一个对象的互斥锁标记，当一个线程获得后，就可以访问该对象，其他线程进入该对象的锁池进入阻塞状态，只有当互斥锁被释放后，其他线程才从阻塞状态回到就绪，重新争夺互斥锁标记 
+
 
 	Lock锁使用方法：
 	* lock、unlock
-	 
-	生产者消费者问题：
-	* 1、产生条件：
-		* 1、一个生产者线程，一个消费者线程，一个共享对象
-		* 2、两个线程操作中存在多条语句操作共享对象，设置同步代码保证数据
-		* 3、通过等待唤醒机制，生产者线程与消费者线程交替运行
-	* 2、使用synchronized、wait()、notify()：
-		* 1、调用obj.wait()、notify()前，必须获得obj锁，也就是这两个方法必须写在synchronized(obj) {...} 代码段内。
-		* 2、调用obj.wait()后，线程A就释放了obj的锁，否则线程B无法获得obj锁，也就无法在synchronized(obj) {...} 代码段内唤醒A。
-		* 3、当obj.wait()方法返回后，线程A需要再次获得obj锁，才能继续执行。
-		* 4、如果A1,A2,A3都在obj.wait()，则B调用obj.notify()只能唤醒A1,A2,A3中的一个（具体哪一个由JVM决定）。
-		* 5、obj.notifyAll()则能全部唤醒A1,A2,A3，但是要继续执行obj.wait()的下一条语句，必须获得obj锁，因此，A1,A2,A3只有一个有机会获得锁继续执行
-	 	* 6、当B调用obj.notify()时，B正持有obj锁，A1,A2虽被唤醒但无法获得obj锁。直到B退出synchronized块，释放obj锁后，A1,A2中的一个才有机会获得锁继续执行。
-	* 3、使用Lock锁、Condition对象，Condition中的await()、signal()
+
 	
 https://www.cnblogs.com/princessd8251/articles/4008366.html
 https://blog.csdn.net/htofly/article/details/51711797
+
+http://www.cnblogs.com/coprince/p/5846625.html
+https://www.cnblogs.com/coprince/p/5848614.html
 
 
 
@@ -128,6 +141,41 @@ https://blog.csdn.net/htofly/article/details/51711797
 	* 为什么操作线程的方法wait notify notifyAll定义在了Object类中？ 
 		* 因为这些方法是监视器的方法。监视器其实就是锁。锁可以是任意的对象，任意的对象调用的方式一定定义在Object类中。
 		* wait()，notify()和notifyall()方法是java.lang.Object类为线程提供的用于实现线程间通信的同步控制方法。
+
+
+**2、生产者消费者问题**
+
+	生产者消费者问题：
+	* 1、产生条件：
+		* 1、一个生产者任务，一个消费者任务，一个共享对象，多个线程操作
+		* 2、两个线程任务操作中存在多条语句操作共享对象，设置同步代码保证数据
+		* 3、通过等待唤醒机制，生产者线程与消费者线程交替运行
+	* 2、使用synchronized、wait()、notify()：
+		* 1、调用obj.wait()、notify()前，必须获得obj锁，也就是这两个方法必须写在synchronized(obj) {...} 代码段内。
+		* 2、调用obj.wait()后，线程A就释放了obj的锁，否则线程B无法获得obj锁，也就无法在synchronized(obj) {...} 代码段内唤醒A。
+		* 3、当obj.wait()方法返回后，线程A需要再次获得obj锁，才能继续执行。
+		* 4、如果A1,A2,A3都在obj.wait()，则B调用obj.notify()只能唤醒A1,A2,A3中的一个（具体哪一个由JVM决定）。
+		* 5、obj.notifyAll()则能全部唤醒A1,A2,A3，但是要继续执行obj.wait()的下一条语句，必须获得obj锁，因此，A1,A2,A3只有一个有机会获得锁继续执行
+	 	* 6、当B调用obj.notify()时，B正持有obj锁，A1,A2虽被唤醒但无法获得obj锁。直到B退出synchronized块，释放obj锁后，A1,A2中的一个才有机会获得锁继续执行。
+
+	
+
+
+    Java中线程协作的最常见的两种方式：
+	* 1、Object对象中的wait()、notify()、notifyAll()，当前线程必须拥有此对象监视器
+		 * notify()：唤醒在此对象监视器上等待的单个线程
+		 * wait():使当前线程主动释放互斥锁，并进入该互斥锁的等待队列。
+	* 2、Lock锁、Condition对象中的await()、signal()
+
+
+
+
+
+
+
+
+
+
 
 		 	
 **2、FutureTask&&Callable**
