@@ -70,4 +70,9 @@
 		2、通过反射调用方法时，入参为可变参数，需注意
 		3、包装类的Class对象：Integer.TYPE = int.class 
 		4、修改final 基本类型与String类型常量时，在编译时其值已经被替换，所有通过反射修改不起作用
-		5、通过反射获取内部类 https://blog.csdn.net/ldstartnow/article/details/52782420
+		5、通过反射获取内部类  https://blog.csdn.net/ldstartnow/article/details/52782420
+        6、
+
+    Field对象有个一个属性叫做modifiers, 它表示的是属性是否是 public, private, static, final 等修饰的组合。
+http://www.bubuko.com/infodetail-1018641.html
+    
