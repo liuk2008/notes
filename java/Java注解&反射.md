@@ -73,6 +73,7 @@
 		5、通过反射获取内部类  https://blog.csdn.net/ldstartnow/article/details/52782420
         6、
 
+	使用反射修改常量值
+    1、
+
     Field对象有个一个属性叫做modifiers, 它表示的是属性是否是 public, private, static, final 等修饰的组合。
-http://www.bubuko.com/infodetail-1018641.html
-    
