@@ -70,10 +70,40 @@
 		2、通过反射调用方法时，入参为可变参数，需注意
 		3、包装类的Class对象：Integer.TYPE = int.class 
 		4、修改final 基本类型与String类型常量时，在编译时其值已经被替换，所有通过反射修改不起作用
-		5、通过反射获取内部类  https://blog.csdn.net/ldstartnow/article/details/52782420
-        6、
+		5、通过反射创建内部类对象，调用方法  
 
-	使用反射修改常量值
-    1、
+	内部类为什么不能用静态方法
+		
+	1、非static的内部类，在外部类加载的时候，并不会加载它，所以它里面不能有静态变量或者静态方法。
+    2、static类型的属性和方法，在类加载的时候就会存在于内存中，要使用某个类的static属性或者方法，那么这个类必须要加载到jvm中。
+    
+	如果一个非static的内部类如果具有static的属性或者方法，那么就会出现一种情况：内部类未加载，但是却试图在内存中创建static的属性和方法，这当然是错误的。
+    原因：类还不存在，但却希望操作它的属性和方法。
+	
+	如果内部类没有static的话，就需要实例化内部类才能调用，说明非static的内部类不是自动跟随主类加载的，而是被实例化的时候才会加载。
+    而static的语义，就是主类能直接通过内部类名来访问内部类中的static方法，而非static的内部类又是不会自动加载的，所以这时候内部类也要static，否则会前后冲突。
 
-    Field对象有个一个属性叫做modifiers, 它表示的是属性是否是 public, private, static, final 等修饰的组合。
+**类加载器**
+
+	1、一个Java类加载到JVM中会经过三个步骤，
+	  * 装载：（查找和导入类或接口的二进制数据），找到class对应的字节码文件。
+	  * 链接：（校验：检查导入类或接口的二进制数据正确性，准备：类的静态变量分配并初始化存储空间，解析：将符号引用转成直接引用），将对应字节码文件读入到JVM中。
+	  * 初始化：（激活类的静态变量的初始化Java代码和静态Java代码块），对class做相应的初始化动作。
+
+	2.Java中两种加载class到JVM中的方式
+	  * 2.1：Class.forName("className");
+	        其实这种方法调运的是：Class.forName(className, true, ClassLoader.getCallerClassLoader())方法
+	        参数一：className，需要加载的类的名称。
+	        参数二：true，是否对class进行初始化（需要initialize）
+	        参数三：classLoader，对应的类加载器
+	
+	  * 2.2：ClassLoader.laodClass("className");
+	        其实这种方法调运的是：ClassLoader.loadClass(name, false)方法
+	        参数一：name,需要加载的类的名称
+	        参数二：false，这个类加载以后是否需要去连接（不需要linking）
+	        
+	  * 2.3:两种方式的区别
+	        forName("")得到的class是已经初始化完成的
+	        loadClass("")得到的class是还没有连接的
+	        一般情况下，这两个方法效果一样，都能装载Class。
+	        但如果程序依赖于Class是否被初始化，就必须用Class.forName(name)了。
