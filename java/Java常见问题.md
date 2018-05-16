@@ -15,20 +15,27 @@
 
 **判断两个对象是否相等**
 	
-	1、通过equal()判断，底层实际判断对象的hashcode，也就是对象的内存地址
-	2、使用HashSet与HashMap集合时，可以手动重写equal()与hashCode()方法
-	3、equal()与hashCode()使用
-	   * 1、equal()相等的两个对象他们的hashCode()肯定相等，也就是用equal()对比是绝对可靠的。
-       * 2、hashCode()相等的两个对象他们的equal()不一定相等，也就是hashCode()不是绝对可靠的。
-	   * 3、在使用集合的过程中，添加的对象如果复写了equal()方法，一定要复写hashCode()方法。
-
-	注意：
-	1、equals方法用于比较对象的内容是否相等（覆盖以后）
-	2、hashcode方法只有在集合中用到
-    3、当覆盖了equals方法时，比较对象是否相等将通过覆盖后的equals方法进行比较（判断对象的内容是否相等）。
-    4、将对象放入到集合中时，首先判断要放入对象的hashcode值与集合中的任意一个元素的hashcode值是否相等，
-    如果不相等直接将该对象放入集合中。如果hashcode值相等，然后再通过equals方法判断要放入对象与集合中的任意一个对象是否相等，
-    如果equals判断不相等，直接将该元素放入到集合中，否则不放入。
+	1、hashCode():返回该对象的哈希码值。哈希值不是地址值，可以理解为地址值。
+	2、equals():底层通过“==”判断对象是否相等，默认比较的是对象的地址值是否相同。
+	3、重写equals()方法，必须重写hashCode()方法。Java规则相等的对象必须具有相等的散列码（hashCode）
+	4、hashCode()重写规则
+	4、equal()与hashCode()使用
+	   * 1、hashCode()相等，两个对象equals()方法可能相等，也可能不相等
+	   * 2、hashCode()不相等，两个对象equals()方法一定不相等
+	   * 3、equals()相等，两个对象的hashCode()方法一定相等
+	   * 4、equals()不相等，两个对象的hashCode()方法可能相等，也可能不相等
+	   
+	注意：使用场景，当两个不同对象的某些属性值相同时就认为他们相同，所以重写equals()方法，未复写HashCode()方法
+	   * 1、在使用HashSet集合过程中，hashCode()方法返回值不同，equals()返回true,这时HashSet会把这两个对象都存进去，这就和Set集合不重复的规则相悖
+	   * 2、在使用HashMap集合过程中，若不复写hashCode()方法，则会导致两个同样的key值存入集合，与HashMap集合key不能重复相悖
+	   * 3、在Java应用程序执行期间，在对同一对象多次调用hashCode方法时，必须一致地返回相同的整数，前提是将对象进行hashcode比较时所用的信息没有被修改。	
+			List<Long> test1 = new ArrayList<Long>(); 
+			test1.add(1L); 
+			test1.add(2L); 
+			System.out.println(test1.hashCode()); //994 
+			test1.set(0,2L); 
+			System.out.println(test1.hashCode()); //1025
+	总结：如果重写equals而未重写hashcode方法，就会出现两个没有关系的对象equals相同（equals是根据对象的特征进行重写的），但hashcode确实不相同。 
 
 **内部类为什么不能用静态方法**
 		
@@ -54,12 +61,10 @@
 	        参数一：className，需要加载的类的名称。
 	        参数二：true，是否对class进行初始化（需要initialize）
 	        参数三：classLoader，对应的类加载器
-	
 	  * 2.2：ClassLoader.laodClass("className");
 	        其实这种方法调运的是：ClassLoader.loadClass(name, false)方法
 	        参数一：name,需要加载的类的名称
 	        参数二：false，这个类加载以后是否需要去连接（不需要linking）
-	        
 	  * 2.3:两种方式的区别
 	        forName("")得到的class是已经初始化完成的
 	        loadClass("")得到的class是还没有连接的

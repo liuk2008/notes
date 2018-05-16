@@ -28,3 +28,5 @@
 	虚引用对象本身是个强引用，不会自动被gc回收），就会浪费内存。因此我们这就可以手动回收位于引用队列中的引用对象本身。
 
 	* 6、（WeakHashMap）
+	WeakHashMap 里的entry可能会被GC自动删除，即使程序员没有调用remove()或者clear()方法。底层的Entry继承WeakReference
+	HashMap和WeakHashMap的区别也在于此，HashMap的key是对实际对象的强引用。
