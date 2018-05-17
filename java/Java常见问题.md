@@ -18,7 +18,7 @@
 	1、hashCode():返回该对象的哈希码值。哈希值不是地址值，可以理解为地址值。
 	2、equals():底层通过“==”判断对象是否相等，默认比较的是对象的地址值是否相同。
 	3、重写equals()方法，必须重写hashCode()方法。Java规则相等的对象必须具有相等的散列码（hashCode）
-	4、hashCode()重写规则
+	4、hashCode()重写规则，需考虑
 	4、equal()与hashCode()使用
 	   * 1、hashCode()相等，两个对象equals()方法可能相等，也可能不相等
 	   * 2、hashCode()不相等，两个对象equals()方法一定不相等
