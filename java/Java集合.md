@@ -26,37 +26,47 @@
 	* 存储的思想都是：通过table数组存储，数组的每一个元素都是一个Entry；而一个Entry就是一个单向链表，Entry链表中的每一个节点就保存了key-value键值对数据。
 	     1、底层将Key值通过哈希函数转换对应的数组下标，并将Key值和Value值存入Entry对象中
 		 2、当多个元素经过转换后数组下标相同时，底层结构将在对应数组元素上挂载链表结构，Entry类里面有一个next属性，作用是指向下一个Entry
-		 A-->index=0-->Entry[0]=A,A.next=A
-		 B-->index=0-->Entry[0]=B,B.next=A,A.next=A
-		 C-->index=0-->Entry[0]=C,C.next=B,B.next=A,A.next=A
+		 A-->index=0-->Entry[0]=A,A.next=null
+		 B-->index=0-->Entry[0]=B,B.next=A,A.next=null
+		 C-->index=0-->Entry[0]=C,C.next=B,B.next=A,A.next=null
 
 	* 2、HashMap底层调用put()方法添加元素时，会判断对象元素的hashCode是否相等，及调用对象的equals()方法
 	
-		int hash = Collections.secondaryHash(key); 	// 获取Key的hashcode
-		HashMapEntry<K, V>[] tab = table; 			// HashMapEntry数组
-		int index = hash & (tab.length - 1);   		// 计算元素的素组索引值
-		for (HashMapEntry<K, V> e = tab[index]; e != null; e = e.next) { // 判断是否存在相同key值，替换value值
-		    if (e.hash == hash && key.equals(e.key)) {
-		        preModify(e);
-		        V oldValue = e.value;
-		        e.value = value;
-		        return oldValue;
-		    }
+		// put()方法源码
+		public V put(K key, V value) {
+	        if (key == null) {
+	            return putValueForNullKey(value);      	// null key总是存放在Entry[]数组的第一个元素。
+	        }
+	
+	        int hash = Collections.secondaryHash(key); 	// 获取Key的hash值
+	        HashMapEntry<K, V>[] tab = table;           // HashMapEntry数组
+	        int index = hash & (tab.length - 1);       	// 计算元素的素组索引值
+			// 判断是否存在相同key值，替换value值
+	        for (HashMapEntry<K, V> e = tab[index]; e != null; e = e.next) {
+	            if (e.hash == hash && key.equals(e.key)) { // 调用元素的hashCode()、equals()方法
+	                preModify(e);
+	                V oldValue = e.value;
+	                e.value = value;  					// 替换Value值，并返回旧Value值
+	                return oldValue;
+	            }
+	        }
+	
+	        modCount++;
+	        if (size++ > threshold) {
+	            tab = doubleCapacity();
+	            index = hash & (tab.length - 1);
+	        }
+	        addNewEntry(key, value, hash, index);		// 创建Entry对象，关联Entry节点
+	        return null;
 		}
-		
-		modCount++;
-		if (size++ > threshold) {
-		    tab = doubleCapacity();
-		    index = hash & (tab.length - 1);
-		}
-		addNewEntry(key, value, hash, index);  // 创建Entry对象，关联Entry节点
 
-		// 
+		// addNewEntry()源码
 		void addNewEntry(K key, V value, int hash, int index) {
+			// 创建对应索引的数组元素，HashMapEntry对象
         	table[index] = new HashMapEntry<K, V>(key, value, hash, table[index]);
 		}
 
-		// 
+		// HashMapEntry构造函数，创建Entry节点值
 		HashMapEntry(K key, V value, int hash, HashMapEntry<K, V> next) {
             this.key = key;
             this.value = value;
@@ -64,10 +74,119 @@
             this.next = next;
         }
 
+	* 3、HashMap底层通过entrySet()、keySet()、valueSet()获取对应的值，底层返回EntrySet、KeySet、ValueSet集合，
+	* 这三个继承于AbstractSet集合，底层实现iterator()方法，返回自定义迭代器EntryIterator对象
+		
+		public Set<Entry<K, V>> entrySet() {
+	        Set<Entry<K, V>> es = entrySet;
+	        return (es != null) ? es : (entrySet = new EntrySet()); // 返回EntrySet集合
+	    }
+		
+		// EntrySet类
+		private final class EntrySet extends AbstractSet<Entry<K, V>> {
+	        public Iterator<Entry<K, V>> iterator() {
+	            return newEntryIterator();							// 返回自定义迭代器
+	        }
+	        public boolean contains(Object o) {
+	            if (!(o instanceof Entry))
+	                return false;
+	            Entry<?, ?> e = (Entry<?, ?>) o;
+	            return containsMapping(e.getKey(), e.getValue());
+	        }
+	        public boolean remove(Object o) {
+	            if (!(o instanceof Entry))
+	                return false;
+	            Entry<?, ?> e = (Entry<?, ?>)o;
+	            return removeMapping(e.getKey(), e.getValue());
+	        }
+	        public int size() {
+	            return size;
+	        }
+	        public boolean isEmpty() {
+	            return size == 0;
+	        }
+	        public void clear() {
+	            HashMap.this.clear();
+	        }
+	    }
+
+	* 4、HashMap底层EntryIterator对象继承于HashIterator，HashIterator类底层通过HashMapEntry与Entry[]数组结合使用，返回对应的Key值和Value值
+	
+		private final class EntryIterator extends HashIterator
+	            implements Iterator<Entry<K, V>> {
+	        public Entry<K, V> next() { return nextEntry(); }
+	    }
+		
+		private abstract class HashIterator {
+	        int nextIndex; // 下一个元素索引	
+
+			// entryForNullKey 默认为null值，当存入null键值，entryForNullKey不为空
+	        HashMapEntry<K, V> nextEntry = entryForNullKey; // 下一个数组元素
+
+	        HashMapEntry<K, V> lastEntryReturned; // 上一个数组元素
+	        int expectedModCount = modCount;
+	
+	        HashIterator() {
+	            if (nextEntry == null) {
+	                HashMapEntry<K, V>[] tab = table;
+	                HashMapEntry<K, V> next = null;
+					// 这里利用了index的初始值为0，从0开始依次向后遍历，直到找到不为null的元素就退出循环。
+					// 注意：此处只遍历了Entry[]数组，未遍历链表
+	                while (next == null && nextIndex < tab.length) {
+	                    next = tab[nextIndex++];  // 返回数组上的Entry对象
+	                }
+	                nextEntry = next;  
+	            }
+	        }
+	
+	        public boolean hasNext() {
+	            return nextEntry != null;
+	        }	
+
+			// 遍历Entry[]数组上Entry元素挂载的单向链表
+	        HashMapEntry<K, V> nextEntry() {
+	            if (modCount != expectedModCount)
+	                throw new ConcurrentModificationException();
+	            if (nextEntry == null)
+	                throw new NoSuchElementException();
+	
+	            HashMapEntry<K, V> entryToReturn = nextEntry; // 
+	            HashMapEntry<K, V>[] tab = table;
+	            HashMapEntry<K, V> next = entryToReturn.next; // 获取指向下一个节点的Entry对象
+				
+	            while (next == null && nextIndex < tab.length) { // 当指向下一个节点的Entry对象为空，则继续遍历数组上的元素
+	                next = tab[nextIndex++];
+	            }
+	            nextEntry = next; // 记录下一个元素的值
+	            return lastEntryReturned = entryToReturn; // 返回当前Entry对象
+	        }
+	
+	        public void remove() {
+	            if (lastEntryReturned == null)
+	                throw new IllegalStateException();
+	            if (modCount != expectedModCount)
+	                throw new ConcurrentModificationException();
+	            HashMap.this.remove(lastEntryReturned.key);
+	            lastEntryReturned = null;
+	            expectedModCount = modCount;
+	        }
+		}
+	
+	
 	* 注意：
 	* 1、当数组元素指向的链表增长时，HashMap底层会自动扩容保证查询速度。
-	* 2、HashMap允许空值、空键，但是
-	
+	* 当哈希表的容量超过默认容量时，必须调整table的大小。
+	* 当容量已经达到最大可能值时，那么该方法就将容量调整到Integer.MAX_VALUE返回，这时，需要创建一张新表，将原表映射到新表中。
+	* 2、HashMap允许空键和空值的存在，会排在集合第一位
+	* 3、通过KeySet、ValueSet、EntrySet集合获取的数据，实际是让Set集合持有HashIterator迭代器对象，从而访问对应元素，但是Set集合底层未存储任何元素
+
+	HashTable与HashMap的区别
+	* 1、HashTable线程安全，因为底层方法添加了synchronize关键字，适用于多线程。Hashmap线程不安全，适用于单线程。
+	* 2、HashTable不允许null键、null值，HashMap允许null键和null值
+	* 3、HashMap是“从前向后”的遍历数组；再对数组具体某一项对应的链表，从表头开始进行遍历。
+	* Hashtabl是“从后往前”的遍历数组；再对数组具体某一项对应的链表，从表头开始进行遍历。
+	* 
+
 
 **2、ArrayList底层迭代器（ArrayListIterator）实现**
 
