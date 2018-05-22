@@ -55,7 +55,9 @@
 	1、反射的本质：获取类的class文件对象后，反向获取对象中的属性信息
 	2、反射的核心：JVM在运行时才动态加载类或调用方法/访问属性，它不需要事先（写代码的时候或编译期）知道运行对象是谁。
 	3、反射的作用：
-		* 通过反射创建对象：1、通过Class对象的newInstance创建对应类的实例  2、通过Class对象获取指定的Constructor对像创建
+		* 通过反射创建对象：
+		* 1、通过Class对象的newInstance创建对应类的实例，无入参，newInstance()，调用对象的默认构造方法。
+		* 2、通过Class对象获取指定的Constructor对像创建，入参是可变参数，newInstance(Object... args) 
 		* 通过反射运行配置文件的内容
 		* 通过反射越过泛型检查,泛型在编译时有效，在运行时会跳过检查
 		* 动态代理，通过反射生成一个代理对象
@@ -65,6 +67,11 @@
 		* 2、类加载器将class文件加载到JVM内存中，生成Class对象
 		* 3、Class对象是在加载类时由Java虚拟机以及通过调用类加载器中的defineClass方法自动构造的。一个类只产生一个Class对象
 		* 4、jvm创建对象前，会先检查类是否加载，寻找类对应的class对象，若加载好，则为你的对象分配内存，初始化也就是代码:new Object()。
+	5、获取字节码文件对象方式，注意每个方式下类的加载时机
+		* 1、AdminDao.class
+		* 2、adminDao.getClass()
+        * 3、Class.forName("com.aerozhonghuan.java.reflect.AdminDaoImpl")  // 优先考虑
+        * 4、ClassLoader.getSystemClassLoader().loadClass("com.aerozhonghuan.java.reflect.AdminDaoImpl")
 	注意：
 		1、使用反射相对来说不安全，破坏了类的封装性
 		2、通过反射调用方法时，入参为可变参数，需注意
