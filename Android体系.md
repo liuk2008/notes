@@ -44,7 +44,7 @@
 
 **技术框架**
 
-	1、MVP模型
+	1、MVC、MVP、MVVM 模型
 	2、开源控件
 		* RxJava
 		* Retrofit
