@@ -40,6 +40,8 @@
 	1、Kotlin语言
 	2、React-Native 混合开发
 	3、插件化开发、热更新、增量更新
+	4、jni、aidl、混淆
+	5、http协议 https协议
 
 
 **技术框架**
