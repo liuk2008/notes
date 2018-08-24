@@ -57,7 +57,7 @@
 		* leackcanary
 	3、Jcenter工具类
 	4、Jenkins自动化打包
-	5、自动化测试、单元测试
+	5、自动化测试、单元测试、Record Espresso Test
 	6、UML时序图设计
 	7、静态代码分析、Lint代码
 	8、leackcanary、Android Monitor检测内存泄漏
