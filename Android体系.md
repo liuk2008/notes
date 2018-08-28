@@ -55,6 +55,8 @@
 		* glide
 		* eventbus
 		* leackcanary
+		* Rxlifecycle
+		* reaml
 	3、Jcenter工具类
 	4、Jenkins自动化打包
 	5、自动化测试、单元测试、Record Espresso Test
