@@ -49,11 +49,11 @@
 
 	1、MVC、MVP、MVVM 模型
 	2、开源控件
-		* RxJava
-		* Retrofit
+		* RxJava2
+		* Retrofit2
 		* Dragger2
-		* glide
-		* eventbus
+		* Glide
+		* EventBus
 		* leackcanary
 		* Rxlifecycle
 		* reaml
