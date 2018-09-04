@@ -1,4 +1,92 @@
-# Android Studio 使用Gradle引入第三方库文件的总结
+
+
+**Gradle相关总结**
+
+	1、Gradle基础知识
+
+	* 在Gradle中，有两个基本概念：项目和任务。请看以下详解：
+		* 项目是指我们的构建产物（比如Jar包）或实施产物（将应用程序部署到生产环境）。一个项目包含一个或多个任务。
+		* 任务是指不可分的最小工作单元，执行构建工作（比如编译项目或执行测试）。
+		* 每一次Gradle的构建都包含一个或多个项目。
+	* build --> project --> task
+		* Gradle构建脚本（build.gradle）指定了一个项目和它的任务。
+		* Gradle属性文件（gradle.properties）用来配置构建属性。
+		* Gradle设置文件（gradle.settings）对于只有一个项目的构建而言是可选的，如果我们的构建中包含多于一个项目，那么它就是必须的，
+    * 因为它描述了哪一个项目参与构建。每一个多项目的构建都必须在项目结构的根目录中加入一个设置文件。
+    * Gradle安装路径：Win平台会默认下载到 C:\Documents and Settings<用户名>.gradle\wrapper\dists 目录
+
+	2、Gradle 命令
+	    * gradlew tasks：查看任务列表
+	    * gradlew -v 版本号
+	    * gradlew clean 清除9GAG/app目录下的build文件夹
+	    * gradlew build 检查依赖并编译打包
+	    * gradlew assemle 编译打包
+	    * gradlew assembleDebug 编译并打Debug包
+	    * gradlew assembleRelease 编译并打Release的包
+	    * gradlew installRelease Release模式打包并安装
+  	    * gradlew uninstallRelease 卸载Release模式包
+	    * assemble任务会编译程序中的源代码，并打包生成Jar文件，这个任务不执行单元测试。
+	    * build任务会执行一个完整的项目构建，执行自动化测试。
+	    * clean任务会删除构建目录。
+	    * compileJava任务会编译程序中的源代码。
+		
+	3、Gradle多渠道打包
+
+	* 以友盟统计为例：里面的Channel_ID就是渠道标示。我们的目标就是在编译的时候这个值能够自动变化。
+		   <meta-data
+		    android:name="UMENG_CHANNEL"
+		    android:value="Channel_ID" />
+		
+		   第一步 在AndroidManifest.xml里配置PlaceHolder
+		   <meta-data
+		    android:name="UMENG_CHANNEL"
+		    android:value="${UMENG_CHANNEL_VALUE}" />
+		
+		   第二步 在build.gradle设置productFlavors
+		   android {  
+		    productFlavors {
+		        xiaomi {
+		            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
+		        }
+		        _360 {
+		            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "_360"]
+		        }
+		        baidu {
+		            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baidu"]
+		        }
+		        wandoujia {
+		            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+		        }
+		     }  
+		   }
+		   或者批量修改
+		
+		   android {  
+				productFlavors {
+					xiaomi {}
+					_360 {}
+					baidu {}
+					wandoujia {}
+				}  
+		
+				productFlavors.all { 
+					flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name] 
+				}
+		  }
+
+	* assemble结合Build Variants来创建task
+
+		 assemble 和 Product Flavor 结合创建新的任务，其实 assemble 是和 Build Variants 一起结合使用的，而 
+		 Build Variants = Build Type + Product Flavor ， 举个例子大家就明白了：
+		 
+		 1、构建一个flavor渠道的release版本，执行如下命令就好了：gradlew assembleFlavor1Release
+		 
+		 2、构建指定flavor的所有APK：gradlew assembleFlavor1此命令会生成Flavor1渠道的Release和Debug版本.
+		 
+		 3、构建productFlavor下的所有渠道的版本：gradlew assembleDebug允许构建指定buildType的所有APK，
+		    Flavor1Debug和Flavor2Debug两个Variant版本。
+
+**Android Studio 使用Gradle引入第三方库文件的总结**
 
   1、引入jar文件
 
@@ -89,7 +177,7 @@
 
 
 
-  *Android Studio使用Gradle构建app。Gradle的使用非常灵活，其中可以设置使用多种类型的仓库，来获取应用中使用的库文件。
+**Gradle设置使用多种类型的仓库**
 
     Maven central repository 	这是Maven的中央仓库，无需配置，直接声明就可以使用。但不支持https协议访问
 	Maven JCenter repository 	JCenter中央仓库，实际也是是用的maven搭建的，但相比Maven仓库更友好，通过CDN分发，并且支持https访问。
@@ -168,7 +256,7 @@
     使用本地文件夹时，就不支持配置元数据格式的信息了（POM文件）。并且Gradle会优先使用服务器仓库中的库文件：
     例如同时声明了jcenter和flatDir，当flatDir中的库文件同样在jcenter中存在，gradle会优先使用jcenter的。
 
- *module 的 build.gradle 文件注解
+**module 的 build.gradle 文件注解**
 
     apply plugin: 'com.android.application' //说明 module 的类型，com.android.application 为程序
  
@@ -201,7 +289,13 @@
 		                YUNXIN_APP_KEY: yunxin_app_key,
 		    ]
 	    }
-        
+
+	    // java版本
+	    compileOptions {
+	        sourceCompatibility JavaVersion.VERSION_1_8
+	        targetCompatibility JavaVersion.VERSION_1_8
+	    }
+    
         //目录指向配置
     	sourceSets {     								 
        		main {
@@ -236,11 +330,19 @@
 	    }
 
 		// productFlavors 产品渠道，默认不提供任何默认配置，在实际发布中，根据不同渠道，我们可能需要用不同的包名，服务器地址等
-
 		productFlavors{
 		     productA{
 		            applicationId "com.crazyman.product.a" // 配置不同的签名
 		            versionName "version-a-1.0"
+					signingConfig signingConfigs.myConfig
+					// 动态设置不同版本下的字符串
+		            buildConfigField "String", "server_release", "\"http://61.132.221.5:80\";"
+		            buildConfigField "String", "server_debug", "\"http://211.103.179.53:8080\";"
+		            buildConfigField "String", "server_debug_internal", "\"http://192.168.66.46:9999\";"
+					// 编写配置信息，在AndroidManifest.xml中动态引用
+		            manifestPlaceholders = [
+		                    BAIDU_API_KEY: "AqnDKxCPkdexd8wcCFbyYH25",
+		            ]
 		     }
 
 	         productB{
@@ -252,7 +354,8 @@
         //build 构建类型，AndroidStudio的Gradle组件默认提供给了“debug”“release”两个默认配置，此处用于配置是否需要混淆、是否可调试等
 		//BuildVariants：每个buildtype和flavor组成一个buildvariant
 	    
-        buildType { 					
+        buildType { 		
+			
 	        release {  						
 	            minifyEnabled  true 						 //混淆开启
                 zipAlignEnabled false                        // Zipalign优化
@@ -267,13 +370,14 @@
                     mapbar_push_key: "test-769b0e2dcb354bf99ed73f4ab23a2f30"
            		]
 	        }
+
             //  配置打包信息，注意修改包名
-			android.applicationVariants.all { variant ->
-	            variant.outputs.each { output ->
-	                def outputFile = output.outputFile
-	                if (outputFile != null && outputFile.name.endsWith('.apk')) {
-	                    def fileName = "HyStation_v${defaultConfig.versionName}_${releaseTime()}_${variant.name}.apk"
-	                    output.outputFile = new File(outputFile.parent, fileName)
+	        android.applicationVariants.all { variant ->
+	            variant.outputs.all { output ->
+	                def outputFileName = output.outputFileName
+	                if (outputFileName != null && outputFileName.endsWith('.apk')) {
+	                    def fileName = "Jenkins_v${defaultConfig.versionName}_${releaseTime()}_${variant.name}.apk"
+	                    output.outputFileName = new File(fileName)
 	                }
 	            }
 	        }
@@ -284,11 +388,28 @@
 	    lintOptions {
 	        abortOnError   false 						
 	    }
+
+		// 手动指明jnilib在
+	    sourceSets {
+	        main {
+	            jniLibs.srcDir 'libs'
+	        }
+	        debug.setRoot('build-types/debug')  // 指定 debug 模式的路径，配置不同的文件
+	        release.setRoot('build-types/release')
+	    }
+
+	    // 指定aar 路径
+	    repositories {
+	        flatDir {
+	            dirs 'libs'
+	        }
+	    }
+
     }
 
 	dependencies  {
-	    compile  fileTree(include: ['*.jar'], dir: 'libs')  //编译lib 目录下的 jar 文件
-	    compile  project(':Easylink')                       //编译附加的项目
-	    compile 'com.jakewharton:butterknife:8.4.0'         //编译第三方开源
+	    implementation  fileTree(include: ['*.jar'], dir: 'libs')  //编译lib 目录下的 jar 文件
+	    implementation  project(':Easylink')                       //编译附加的项目
+	    implementation 'com.jakewharton:butterknife:8.4.0'         //编译第三方开源
 	}
 
