@@ -4,6 +4,8 @@
 **Android的类AsyncTask对线程间通讯进行了包装，提供了简易的编程方式来使后台线程和UI线程进行通讯，后台线程执行异步任务，并把操作结果通知UI线程。**
 
 	* AsyncTask通过其execute方法启动执行，底层通过线程池来管理和调度进程中的所有Task的，通过重用原来创建的线程执行新的任务。
+	* 内部实现是：线程池+Handler。其中Handler是为了处理线程之间的通信，AsyncTask内部实现了两个线程池，分别是：串行线程池和固定线程数量的线程池。
+	* 而这个固定线程数量则是通过CPU的数量决定的。
 
 	1、通过execute()方法启动
 	* execute 底层实际调用executeOnExecutor，使用AsyncTask默认创建SerialExecutor线程池执行任务，按先后顺序每次只运行一个，每个任务都是串行执行的。
@@ -44,3 +46,188 @@
 		* 3、当有需要大量线程执行任务时，一定要创建线程池。
 		
 **AysncTask内部实现机制**
+
+	* 1、创建执行串行任务的线程池
+	
+		public static final Executor SERIAL_EXECUTOR = new SerialExecutor();         
+	    private static volatile Executor sDefaultExecutor = SERIAL_EXECUTOR;
+		// 创建线程池对象
+	    private static class SerialExecutor implements Executor {
+	        final ArrayDeque<Runnable> mTasks = new ArrayDeque<Runnable>();
+	        Runnable mActive;
+	
+	        public synchronized void execute(final Runnable r) {
+	            mTasks.offer(new Runnable() {
+	                public void run() {
+	                    try {
+	                        r.run();
+	                    } finally {
+	                        scheduleNext();
+	                    }
+	                }
+	            });
+	            if (mActive == null) {
+	                scheduleNext();
+	            }
+	        }
+	
+	        protected synchronized void scheduleNext() {
+	            if ((mActive = mTasks.poll()) != null) {
+	                THREAD_POOL_EXECUTOR.execute(mActive);
+	            }
+	        }
+	    }
+
+
+	* 2、创建执行并发任务的线程池
+
+		private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors(); 	// 最大线程数量
+	    private static final int CORE_POOL_SIZE = Math.max(2, Math.min(CPU_COUNT - 1, 4));  // 核心线程数量
+	    private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;							
+	    private static final int KEEP_ALIVE_SECONDS = 30;									// 线程池中非核心线程存活时间
+	   
+	
+	    private static final ThreadFactory sThreadFactory = new ThreadFactory() {			// 创建线程工厂对象
+	        private final AtomicInteger mCount = new AtomicInteger(1);
+	
+	        public Thread newThread(Runnable r) {
+	            return new Thread(r, "AsyncTask #" + mCount.getAndIncrement());
+	        }
+	    };
+	
+		// 一个长度为128的阻塞队列，也就是说这个线程池的任务队列中可以同时有128个任务等待执行
+	    private static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<Runnable>(128);
+	 
+		// 创建线程池
+	    public static final Executor THREAD_POOL_EXECUTOR;									
+		
+	    static {
+	        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
+	                CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_SECONDS, TimeUnit.SECONDS,
+	                sPoolWorkQueue, sThreadFactory);
+	        threadPoolExecutor.allowCoreThreadTimeOut(true);
+	        THREAD_POOL_EXECUTOR = threadPoolExecutor;
+	    }
+
+
+	* 3、AsyncTask构造函数，底层使用Callable存储任务与FutureTask执行任务
+    
+	    public AsyncTask(@Nullable Looper callbackLooper) {
+		
+			// 创建Handler对象
+	        mHandler = callbackLooper == null || callbackLooper == Looper.getMainLooper()
+	            ? getMainHandler()
+	            : new Handler(callbackLooper);
+		
+			// 实现Java提供的Callable接口，存储线程执行任务
+	        mWorker = new WorkerRunnable<Params, Result>() {		
+	            public Result call() throws Exception {
+	                mTaskInvoked.set(true);
+	                Result result = null;
+	                try {
+	                    Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+	                    //noinspection unchecked
+	                    result = doInBackground(mParams);
+	                    Binder.flushPendingCommands();
+	                } catch (Throwable tr) {
+	                    mCancelled.set(true);
+	                    throw tr;
+	                } finally {
+	                    postResult(result);						// 底层通过Handler发送
+	                }
+	                return result;
+	            }
+	        };
+	
+			// 使用Java提供的FutureTask，执行Callable中的任务，同时可以获取任务执行结果
+	        mFuture = new FutureTask<Result>(mWorker) {
+	            @Override
+	            protected void done() {
+	                try {
+	                    postResultIfNotInvoked(get());			// 调用FutureTask的get()方法获取Callable中的执行结果
+	                } catch (InterruptedException e) {
+	                    android.util.Log.w(LOG_TAG, e);
+	                } catch (ExecutionException e) {
+	                    throw new RuntimeException("An error occurred while executing doInBackground()",
+	                            e.getCause());
+	                } catch (CancellationException e) {
+	                    postResultIfNotInvoked(null);
+	                }
+	            }
+	        };
+	    }
+	
+	    private void postResultIfNotInvoked(Result result) {	// 底层调用Handler将执行结果发送到主线程中
+	        final boolean wasTaskInvoked = mTaskInvoked.get();	// 默认值是false
+	        if (!wasTaskInvoked) {								// 在Callable中设置成true，所以此处代码不执行
+	            postResult(result);
+	        }
+	    }
+	
+	    private Result postResult(Result result) {
+	        @SuppressWarnings("unchecked")
+	        Message message = getHandler().obtainMessage(MESSAGE_POST_RESULT,
+	                new AsyncTaskResult<Result>(this, result));
+	        message.sendToTarget();
+	        return result;
+	    }
+
+	* 4、调用线程池执行FutureTask任务
+
+	    public final AsyncTask<Params, Progress, Result> executeOnExecutor(Executor exec,
+	            Params... params) {
+	        if (mStatus != Status.PENDING) {
+	            switch (mStatus) {
+	                case RUNNING:
+	                    throw new IllegalStateException("Cannot execute task:"
+	                            + " the task is already running.");
+	                case FINISHED:
+	                    throw new IllegalStateException("Cannot execute task:"
+	                            + " the task has already been executed "
+	                            + "(a task can be executed only once)");
+	            }
+	        }
+	        mStatus = Status.RUNNING;
+	        onPreExecute();
+	        mWorker.mParams = params;
+	        exec.execute(mFuture);			// 执行FutureTask任务
+	        return this;
+	    }
+
+
+	* 5、底层Handler实现主线程方法回调，通过调用FutureTask取消任务
+
+		private static class InternalHandler extends Handler {
+	        public InternalHandler(Looper looper) {
+	            super(looper);
+	        }
+	
+	        @Override
+	        public void handleMessage(Message msg) {
+	            AsyncTaskResult<?> result = (AsyncTaskResult<?>) msg.obj;
+	            switch (msg.what) {
+	                case MESSAGE_POST_RESULT:
+	                    // There is only one result
+	                    result.mTask.finish(result.mData[0]);
+	                    break;
+	                case MESSAGE_POST_PROGRESS:
+	                    result.mTask.onProgressUpdate(result.mData);
+	                    break;
+	            }
+	        }
+	    }
+		
+		private void finish(Result result) {
+		    if (isCancelled()) {
+		        onCancelled(result);
+		    } else {
+		        onPostExecute(result);
+		    }
+		    mStatus = Status.FINISHED;
+		}
+
+		// 取消线程任务
+		public final boolean cancel(boolean mayInterruptIfRunning) {
+	        mCancelled.set(true);
+	        return mFuture.cancel(mayInterruptIfRunning);
+	    }
