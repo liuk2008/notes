@@ -17,12 +17,21 @@
 	
 		Handler handler = new Handler();那么这个会默认用当前线程的looper
 	    Handler handler = new Handler(Looper.getMainLooper());入参自定义Looper
+
+**Handler、Message、MessageQueue、Looper之间机制**
+
+* 1、主线程创建Looper对象，相互之间进行绑定，底层同时创建MessageQueue对象
+* 2、底层Looper对象开启轮循，遍历消息队列
+* 3、创建Handler对象，子线程调用sendMsg相关方法发送消息
+* 4、Handler底层发送消息，同时将Handler对象与每一个Message对象进行绑定，绑定后Message对象会被添加到消息队列中
+* 5、当消息队列存在消息时，Looper底层从MessageQueue中取出Message，此时Msg对象已经绑定对应的Handler对象
+* 6、底层调用Handler对象dispatchMessage方法处理消息
 	
 **Loop类**
 
 * 1、通过Looper.prepare()来创建消息队列，并将当前线程与Looper对象进行绑定，在一个线程中只能调用一次
 
-		* 1、通过hreadLocal判断当前线程是否已经绑定Looper对象，已存在抛出异常
+		* 1、通过ThreadLocal判断当前线程是否已经绑定Looper对象，已存在抛出异常
 		* 2、当前线程不存在Looper对象时，创建Looper对象，通过ThreadLocal将当前线程与Looper对象进行绑定
 		
 			public static void prepare() {
@@ -33,13 +42,13 @@
 			    if (sThreadLocal.get() != null) {
 			        throw new RuntimeException("Only one Looper may be created per thread");
 			    }
-			    sThreadLocal.set(new Looper(quitAllowed));
+			    sThreadLocal.set(new Looper(quitAllowed));	 // 将Looper对象绑定至当前线程 
 			}
 
-		* 3、在创建Looper对象时，底层实际创建MessageQueue对象，获取当前线程对象
+		* 3、在创建Looper对象时，底层实际创建MessageQueue对象，获取当前线程对象，与当前的Looper对象进行关联
 		
 		    private Looper(boolean quitAllowed) {
-		        mQueue = new MessageQueue(quitAllowed);
+		        mQueue = new MessageQueue(quitAllowed);		// 创建消息队列
 		        mThread = Thread.currentThread();
 		    }
 
@@ -53,7 +62,7 @@
 		        if (me == null) {
 		            throw new RuntimeException("No Looper; Looper.prepare() wasn't called on this thread.");
 		        }
-				final MessageQueue queue = me.mQueue;
+				final MessageQueue queue = me.mQueue;		// 获取当前线程的消息队列
 	
 		* 2、开启死循环，遍历消息队列。通过MessageQueue对象取出Message对象，获取Message对象中的Handler对象，调用Handler对象dispatchMessage处理消息
 		 
@@ -69,6 +78,7 @@
 					// 从消息池中释放消息
 		            msg.recycleUnchecked();
 		        }
+		 注意：1、循环检测消息的机制  2、底层消息阻塞原理
 
 * 3、调用Looper对象的quitSafely和quit方法底层实际是调用MessageQueue对象的方法，退出消息队列
 
@@ -137,7 +147,7 @@
 		        if (mAsynchronous) {
 		            msg.setAsynchronous(true);
 		        }
-		        return queue.enqueueMessage(msg, uptimeMillis); // 将Msg添加至消息队列中
+		        return queue.enqueueMessage(msg, uptimeMillis); // 调用MessageQueue方法将Msg添加至消息队列中
 		    }
 
 * 3、Loop对象在检测MessageQueue时，获取到Msg，通过Message对象获取到Handler对象，调用dispatchMessage处理消息
@@ -176,8 +186,8 @@
 	            Message p = mMessages;
 	            boolean needWake;
 	            if (p == null || when == 0 || when < p.when) {  // 如果对列中没有message时
-	                msg.next = p; 	 		 // 将当前msg的next指为null
-	                mMessages = msg; 		// 将当前的msg赋值给成员变量msg
+	                msg.next = p; 	 		 					// 将当前msg的next指为null
+	                mMessages = msg; 							// 将当前的msg赋值给成员变量msg
 	                needWake = mBlocked;
 	            } else {
 	                needWake = mBlocked && p.target == null && msg.isAsynchronous();
@@ -204,9 +214,8 @@
 	        return true;	
 		}
 
-
-		** enqueueMessage 方法中，是将所有的message 按照消息的执行时间为顺序，从小到大，以单链表的形式，存储的。**
-		** 时间越小，表示，执行的时间越早。这样的话，单链表中第一个message,就是下一个应该执行的message **	
+		* enqueueMessage 方法中，是将所有的message 按照消息的执行时间为顺序，从小到大，以单链表的形式存储的
+		* 时间越小，表示，执行的时间越早。这样的话，单链表中第一个message，就是下一个应该执行的message 
 
 * 2、调用next()取出消息进行处理
 
