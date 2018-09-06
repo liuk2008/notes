@@ -33,7 +33,7 @@
 	9、权限问题
 		* 动态申请权限
 		* 运行时权限
-	10、gradle原理
+	10、Gradle原理
 	
 
 **新技术方向**
@@ -43,6 +43,7 @@
 	3、插件化开发、热更新、增量更新
 	4、jni、aidl、混淆
 	5、http协议 https协议
+	6、Python + appiums
 
 
 **技术框架**
@@ -63,6 +64,7 @@
 	6、UML时序图设计
 	7、静态代码分析、Lint代码
 	8、leackcanary、Android Monitor检测内存泄漏
+	9、Android 路由框架
 
 
 **遗留问题**
