@@ -1,4 +1,6 @@
 
+**相关总结**
+
 	* 为什么用服务而不是线程？
 		* 当Android应用程序把所有的界面关闭时进程还没有被销毁，不过处于的是空进程状态，Thread运行在空进程中很容易的被销毁了。
 		* 服务不容易被销毁, 如果非法状态下被销毁了, 系统会在内存够用时, 重新启动。
@@ -38,13 +40,6 @@
     		* 2、设置此标记时会清除栈内所有的Activity，并且会新开启一个任务栈重新生成一个Activity实例对象
     	2、启动模式为singleTop或者为singleTask时，重用Activity时会调用onNewIntent方法。
 		   需要在onNewIntent()中使用setIntent(intent)赋值给Activity的Intent，否则，后续的getIntent()都是得到老的Intent。
-
-	* 进程优先级
-		1、前台进程
-		2、可见进程
-		3、服务进程
-		4、后台进程：
-		5、空进程：优先级低，系统会经常终止这种进程
 
 	* Toast的创建需要依赖Handler，存在handler的话，子线程也可以弹出toast
 	
@@ -87,23 +82,26 @@
 		* 增量更新：通过生成差分包的供下载，再合并达到更新的方式
 		* 热修复（热更新）：强调的是修改线上版本的bug，用技术去实现不更新整个apk的条件下，修改掉bug。
 
-	* 常见异步机制
-		* Thread+Handler
-		* 常用第三方网络框架
-		* AsyncTask
-		* Executor线程池
-		* IntentService机制
-		* HandlerThread机制
-		* AsyncQueryHandler
 
-	* 常见内存泄漏
-		* Handler未处理
-		* 内部类引用外部类对象
-		* 单例模式
-		* 线程任务
-		* 资源未关闭
-		* Android组件未关闭
+**技术框架**
 
+	1、MVC、MVP、MVVM 模型
+	2、开源控件
+		* RxJava2
+		* Retrofit2
+		* Dragger2
+		* Glide
+		* EventBus
+		* LeackCanary
+		* Rxlifecycle
+		* reaml
+	
+**遗留问题**
+
+	1、为什么不能在子线程更新UI？
+	2、如何让android的service一直在后台运行？进程杀死后，服务可以重启
+	3、网络框架需考虑内存泄漏问题
+	4、自定义View相关：绘制流程、事件传递、滑动冲突
 
 
 
