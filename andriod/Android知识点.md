@@ -41,7 +41,7 @@
     	2、启动模式为singleTop或者为singleTask时，重用Activity时会调用onNewIntent方法。
 		   需要在onNewIntent()中使用setIntent(intent)赋值给Activity的Intent，否则，后续的getIntent()都是得到老的Intent。
 
-	* Toast的创建需要依赖Handler，存在handler的话，子线程也可以弹出toast
+	* Toast的创建需要依赖Looper，底层调用Looper.myLooper()获取Looper对象，若存在，在线程也可以弹出Toast，若不存在，抛出异常
 	
 	* Intent传递对象时，是将对象拷贝了一份进行传递
 
