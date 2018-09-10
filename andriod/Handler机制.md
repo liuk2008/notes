@@ -4,24 +4,38 @@
 
 * 1、ActivityThread中会在main()方法创建Looper对象
 
-* 2、Android应用启动的时候会创建 UI主线程 的 Looper 对象，它存在于整个应用的生命周期，用于处理消息队列里的 Message。
+* 2、Android应用启动的时候会创建UI主线程的Looper对象，它存在于整个应用的生命周期，用于处理消息队列里的 Message。
 
 * 3、Android的消息队列和消息循环都是针对具体线程的，一个线程可以存在一个消息队列和消息循环，特定线程的消息只能分发给本线程，不能跨线程和跨进程通讯。
 	
 		// 创建子线程中的Looper对象
-		public void run(){  
+		public void run(){ 
+		   /**
+			* 1、创建Looper对象，通过Looper对象创建其成员变量MessageQueue对象
+			* 2、通过TheadLocal将Looper对象与当前线程进行绑定
+			*/
 		   Looper.prepare();  
+ 		   /**
+			* 1、创建Handler对象，从当前线程中找到之前绑定的Looper对象，获取Looper对象中的MessageQueue对象
+			* 2、底层发送消息，同时将Handler对象与每一个Message对象进行绑定，绑定后Message对象会被添加到消息队列中
+			*/
 		   handler=new MyHandler();  
+		   /**
+			* 1、从当前线程中找到之前绑定的Looper对象，获取Looper对象中的MessageQueue对象
+			* 2、开启死循环，遍历MessageQueue
+			* 3、底层调用Msg中的Handler对象dispatchMessage方法处理消息
+			*/
 		   Looper.loop();  
 		} 
 	
-		Handler handler = new Handler();那么这个会默认用当前线程的looper
-	    Handler handler = new Handler(Looper.getMainLooper());入参自定义Looper
+		Handler handler = new Handler();那么这个会默认用UI线程的Looper
+	    Handler handler = new Handler(Looper.myLooper());入参自定义Looper
+		注意：Handler中的Looper对象与当前线程绑定的Looper对象必须一致，目的是使用唯一的MessageQueue
 
 **Handler、Message、MessageQueue、Looper之间机制**
 
-* 1、主线程创建Looper对象，相互之间进行绑定，底层同时创建MessageQueue对象
-* 2、底层Looper对象开启轮循，遍历消息队列
+* 1、当前线程创建Looper对象，通过ThreadLocal相互之间进行绑定，底层同时创建MessageQueue对象
+* 2、底层Looper对象开启轮循，从当前线程中找到之前绑定的Looper对象，获遍历消息队列
 * 3、创建Handler对象，子线程调用sendMsg相关方法发送消息
 * 4、Handler底层发送消息，同时将Handler对象与每一个Message对象进行绑定，绑定后Message对象会被添加到消息队列中
 * 5、当消息队列存在消息时，Looper底层从MessageQueue中取出Message，此时Msg对象已经绑定对应的Handler对象

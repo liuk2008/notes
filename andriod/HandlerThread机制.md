@@ -5,18 +5,15 @@
 	
 	* 1、通过构造函数指定线程名称以及线程优先级，此处的优先级是android.os.Process
 
-		// 1、初始化线程对象
+		// 初始化线程对象
 		   public HandlerThread(String name) {
 		        super(name);
 		        mPriority = Process.THREAD_PRIORITY_DEFAULT;
 		   }
-	
-		// 2、执行初始化任务
-		   protected void onLooperPrepared() {
-		   }
 
 	* 2、在线程的run方法中，对Looper对象进行实例化，此时获取Looper对象唤醒线程，并且开启Looper轮询消息队列。
 
+		// 执行初始化任务
 	    protected void onLooperPrepared() {
 	    }
 	
@@ -70,4 +67,7 @@
 			    }
 			};
 		}
-
+ 	* 总结：
+ 	* 1、创建HandlerThread对象，调用start方法，开启线程，底层实际是创建Looper对象
+ 	* 2、创建Handler对象，必须入参HandlerThread中的Looper对象，以保证Handler中的MessageQueue与HandlerThread线程使用MessageQueue一致
+ 	* 3、通过Handler发送msg，在handleMessage方法中执行耗时任务
