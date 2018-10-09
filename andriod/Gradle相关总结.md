@@ -43,36 +43,25 @@
 		    android:value="${UMENG_CHANNEL_VALUE}" />
 		
 		   第二步 在build.gradle设置productFlavors
-		   android {  
+
 		    productFlavors {
 		        xiaomi {
 		            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
 		        }
-		        _360 {
-		            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "_360"]
-		        }
+
 		        baidu {
 		            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baidu"]
-		        }
-		        wandoujia {
-		            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
-		        }
-		     }  
-		   }
+		        } 
+		    }
 		   或者批量修改
-		
-		   android {  
 				productFlavors {
 					xiaomi {}
-					_360 {}
 					baidu {}
-					wandoujia {}
 				}  
 		
 				productFlavors.all { 
 					flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name] 
 				}
-		  }
 
 	* assemble结合Build Variants来创建task
 
@@ -94,10 +83,10 @@
     build.gradle配置文件，在dependencies项中添加配置命令，这里有两种配置方式可供选择：
 
     * 一次性引入libs目录下所有jar文件
-     compile fileTree(include: ['*.jar'], dir: 'libs')
+     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     * 单个逐一引入jar文件
-     compile files('libs/universal-image-loader-1.8.6-with-sources.jar') 
+     implementation files('libs/universal-image-loader-1.8.6-with-sources.jar') 
 
   2、引入so文件
    
@@ -125,41 +114,20 @@
   4、引入Library库文件
 
     将第三方Library库文件复制到项目根目录下，打开项目根目录下的settings.gradle文件，添加配置命令，如：
-
     include ':app', ':PullToRefresh'
-
-    然后打开app module目录下的build.gradle，添加配置命令，如：
-    compile project(':PullToRefresh')
-
-    小技巧：推荐在项目根目录下新建一个文件夹，如extras文件夹，将所有Library库文件都复制到该文件下，方便统一浏览管理，
-    这样上面两步对应的配置命令将变成：
-
-    include ':app', ':extras:PullToRefresh'
-    和
-    compile project(':extras:PullToRefresh')
+    在module目录下的build.gradle，添加配置命令，如：
+    implementation project(':PullToRefresh')
   
   5、引入aar文件
-   
-    aar其实也是一个压缩文件，相比jar文件，它能够含带res资源文件等，aar文件的引入方式有两种：
 
-    1、Module形式引入
-    选择File菜单，或者打开Project Structure界面，添加新的Module（New Module…），选择Import .JAR/.AAR Package，
-    选择目标aar文件导入。导入之后，在项目根目录下会自动生成一个新的文件夹放置aar文件及其配置文件，然后打开app module目录
-    下的build.gradle配置文件，在dependencies依赖项中添加配置即可：
-     
-    compile project(':qiniu-android-sdk-7.2.0')
-
-    注意：这种引入方式无法查看aar文件中的代码和资源等文件。
-
-    2、libs目录中引入
     将aar文件复制到app module目录下的libs文件夹中，然后打开app module目录下的build.gradle配置文件，在android一栏中添加依赖：
      repositories {
-     		flatDir {
-        		dirs 'libs'
+     	  flatDir {
+        	dirs 'libs'
     	 }
-	}
+	 }
     然后再在dependencies一栏中添加：
-    compile(name:'qiniu-android-sdk-7.2.0', ext:'aar')
+    implementation(name:'qiniu-android-sdk-7.2.0', ext:'aar')
 
  6、引入jcenter、maven仓库文件
 
@@ -173,7 +141,7 @@
 	}
 
     然后再各个Module的build.gradle配置文件的dependencies项中添加依赖，格式为｀compile ‘name:version’｀，如：
-    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.2.0'
 
 
 

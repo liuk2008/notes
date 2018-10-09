@@ -98,6 +98,23 @@
 			* 2、onCreate 的时候 ViewRootImpl 还未创建
 			* 3、如果子线程的操作能在 onCreate 和 创建 ViewRootImpl 过程中完成，就不会报错 
 
+	* 解决Gradle依赖冲突
+		* gradlew -q app:dependencies 查询APP所有依赖包
+		* 其存在冲突的module中的build.gradle文件中加入下面代码，原理就是通过遍历所有依赖，并修改指定库的版本号
+			其中 requested.group == 'com.android.support' 	com.android.support表示要修改的依赖库
+			    details.useVersion '28.0.0'	                28.0.0表示要修改的版本号
+
+			configurations.all {
+			    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+			        def requested = details.requested
+			        if (requested.group == 'com.android.support') {
+			            if (!requested.name.startsWith("multidex")) {
+			                details.useVersion '28.0.0'
+			            }
+			        }
+			    }
+			}
+
 
 **技术框架**
 
