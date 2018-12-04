@@ -57,7 +57,27 @@
          1、配置了Archive the artifacts
             在“用于存档的文件”中填写需要存档的文件名，可以使用通配符。比如上面我配置了app/build/outputs/apk/*.apk，构建完之后在任务首页可以下载存档的文件
          2、配置Editable Email Notification 发送邮件    
-            在“Triggers”中，设置邮件发送时机及收件人地址         
+            在“Triggers”中，设置邮件发送时机及收件人地址        
+
+  3、使用Jenkins打包时常见问题处理
+
+	  1、gradle路径配置错误，提示以下错误
+		[Gradle] - [ERROR] Can't retrieve the Gradle executable.
+		Build step 'Invoke Gradle script' marked build as failure
+	    
+		解决办法：在 全局工具配置 里面修改gradle路径
+	    例：C:\Users\Administrator\.gradle\wrapper\dists\gradle-3.3-all\55gk2rcmfc6p2dg9u9ohc3hw9\gradle-3.3      
+	   
+	 
+	  2、打包时提示“Could not load Logmanager "org.apache.juli.ClassLoaderLogManager"”
+	    
+	    解决办法：修改Tomcat的bin目录下的catalina.bat文件。
+	    将
+	      set "JAVA_OPTS=%JAVA_OPTS% %LOGGING_CONFIG%"
+		  set "JAVA_OPTS=%JAVA_OPTS% %LOGGING_MANAGER%"
+	    修改为
+	      rem set "JAVA_OPTS=%JAVA_OPTS% %LOGGING_CONFIG%"   
+      rem set "JAVA_OPTS=%JAVA_OPTS% %LOGGING_MANAGER%"
 
 配置Jenkins文档：
 
