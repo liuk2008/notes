@@ -147,5 +147,23 @@ Python ： 交互式编程，不需要经过编译阶段，可以直接运行。
 
 **4、条件语句**
 
-	1、由于 python 并不支持 switch 语句，所以多个条件判断，只能用 elif 来实现，如果判断需要多个条件需同时判断时，可以使用 or （或），表示两个
-	   条件有一个成立时判断条件成功；使用 and （与）时，表示只有两个条件同时成立的情况下，判断条件才成功。
+	1、由于 python 并不支持 switch 语句，所以多个条件判断，只能用 elif 来实现
+	2、如果判断需要多个条件需同时判断时，可以使用 or （或），表示两个条件有一个成立时判断条件成功
+	3、使用 and （与）时，表示只有两个条件同时成立的情况下，判断条件才成功。
+	4、if 简单条件判断一行搞定：
+		a = [1,2,3]
+		b = a if len(a) != 0 else ""
+		print(b)
+	5、Python 没有 switch/case 语句，可以考虑用字典映射的方法替代
+		# 包含函数或者 lambda 表达式：
+		def num2Str(arg):
+		    switcher={
+		        0:zero,
+		        1:one,
+		        2:two,
+		        3:lambda:"three"
+		    }
+		    func=switcher.get(arg,lambda:"nothing")
+		    return func()
+
+
