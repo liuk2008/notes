@@ -194,10 +194,33 @@ Python ： 交互式编程，不需要经过编译阶段，可以直接运行。
        索引的值，但是它并不会在内存中真正产生一个列表对象，这种对象被称为可迭代对象
 	2、enumerate(sequence, [start=0])  #第二个参数为指定索引函数：多用于在for循环中得到计数，利用它可以同时获得索引和值
 	3、id()函数能够获取对象的内存地址
-	4、list()函数是对象迭代器，从一个可迭代对象中连续获取指定索引的值，一直到索引结束，把对象转为一个列表，返回的变量类型为列表
 	
 	import 与 from...import:
 		* 1、将整个模块(somemodule)导入，格式为： import somemodule
 		* 2、从某个模块中导入某个函数,格式为： from somemodule import somefunction
 		* 3、从某个模块中导入多个函数,格式为： from somemodule import firstfunc, secondfunc, thirdfunc
 		* 4、将某个模块中的全部函数导入，格式为： from somemodule import *
+	
+	迭代器（Iterator）：
+		* 迭代器是一个可以记住遍历的位置的对象。StopIteration 异常用于标识迭代的完成
+		* 迭代器对象从集合的第一个元素开始访问，直到所有的元素被访问完结束。迭代器只能往前不会后退。
+		* 迭代器有两个基本的方法：iter() 和 next()
+		* 使用iter()函数可以将list、dict、str等由Iterable变成Iterator
+
+	可迭代对象（Iterable）
+		* 可以直接作用于 for 循环的对象统称为可迭代对象，数据类型有以下几种：
+			1、集合数据类型，如list、tuple、dict、set、str等
+			2、generator，包括生成器和带yield的generator function
+
+	注意：
+		* 如果一个对象是迭代器，那么这个对象肯定是可迭代的；但是反过来，如果一个对象是可迭代的，那么这个对象不一定是迭代器。
+		* 凡是可作用于for循环的对象都是Iterable类型，凡是可用作next()函数的对象都是Iterator类型，它表示一个惰性计算的序列。
+		
+	生成器（generator）：
+		* 在Python中，使用了 yield 的函数被称为生成器（generator），生成器是一个返回Iterator对象的函数
+		* yield 是一个类似 return 的关键字，生成器的唯一注意事项就是：生成器只能遍历一次。
+		* 在调用生成器运行的过程中，每次遇到 yield 时函数会暂停并保存当前所有的运行信息，返回 yield 的值, 并在下一次执行 next() 方法时从当前位置继续运行。
+		* 注意：
+		一个带有yield的函数和普通函数不同，Python解释器会将其视为一个生成器（generator），调用函数时不会执行任何函数代码，而是返回一个Iterator对象，
+		直到对其调用 next()（在 for 循环中会自动调用 next()）才开始执行。虽然执行流程仍按函数的流程执行，但每执行到一个 yield 语句就会中断，并返回一个
+		迭代值，下次执行时从 yield 的下一个语句继续执行。
