@@ -99,8 +99,7 @@ Python ： 交互式编程，不需要经过编译阶段，可以直接运行。
 		* 4、可变数据（3 个）：List（列表）、Dictionary（字典）、Set（集合），list、set、dict类中存在copy方法
 		* 5、可迭代对象：str、list、tuple、set、dict（默认输出key值）
 		* 6、有序数据：str、list、tuple      无序数据：set、dict
-		* 7、函数返回多个值的时候，是以元组的方式返回的
-		* 8、Python 的所有数据类型都是类,可以通过 type() 查看该变量的数据类型，还可以用 isinstance 来判断
+		* 7、Python 的所有数据类型都是类,可以通过 type() 查看该变量的数据类型，还可以用 isinstance 来判断
 	   		 1、isinstance(object, classinfo) object -- 实例对象，classinfo -- 可以是直接或间接类名、基本类型或者有它们组成的元组。
 	   		 2、type()不会认为子类是一种父类类型。 
 	   		 3、isinstance()会认为子类是一种父类类型。
@@ -218,7 +217,8 @@ Python ： 交互式编程，不需要经过编译阶段，可以直接运行。
 
 	函数使用：
 		* 1、函数中参数传递，具体为：不可变对象和可变对象。
-		* 2、参数分为：固定参数，可变参数
+		* 2、函数返回多个值的时候，是以元组的方式返回的
+		* 3、参数分为：固定参数，可变参数
 			* 固定参数：必需参数、关键字参数、默认参数
 				def printinfo(name, age=20):
 				    print("名字: ", name)
@@ -241,10 +241,15 @@ Python ： 交互式编程，不需要经过编译阶段，可以直接运行。
 				def printinfo(a, b, *, c):  # 如果单独出现星号 * 后的参数必须用参数名传入
 				    return a + b + c
 				print(printinfo(1, 2, c=3))
-		* 3、lambda 表达匿名函数，也可以使用关键字参数、默认参数
+		* 4、lambda 表达匿名函数，也可以使用关键字参数、默认参数
 				count = lambda arg1, arg2: arg1 + arg2 
 				print(count(1, 2))
-
+		* 5、函数也可以以一个函数为其参数:
+				def func():
+    				print("hello world")
+				def excute(f):
+    				f()	
+				excute(func) 
 
 **6、变量作用域**
 
@@ -264,4 +269,9 @@ Python ： 交互式编程，不需要经过编译阶段，可以直接运行。
 	
 	模块（module），类（class）以及函数（def、lambda）才会引入新的作用域，其它的代码块（如 if/elif/else/、try/except、for/while等）
 	是不会引入新的作用域，这些语句内定义的变量，外部也可以访问
+
+	global 和 nonlocal关键字
+		* 当内部作用域想修改全局变量时，则需要 global 关键字
+		* 当内部作用域想修改嵌套作用域（enclosing 作用域，外层非全局作用域）中的变量，则需要 nonlocal 关键字
+		* nonlocal 只能修改外层函数的变量而不能修改外层函数所引用的全局变量
 
