@@ -175,12 +175,6 @@ Python ： 交互式编程，不需要经过编译阶段，可以直接运行。
 
 **5、迭代器&函数**
 	
-	import 与 from...import:
-		* 1、将整个模块(somemodule)导入，格式为： import somemodule
-		* 2、从某个模块中导入某个函数,格式为： from somemodule import somefunction
-		* 3、从某个模块中导入多个函数,格式为： from somemodule import firstfunc, secondfunc, thirdfunc
-		* 4、将某个模块中的全部函数导入，格式为： from somemodule import *
-	
 	迭代器（Iterator）：
 		* 迭代器是一个可以记住遍历的位置的对象。StopIteration 异常用于标识迭代的完成
 		* 迭代器对象从集合的第一个元素开始访问，直到所有的元素被访问完结束。迭代器只能往前不会后退。
@@ -212,8 +206,6 @@ Python ： 交互式编程，不需要经过编译阶段，可以直接运行。
 		3、id()函数能够获取对象的内存地址
 		4、copy.deepcopy()：深拷贝，完全复制源变量相关的所有数据，在内存中生成一套完全一样的内容，我们修改源变量或目标变量时都不会影响其他的变量
 		5、copy.copy()：浅拷贝，完全复制源变量相关的所有数据，在内存中生成一套完全一样的内容，产生新的对象
-		6、pass：是空语句，是为了保持程序结构的完整性，不做任何事情，一般用做占位语句。
-
 
 	函数使用：
 		* 1、函数中参数传递，具体为：不可变对象和可变对象。
@@ -275,3 +267,29 @@ Python ： 交互式编程，不需要经过编译阶段，可以直接运行。
 		* 当内部作用域想修改嵌套作用域（enclosing 作用域，外层非全局作用域）中的变量，则需要 nonlocal 关键字
 		* nonlocal 只能修改外层函数的变量而不能修改外层函数所引用的全局变量
 
+**7、模块&关键字&序列化**
+
+	import 与 from...import:
+		* 1、将整个模块(somemodule)导入，格式为： import somemodule
+		* 2、从某个模块中导入某个函数,格式为： from somemodule import somefunction
+		* 3、从某个模块中导入多个函数,格式为： from somemodule import firstfunc, secondfunc, thirdfunc
+		* 4、将某个模块中的全部函数导入，格式为： from somemodule import *
+
+	关键字：
+		* 1、循环及判断主要包括关键字：
+		     if　　elif　　else　　for　　while　　break　　continue　　and　　 or　　is　　not　　in
+		* 2、函数、模块、类主要包括关键字：
+			 from　　import　　as　　def　　pass　　lambda　　return　　class
+		* 3、异常主要包括关键字：
+			 try　　except　　finally　　raise 
+		* 4、其他关键字
+			 print　　del　　global　　with　　assert　　yield　　exec
+		* 重点注意：
+		  1、pass：是空语句，是为了保持程序结构的完整性，不做任何事情，一般用做占位语句。 
+		  2、with...as
+		  3、raise 
+		  4、assert 
+		  5、exec 
+
+	序列化&反序列化：
+		函数装饰器 @ 
