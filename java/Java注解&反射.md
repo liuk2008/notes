@@ -80,7 +80,7 @@
 	3、反射的作用：
 		* 通过反射创建对象：
 		* 1、通过Class对象的newInstance创建对应类的实例，无入参，newInstance()，调用对象的默认构造方法。
-		* 2、通过Class对象获取指定的Constructor对像创建，入参是可变参数，newInstance(Object... args) 
+		* 2、通过Class对象获取指定的Constructor对象创建，入参是可变参数，newInstance(Object... args) 
 		* 通过反射运行配置文件的内容
 		* 通过反射越过泛型检查,泛型在编译时有效，在运行时会跳过检查
 		* 动态代理，通过反射生成一个代理对象
