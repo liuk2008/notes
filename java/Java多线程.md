@@ -102,7 +102,17 @@
 						}
 					}   
 				}
-	
+
+	线程中断问题：
+	* 1、当对一个线程调用interrupt()方法时
+		 * 如果线程处于正常活动状态，那么会将该线程的中断标志设置为 true。被设置中断标志的线程将继续正常运行，不受影响。
+		 * 如果线程处于被阻塞状态（sleep, wait, join 等状态），那么线程将立即退出被阻塞状态，并抛出一个InterruptedException
+    * 注意：interrupt() 并不能真正的中断线程，需要被调用的线程自己进行配合才行
+
+① 在正常运行任务时，经常检查本线程的中断标志位，如果被设置了中断标志就自行停止线程
+
+② 在调用阻塞方法时正确处理InterruptedException异常
+	https://blog.csdn.net/qq_38663729/article/details/78232648
 
 **2、生产者消费者问题**
 
@@ -136,7 +146,7 @@
 	* 5、obj.notifyAll()则能全部唤醒A1,A2,A3，但是要继续执行obj.wait()的下一条语句，必须获得obj锁，因此，A1,A2,A3只有一个有机会获得锁继续执行
  	* 6、当B调用obj.notify()时，B正持有obj锁，A1,A2虽被唤醒但无法获得obj锁。直到B退出synchronized块，释放obj锁后，A1,A2中的一个才有机会获得锁继续执行。
 		 	
-**2、FutureTask&&Callable**
+**3、FutureTask&&Callable**
 
 	* 1、通过实现 Callable 接口，创建线程任务，可以返回任务执行结果。
 	* 2、调用 FutureTask 类，传递 Callable 任务，开启工作线程执行任务

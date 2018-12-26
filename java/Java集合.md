@@ -22,13 +22,13 @@
 		2、当源集合元素出现变动时，Set集合也会出现变动。比如，ArrayList添加了一个重复元素，此时的Set集合也会出现重复元素
 
 	HashMap集合
-	* 1、底层是hash表结构，实现方式是数组+链表，数组、链表类型为Entry型，Entry主要存储Key值和Value值，及下一个节点值next
-	* 存储的思想都是：通过table数组存储，数组的每一个元素都是一个Entry；而一个Entry就是一个单向链表，Entry链表中的每一个节点就保存了key-value键值对数据。
-	     1、底层将Key值通过哈希函数转换对应的数组下标，并将Key值和Value值存入Entry对象中
-		 2、当多个元素经过转换后数组下标相同时，底层结构将在对应数组元素上挂载链表结构，Entry类里面有一个next属性，作用是指向下一个Entry
-		 A-->index=0-->Entry[0]=A,A.next=null
-		 B-->index=0-->Entry[0]=B,B.next=A,A.next=null
-		 C-->index=0-->Entry[0]=C,C.next=B,B.next=A,A.next=null
+	* 1、底层是哈希表结构，实现方式是数组+链表，数组、链表类型为Entry型，Entry主要存储Key值和Value值，及下一个节点值next
+	     1、第一步：先将元素的Key值通过哈希函数转换对应的数组下标，元素的Key值和Value值被存入Entry对象中，最后将Entry对象存储到计算出来的数组中对应下标。
+		 2、第二步：当多个元素经过转换后，得到的数组下标相同时，底层结构将在对应数组元素上挂载链表结构，Entry类里面有一个next属性，作用是指向下一个Entry
+			 A-->index=0-->Entry[0]=A,A.next=null
+			 B-->index=0-->Entry[0]=B,B.next=A,A.next=null
+			 C-->index=0-->Entry[0]=C,C.next=B,B.next=A,A.next=null
+		 总结：建立一个长度为16的数组，数组中每个元素值是一个Entry对象，同时表示一个链表的头结点，以这个头结点开始，建立一个单向链表，依次存储数组下标相同的Entry对象
 
 	* 2、HashMap底层调用put()方法添加元素时，会判断对象元素的hashCode是否相等，及调用对象的equals()方法
 	
@@ -184,7 +184,7 @@
 	* 1、HashTable线程安全，因为底层方法添加了synchronize关键字，适用于多线程。Hashmap线程不安全，适用于单线程。
 	* 2、HashTable不允许null键、null值，HashMap允许null键和null值
 	* 3、HashMap是“从前向后”的遍历数组；再对数组具体某一项对应的链表，从表头开始进行遍历。
-	* Hashtabl是“从后往前”的遍历数组；再对数组具体某一项对应的链表，从表头开始进行遍历。
+	* Hashtable是“从后往前”的遍历数组；再对数组具体某一项对应的链表，从表头开始进行遍历。
 	* 
 
 
