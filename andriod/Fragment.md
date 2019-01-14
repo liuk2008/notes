@@ -16,6 +16,10 @@
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
     fragmentTransaction.replace(Window.ID_ANDROID_CONTENT, fragment, tag);
     fragmentTransaction.commit();
+	
+	getFragmentManager()：所得到的是所在fragment的父容器的管理器
+	getChildFragmentManager()：所得到的是在fragment里面子容器的管理器
+	getFragmentManager到的是activity对所包含fragment的Manager，而如果是fragment嵌套fragment，那么就需要利用getChildFragmentManager()了。
 
 **3、FragmentManager中add和replace的区别**
 
@@ -60,3 +64,5 @@
     2、同一个Activity中，不个container间Fragment的参数传递。
 
 **8、监听Fragment回退事件**
+
+
