@@ -26,6 +26,7 @@
 	1、add不会重新初始化fragment，replace每次都会。所以如果在fragment生命周期内获取获取数据,使用replace会重复获取。
 	2、添加相同的fragment时，replace不会有任何变化，add会报IllegalStateException异常。
 	3、replace会先清空父布局容器，再显示当前fragment，而add是覆盖前一个fragment。所以如果使用add一般会伴随hide()和show()，避免布局重叠。
+	4、
 
 **4、有关回滚——FragmentTransaction**
 
@@ -60,8 +61,15 @@
 
 **7、Fragment之间参数传递 **
 
-    1、同一个container中不同fragment间的参数传递。这种情况一般发生在fragment跳转时，上一个Fragment将参数传递给下一个Fragment。
-    2、同一个Activity中，不个container间Fragment的参数传递。
+    1、Activity把值传递给Fragment
+	   * 1、通过Bundle传递参数
+	   * 2、是在宿主Activity中定义方法，将要传递的值传递到Fragment中，在Fragment中的onAttach方法中，获取到这个值。
+	   * 3、在Activity中通过单例模式创建Fragment，通过方法入参传递参数
+	2、Fragment把值传递给Activity
+	   * 1、通过在Fragment内部定义回调接口，向Activity传值
+	3、Fragment与Fragment之间的传值
+       * 1、通过共同的Activity传递
+       * 2、通过调用Fragment中的onActivityResult方法实现传值
 
 **8、监听Fragment回退事件**
 
