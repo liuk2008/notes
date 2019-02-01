@@ -21,9 +21,15 @@
 	getChildFragmentManager()：所得到的是在fragment里面子容器的管理器
 	getFragmentManager到的是activity对所包含fragment的Manager，而如果是fragment嵌套fragment，那么就需要利用getChildFragmentManager()了。
 
-	注意：常用Fragment可能会经常遇到这样Activity状态不一致：checkStateLoss这样的错误。主要是因为：commit方法一定要在Activity.onSaveInstance()之前调用。
-		 只能在activity存储它的状态（当用户要离开activity时）之前调用commit()，如果在存储状态之后调用commit()，将会抛出一个异常。
-		 这是因为当activity再次被恢复时commit之后的状态将丢失。如果丢失也没关系，那么使用commitAllowingStateLoss()方法。
+	注意：
+	* 1、常用Fragment可能会经常遇到这样Activity状态不一致：checkStateLoss这样的错误。主要是因为：commit方法一定要在Activity.onSaveInstance()之前调用。
+    * 只能在activity存储它的状态（当用户要离开activity时）之前调用commit()，如果在存储状态之后调用commit()，将会抛出一个异常。这是因为当activity再次被恢
+    * 复时commit之后的状态将丢失。如果丢失也没关系，那么使用commitAllowingStateLoss()方法。
+    
+	* 2、采用new BlankFragment()和Fragment.newInstance()的方式不同点：当Activity销毁后又重新建立时，fragment是通过反射进行重建的，而且只调用了无参构造
+	* 的方法，这也是通过new Fragment()的方式构建fragment时，遇到屏幕切换时，fragment会报空指针异常的原因。fragment在初始化之后会把参数保存在arguments中，
+	* 当fragment再次重建的时候，它会检查arguments中是否有参数存在，如果有，则拿出来再用，所以我们再onCreate()方法里面才可以拿到之前设置的参数，但是fragment
+	* 在重建的时候不会调用有参构造，所以，通过new Fragment()的方法来初始化，fragment重建时，我们设置的参数就没有了
 
 **3、FragmentManager中add和replace的区别**
 
