@@ -127,30 +127,3 @@
 			3、同时勾选V1和V2则所有机型都没问题
 
 
-**技术框架**
-
-	1、MVC、MVP、MVVM 模型
-	2、开源控件
-		* RxJava2
-		* Retrofit2
-		* Dragger2
-		* Glide
-		* EventBus
-		* LeackCanary
-		* Rxlifecycle
-		* reaml
-	
-**遗留问题**
-
-	1、为什么不能在子线程更新UI？
-	2、如何让android的service一直在后台运行？进程杀死后，服务可以重启
-	3、网络框架需考虑内存泄漏问题
-	4、自定义View相关：绘制流程、事件传递、滑动冲突
-	5、主线程中的Looper循环为什么不影响运行程序运行
-
-
-
-
-
-
-
