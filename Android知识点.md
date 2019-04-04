@@ -116,20 +116,35 @@
 		2、只勾选V2签名7.0以下会直接安装完显示未安装，7.0以上则使用了V2的方式验证
 		3、同时勾选V1和V2则所有机型都没问题
 
-**其他**
+**ANR总结**
 
-	* 为什么Android更新UI只能在主线程（UI只能在创建它的线程中更新，不一定是主线程）
-	
-	* UI访问没有加锁，在多个线程访问UI是不安全的，所以Android中规定只能在UI线程中访问UI。
-	* 有些UI更新可以在 onCreate 中创建子线程操作UI，不会程序崩溃，主要是因为： 
-		* 1、错误是从 ViewRootImpl.requestLayout → ViewRootImpl.checkThread 中抛出
-		* 2、onCreate 的时候 ViewRootImpl 还未创建
-		* 3、如果子线程的操作能在 onCreate 和 创建 ViewRootImpl 过程中完成，就不会报错 
+	* 造成ANR的原因一般有两种：
+	  1、当前的事件没有机会得到处理（即主线程正在处理前一个事件，没有及时的完成或者looper被某种原因阻塞住了）
+	  2、当前的事件正在处理，但没有及时完成
 
-1、为什么不能在子线程更新UI？
-   https://blog.csdn.net/ZHWang102107/article/details/83113245
-	3、主线程中的Looper循环为什么不影响运行程序运行
+	* Looper为什么要无限循环？
+	  ActivityThread是主线程入口的类，其中main方法主要就是做消息循环，一旦退出消息循环，那么应用也就退出了。
+
+	* 主线程中的Looper循环为什么不影响运行程序运行？
+	  当主线程Looper从消息队列读取消息，当读完所有消息时，主线程阻塞。子线程往消息队列发送消息，并且往管道文件写数据，主线程即被唤醒，
+      从管道文件读取数据，主线程被唤醒只是为了读取消息，当消息读取完毕，再次睡眠。因此loop的循环并不会对CPU性能有过多的消耗。
+
+	总结：
+      1、Looer.loop()方法可能会引起主线程的阻塞，但只要它的消息循环没有被阻塞，能一直处理事件就不会产生ANR异常。	
+	  2、Activity的每个生命周期都是由消息驱动的。接收不同的消息，进行不同的生命周期方法，举个例子：假如现在轮询到了onResume这个消息，这个时候， Activity应该执行onResume方法。
+         假如这个时候我们在onResume方法里面执行耗时操作。同时又进行点击事件，那么点击事件就不会得到及时的处理。这样的话，就会造成卡顿，然后ANR了。
+
+**onSaveInstanceState()和onRestoreInstanceState()**
+
+	* onSaveInstanceState()：Android系统的回收机制会在未经用户主动操作的情况下销毁Activity，则调用该方法保存数据，在onStop()之前
+	* onRestoreInstanceState()：只有在Activity被系统回收，重新创建Activity的情况下才会被调用，在onStart()之后
+ 	* 如果onRestoreInstanceState被调用了，则页面必然被回收过，则onSaveInstanceState必然被调用过。
 
 
-http://blog.csdn.net/fenggering/article/details/53907654
-http://blog.csdn.net/tianyl_melodie/article/details/53424116
+**ActivityThread**
+
+
+
+
+
+
