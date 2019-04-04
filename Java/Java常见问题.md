@@ -142,3 +142,22 @@
 	2、OOM：OutOfMemoryError
        * 堆内存溢出
        * 栈内存溢出
+
+**集合与数组之间的转换**
+
+    // 分配一个长度与list的长度相等的字符串数组
+    String[] array2 = (String[]) list.toArray(new String[list.size()]);
+
+    // 将数组装换为list，直接使用Arrays的asList方法
+    ArrayList<String> list = Arrays.asList(array);
+
+    源码分析：
+
+    l、当list或Set中元素类型单一时，可以使用带参数的toArray方法，参数为目标数组对象，如果目标数组长度小于List或Set的元素个数时，
+       在转化时自动把目标数组长度调整到L，如果目标数组长度大于L，转化时将List或Set的元素放到目标数组的前L个位置。
+       转化后需要进行强制类型转换，才能得到目标数组。
+
+    2、数组转化为List或Set时需要借助Arrays的asList方法，它将数组转化成一个List，可以用这个List构造Set。
+       Set set = new HashSet(Arrays.asList(array));
+
+
