@@ -39,7 +39,6 @@
 		* 2、设置PendingIntent后，自定义消息通知无法消失，无论是通过getBroadcast、getActivity发送广播
 		* 3、非Activity的Context都需要启动Activity都需要新建任务栈去放置，不仅仅是广播里面的context 	 
 
-
 **任务栈相关内容**
 		
 	1、Android程序打开时会创建一个任务栈，用于存储当前程序的Activity，所有的Activity属于一个任务栈。
@@ -47,7 +46,6 @@
 	3、任务栈可以移动到后台并且保留了每一个Activity的状态，并且有序的给用户列出它们的任务，而且还不丢失它们状态信息。
 	4、退出应用程序时：当把任务栈中所有的Activity清除出栈时，任务栈会被销毁，程序退出。
 	
-
 **Activity的四种启动模式**
 
 	1、standard：默认启动模式，每次创建新的Activity放入任务栈中。
@@ -64,7 +62,6 @@
 		2、启动模式为singleTop或者为singleTask时，重用Activity时会调用onNewIntent方法。我们需要在onNewIntent()中使用setIntent(intent)
 		   赋值给Activity的Intent，否则后续的getIntent()都是得到老的Intent。
 
-
 **分辨率、dp、px相关内容**
 
 	1、分辨率：图像在水平和垂直方向上所容纳最大像素个数。例如 960*640 表示表示水平像素数为960个，垂直像素数640个，像素大小为960*640，约60万像素。
@@ -74,7 +71,6 @@
 	4、屏幕像素密度（density）：每英寸像素数量，dip到px的转换公式: px = dip * density。
 
 	注意：Android规定，在屏幕像素密度为160dpi的情况下，1dp=1px。而在像素密度为320dpi的情况下，1dp=2px，以此类推。计算公式：1dp=（像素密度/160dpi）*1px
-
 
 **StickyBroadcast广播**
 	
@@ -87,7 +83,6 @@
 	2、粘性广播Receiver如果被销毁，那么下次重建时会自动接收到消息数据
 	3、粘性广播是指广播接收器一注册马上就能收到广播的一种机制，当然首先系统要存在广播。普通广播要先注册广播接收器，然后广播被发送到系统，广播接收器才能收到广播
 	
-
 **解决Gradle依赖冲突**
 
 	* gradlew -q app:dependencies 查询APP所有依赖包
@@ -103,13 +98,12 @@
 		    }
 		}	
 
-
 **V1签名和V2签名的区别**
 
-	* V1：在V1中只对未压缩的文件内容进行了验证，所以在APK签名之后可以进行很多修改——文件可以移动，甚至可以重新压缩。即可以对签名后的文件在进行处理 
-	* V2：V2签名验证了归档中的所有字节，而不是单独的ZIP条目，如果您在构建过程中有任何定制任务，包括篡改或处理APK文件，请确保禁用它们，否则您可能会
-	* 使v2签名失效，从而使您的APKs与Android 7.0和以上版本不兼容。
-
+	1、V1：在V1中只对未压缩的文件内容进行了验证，所以在APK签名之后可以进行很多修改——文件可以移动，甚至可以重新压缩。即可以对签名后的文件在进行处理 
+	2、V2：V2签名验证了归档中的所有字节，而不是单独的ZIP条目，如果您在构建过程中有任何定制任务，包括篡改或处理APK文件，请确保禁用它们，否则您可能会
+	       使v2签名失效，从而使您的APKs与Android 7.0和以上版本不兼容。
+ 
 	* V1签名是对jar进行签名，V2签名是对整个apk签名
 	* V1和V2的签名使用：
 		1、只勾选v1签名并不会影响什么，但是在7.0上不会使用更安全的验证方式
@@ -118,28 +112,63 @@
 
 **ANR总结**
 
-	* 造成ANR的原因一般有两种：
-	  1、当前的事件没有机会得到处理（即主线程正在处理前一个事件，没有及时的完成或者looper被某种原因阻塞住了）
-	  2、当前的事件正在处理，但没有及时完成
+	1、造成ANR的原因一般有两种：
+	   1、当前的事件没有机会得到处理（即主线程正在处理前一个事件，没有及时的完成或者looper被某种原因阻塞住了）
+	   2、当前的事件正在处理，但没有及时完成
 
-	* Looper为什么要无限循环？
-	  ActivityThread是主线程入口的类，其中main方法主要就是做消息循环，一旦退出消息循环，那么应用也就退出了。
+	2、Looper为什么要无限循环？
+	   ActivityThread是主线程入口的类，其中main方法主要就是做消息循环，一旦退出消息循环，那么应用也就退出了。
 
-	* 主线程中的Looper循环为什么不影响运行程序运行？
-	  当主线程Looper从消息队列读取消息，当读完所有消息时，主线程阻塞。子线程往消息队列发送消息，并且往管道文件写数据，主线程即被唤醒，
-      从管道文件读取数据，主线程被唤醒只是为了读取消息，当消息读取完毕，再次睡眠。因此loop的循环并不会对CPU性能有过多的消耗。
+	3、主线程中的Looper循环为什么不影响运行程序运行？
+	   当主线程Looper从消息队列读取消息，当读完所有消息时，主线程阻塞。子线程往消息队列发送消息，并且往管道文件写数据，主线程即被唤醒，
+       从管道文件读取数据，主线程被唤醒只是为了读取消息，当消息读取完毕，再次睡眠。因此loop的循环并不会对CPU性能有过多的消耗。
 
 	总结：
-      1、Looer.loop()方法可能会引起主线程的阻塞，但只要它的消息循环没有被阻塞，能一直处理事件就不会产生ANR异常。	
-	  2、Activity的每个生命周期都是由消息驱动的。接收不同的消息，进行不同的生命周期方法，举个例子：假如现在轮询到了onResume这个消息，这个时候， Activity应该执行onResume方法。
-         假如这个时候我们在onResume方法里面执行耗时操作。同时又进行点击事件，那么点击事件就不会得到及时的处理。这样的话，就会造成卡顿，然后ANR了。
+       1、Looer.loop()方法可能会引起主线程的阻塞，但只要它的消息循环没有被阻塞，能一直处理事件就不会产生ANR异常。	
+	   2、Activity的每个生命周期都是由消息驱动的。接收不同的消息，进行不同的生命周期方法，比如：现在轮询到了onResume这个消息，这时Activity应该执行
+		  onResume()。假如这时我们在onResume()里执行耗时操作，同时又进行点击事件，那么点击事件就不会得到及时的处理。这样的话就会造成卡顿，然后ANR了。
 
 **onSaveInstanceState()和onRestoreInstanceState()**
 
-	* onSaveInstanceState()：Android系统的回收机制会在未经用户主动操作的情况下销毁Activity，则调用该方法保存数据，在onStop()之前
-	* onRestoreInstanceState()：只有在Activity被系统回收，重新创建Activity的情况下才会被调用，在onStart()之后
- 	* 如果onRestoreInstanceState被调用了，则页面必然被回收过，则onSaveInstanceState必然被调用过。
+	Android系统的回收机制会在未经用户主动操作的情况下销毁activity，而为了避免系统回收activity导致数据丢失，Android为我们提供了
+    onSaveInstanceState(Bundle outState)和onRestoreInstanceState(Bundle savedInstanceState)用于保存和恢复数据。
 
+	* onSaveInstanceState()：当Activity有可能被系统回收的情况下，则调用该方法保存数据，而且是在onStop()之前
+	* onSaveInstanceState()会在以下情况被调用： 
+		1、当用户按下HOME键时。 
+		2、从最近应用中选择运行其他的程序时。 
+		3、按下电源按键（关闭屏幕显示）时。 
+		4、从当前activity启动一个新的activity时。 
+		5、屏幕方向切换时(无论竖屏切横屏还是横屏切竖屏都会调用)。
+	* onRestoreInstanceState()：只有在Activity被系统回收，重新创建Activity的情况下才会被调用，在onStart()之后
+	    1、回收Activity时机：1、切换横竖屏，2、系统内存不足
+		2、如果onRestoreInstanceState被调用了，则页面必然被回收过，则onSaveInstanceState必然被调用过
+
+
+**Android更新UI问题**
+
+	1、Android为什么更新UI只能在主线程？
+	   1、Android的UI访问是没有加锁的，这样在多个线程访问UI是不安全的。在多线程中并发访问可能会导致UI控件处于不可预期的状态，比如主线程正在绘制页面，
+          而另外能操作UI的线程对View进行了操作，当主线程绘制完上方的View后，这个被其他线程操作后的VIew的很有可能会覆盖到其他View之上，出现异常。
+	   2、不对UI控件的访问加上锁机制的原因有：1、上锁会让UI控件变得复杂和低效，2、上锁后会阻塞某些进程的执行
+
+	2、Android中为什么不能在子线程中更新UI？
+	   不管调用View的什么方法，它都会去调用 ViewRootImpl 中的 checkThread() 去检测线程，所以关键在于checkThread()这个方法。
+			void checkThread() {
+			    if (mThread != Thread.currentThread()) {
+			        throw new CalledFromWrongThreadException(
+			                "Only the original thread that created a view hierarchy can touch its views.");
+			    }
+			}
+	   其中，Thread.currentThread()是子线程，而mThread是在构造方法中初始化的，是主线程 [ MainThread ]。 每一次访问了UI，Android都会重新绘制View。
+
+	3、部分条件下在onCreate中可以创建子线程操作UI，不会程序崩溃。原因：
+       1、在执行onCreate方法的时候ViewRootImpl还没创建，ViewRootImpl的创建在onResume方法回调之后，所以无法去检查当前线程。
+       2、ViewRootImpl是在WindowManagerGlobal的addView方法中创建的。
+
+	总结：
+		由于Android的UI访问是没有加锁的，当多个线程访问View时会出现不可预期的状态，所以Android中规定只能在UI线程中访问UI，并且在View绘制的过程中
+        校验当前线程是否是主线程，否则就抛出异常。
 
 **ActivityThread**
 
