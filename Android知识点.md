@@ -2,25 +2,33 @@
 **相关总结**
 
 	1、A界面数据发生改变时通知B界面：1、回调接口，2、发送广播
+
 	2、Toast的创建需要依赖Looper，底层调用Looper.myLooper()获取Looper对象，若存在，在线程也可以弹出Toast，若不存在，抛出异常
+
 	3、Intent传递对象时，是将对象拷贝了一份进行传递
+
 	4、增量更新、热修复、插件化
 	   * 增量更新：通过生成差分包的供下载，再合并达到更新的方式
 	   * 热修复（热更新）：强调的是修改线上版本的bug，用技术去实现不更新整个apk的条件下，修改掉bug。
+	   * 
 	5、热启动、冷启动
 	   * 冷启动：当应用启动时，后台没有该应用的进程，这时系统会重新创建一个新的进程分配给该应用，这个启动方式就叫做冷启动（后台不存在该应用进程）。
 	   * 热启动：当应用已经被打开，但是被按下返回键或Home键时回到桌面或者切换到其他程序时，再重新打开该app时，这个方式叫做热启动（后台已经存在该应用进程）。
+	   
 	6、class文件、dex文件
 	   * class文件：class文件是一种能够被JVM识别，加载并且执行的文件格式。
 	   * dex文件：能够被DVM或者Art虚拟机执行并且加载的文件格式。先生成class文件，再根据class文件生成dex文件
+	   
 	7、为什么用服务而不是线程？
 	   * 当Android应用程序把所有的界面关闭时进程还没有被销毁，不过处于的是空进程状态，Thread运行在空进程中很容易的被销毁了。
 	   * 服务不容易被销毁, 如果非法状态下被销毁了, 系统会在内存够用时, 重新启动。
+	   
 	8、内存抖动和内存泄漏
 	   * 内存抖动：在短时间内有大量的对象被创建或者被回收的现象
 	   * 内存泄漏：某一段内存在程序里已经不需要了，但是GC回收内存时检测那段内存还是被需要的，不能正常被回收，这种在程序中在没有使用的但是又不能被回收的内存
 		 就是被泄漏的内存。一般检查这段内存是否存在引用和被引用关系，不存在这关系时，就认为可回收，若还存在引用或被引用关系，就认为不可回收。
 	   * 注意：执行GC操作的时候，任何线程的任何操作都会需要暂停，等待GC操作完成之后，其他操作才能够继续运行（所以垃圾回收运行次数越少，对性能影响就越少）。
+	   
 	9、SharedPreference.Editor的apply和commit方法异同
 	   * 1、apply没有返回值而commit返回boolean表明修改是否提交成功 
 	   * 2、apply是将修改数据原子提交到内存, 而后异步真正提交到硬件磁盘, 而commit是同步的提交到硬件磁盘
@@ -82,6 +90,15 @@
 	1、无序广播和粘性消息不能被截获，而有序广播是可以被截获的
 	2、粘性广播Receiver如果被销毁，那么下次重建时会自动接收到消息数据
 	3、粘性广播是指广播接收器一注册马上就能收到广播的一种机制，当然首先系统要存在广播。普通广播要先注册广播接收器，然后广播被发送到系统，广播接收器才能收到广播
+	4、Android 8.0以上大部分静态注册的广播无法接受到，解决办法：
+       if(Build.VERSION.SDK_INT >= 26){
+            ComponentName componentName=new ComponentName(packagename,"xx.xx.xx.xxReceiver");//参数1-包名 参数2-广播接收者所在的路径名
+            intent.setComponent(componentName);
+       }
+	   // 解决在android8.0系统以上2个module之间发送广播接收不到的问题
+	   if(Build.VERSION.SDK_INT >= 26){
+			intent.addFlags(0x01000000);
+	   }
 	
 **解决Gradle依赖冲突**
 
@@ -144,7 +161,6 @@
 	    1、回收Activity时机：1、切换横竖屏，2、系统内存不足
 		2、如果onRestoreInstanceState被调用了，则页面必然被回收过，则onSaveInstanceState必然被调用过
 
-
 **Android更新UI问题**
 
 	1、Android为什么更新UI只能在主线程？
@@ -170,10 +186,15 @@
 		由于Android的UI访问是没有加锁的，当多个线程访问View时会出现不可预期的状态，所以Android中规定只能在UI线程中访问UI，并且在View绘制的过程中
         校验当前线程是否是主线程，否则就抛出异常。
 
-**ActivityThread**
 
+**AppCompatActivity \ view \ window 之间的关系**
 
-
-
-
+	1、调用AppCompatActivity的setContentView()方法，底层实际上通过调用生成AppCompatDelegate对象的setContentView()方法
+	2、AppCompatDelegate对象底层PhoneWindow、DecorView创建过程：
+       1、先调用PhoneWindow相关方法：generateDecor()和generateLayout()，生成DecorView以及加载对应的布局文件 
+	   2、根据不同的属性加载不同的XML布局，生成subDecorView
+       3、找到Window中的 android.R.id.content 布局，通过循环删除FrameLayout里面的子View，删除的同时将这些子View添加到这个兼容的View里面即subDecorView
+	   4、清除Window中android.R.id.content的id，同时将subDecorView中的id替换为Window中android.R.id.content的id
+	   5、最后将subDecor作为参数传到PhoneWindow的setContentView()方法中;
+	3、在AppCompatDelegate对象的setContentView(View view)方法中，先查找subDecor中id为android.R.id.content的布局，然后将view通过addView添加到此布局中
 
