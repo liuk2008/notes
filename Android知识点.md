@@ -114,8 +114,23 @@
 		        }
 		    }
 		}	
+**Android签名文件**
 
-**v1签名和v2签名的区别**
+	1、公钥证书（也称为数字证书或身份证书）包含公钥/私钥对的公钥，以及标识密钥所有者的一些其他元数据（例如名称和位置）。证书的所有者持有对应的私钥。
+	2、密钥库是一种包含一个或多个私钥的二进制文件。
+	3、在您签署 APK 时，签署工具会将公钥证书附加到 APK（在签署应用软件包时也是如此）。公钥证书充当“指纹”，用于将 APK 或应用软件包唯一关联到您及您的对应私钥。 
+	   这有助于 Android 确保应用将来的所有更新都是原版更新且来自原始作者。用于创建此证书的密钥称为应用签名密钥。
+
+	* 密钥库
+		Key store path：选择创建密钥库的 位置。
+		Password：为您的密钥库创建并确认安全的密码。
+	* 密钥
+		Alias：为您的密钥输入一个标识名。
+		Password：为您的密钥创建并确认安全的密码。此密码应当与您为密钥库选择的密码不同。
+		Validity (years)：以年为单位设置密钥的有效时长。密钥的有效期应至少为 25 年，以便您可以在应用的整个生命期内使用相同的密钥签署应用更新。
+		Certificate：为证书输入一些关于您自己的信息。此信息不会显示在应用中，但会作为 APK 的一部分包含在您的证书中。
+
+**v1签名方案和v2签名方案的区别**
 
 	1、v1：在v1中只对未压缩的文件内容进行了验证，所以在APK签名之后可以进行很多修改——文件可以移动，甚至可以重新压缩。即可以对签名后的文件在进行处理 
 		   META-INF 目录下生成三个文件：MANIFEST.MF、CERT.SF、CERT.RSA，最终构成了 APK 签名信息。
@@ -129,8 +144,11 @@
 		3、同时勾选v1和v2则所有机型都没问题
 	
 	注意：
-    	在默认情况下，Android Studio 2.2 以上 和 Android Plugin for Gradle 2.2 以上会使用 APK Signature Scheme v2 和传统签名方案来签署应用，所以
-        无论生成的v1签名还是v2签名，实际上Android Studio在打包过程中已经添加了v1和v2签名
+    	在默认情况下，Android Studio 2.2 以上 和 Android Plugin for Gradle 2.2 以上会使用 APK Signature Scheme v2 和传统签名方案来签署应用
+		查看APK采用哪种签名方案：
+		java -jar apksigner.jar verify -v xxx.apk
+		重新对APK进行签名：
+		java -jar apksigner.jar sign --ks keyStorePath --ks-key-alias alias --ks-pass pass:KeyStorePwd --key-pass pass:aliasPwd --out out.apk input.apk
 
 **ANR总结**
 
