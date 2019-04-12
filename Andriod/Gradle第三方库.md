@@ -68,7 +68,6 @@
     implementation 'com.squareup.okhttp3:okhttp:3.2.0'
 
 
-
 **Gradle设置使用多种类型的仓库**
 
     Maven central repository 	这是Maven的中央仓库，无需配置，直接声明就可以使用。但不支持https协议访问
