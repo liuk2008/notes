@@ -34,6 +34,40 @@
 			* rootProject.ext.date 
 			* rootProject.ext.android.minSdkVersion
 			* rootProject.ext.dependencies["appcompat-v7"] 
+	* Gradle任务
+		* apply
+			* apply plugin: 'com.android.application'
+			* 底层调用了project对象的apply方法，传入了一个以plugin为key的map。完整写出来就是这样的：
+			* project.apply([plugin: 'com.android.application'])
+		* dependencies
+			dependencies {
+				implementation 'xxx.xx.xx:xx:1.0'
+			}
+			* 底层调用的时候会传入一个DependencyHandler的闭包,代码如下:
+			project.dependencies({
+				add('implementation','xxx.xx.xx:xx:1.0',{
+			
+			    })
+			})
+		* task
+			task hello {  // task代表一个独立的原子性操作
+			    doLast {
+			        println 'Hello world!' // doLast 代表task执行的最后一个action，通俗来讲就是task执行完毕后会回调doLast中的代码
+			    }
+			}
+			task hello << { // 操作符<< 是doLast方法的快捷版本
+			    println 'Hello world!'
+			}
+		* dependsOn
+			task task1 <<{
+			    println 'task1'
+			}
+			
+			task task2 <<{
+			    println 'task2'
+			}
+			task2.dependsOn task1
+			* gradlew task2同时执行两个任务，gradlew task1只执行task1任务
 			
 **Gradle常用命令**
 
@@ -53,36 +87,30 @@
 
 **Groovy in Gradle**
 
-	* apply
-		* apply plugin: 'com.android.application'
-		* 底层调用了project对象的apply方法，传入了一个以plugin为key的map。完整写出来就是这样的：
-		* project.apply([plugin: 'com.android.application'])
-	* dependencies
-		dependencies {
-			implementation 'xxx.xx.xx:xx:1.0'
-		}
-		* 底层调用的时候会传入一个DependencyHandler的闭包,代码如下:
-		project.dependencies({
-			add('implementation','xxx.xx.xx:xx:1.0',{
-		
-		    })
-		})
-	* task
-		task hello {  // task代表一个独立的原子性操作
-		    doLast {
-		        println 'Hello world!' // doLast 代表task执行的最后一个action，通俗来讲就是task执行完毕后会回调doLast中的代码
-		    }
-		}
-		task hello << {
-		    println 'Hello world!'
-		}
-	* dependsOn
-		task task1 <<{
-		    println 'task1'
-		}
-		
-		task task2 <<{
-		    println 'task2'
-		}
-		task2.dependsOn task1
-		* gradlew task2同时执行两个任务，gradlew task1只执行task1任务
+	* 变量：Groovy中用def关键字来定义变量，可以不指定变量的类型，默认访问修饰符是public
+	* 方法：方法使用返回类型或def关键字定义，方法可以接收任意数量的参数，这些参数可以不申明类型，如果不提供可见性修饰符，则该方法为public。
+			def add(int a,int b) { 
+			 println a+b 
+			}  
+
+			def minus(a,b) {
+			 println a-b
+			}
+
+			int minus(a,b) { 
+			  return a-b 
+			}
+
+			int minus(a,b) { 
+			  a-b 
+			}
+	* 数据类型主要有以下几种：
+		* Java中的基本数据类型
+		* Groovy中的容器类：List、Map
+		* 闭包：一个开放的、匿名的、可以接受参数和返回值的代码块
+			* { [closureParameters -> ] statements } 参数列表部分[closureParameters -> ]和语句部分 statements
+			* 参数列表部分是可选的，如果闭包只有一个参数，参数名是可选的，Groovy会隐式指定it作为参数名
+				{ it -> println it }   //it是一个显示参数 
+				{ String a, String b ->                                
+				    println "${a} is a ${b}"
+				}
