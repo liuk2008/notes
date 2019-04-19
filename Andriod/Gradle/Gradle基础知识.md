@@ -34,40 +34,6 @@
 			* rootProject.ext.date 
 			* rootProject.ext.android.minSdkVersion
 			* rootProject.ext.dependencies["appcompat-v7"] 
-	* Gradle任务
-		* apply
-			* apply plugin: 'com.android.application'
-			* 底层调用了project对象的apply方法，传入了一个以plugin为key的map。完整写出来就是这样的：
-			* project.apply([plugin: 'com.android.application'])
-		* dependencies
-			dependencies {
-				implementation 'xxx.xx.xx:xx:1.0'
-			}
-			* 底层调用的时候会传入一个DependencyHandler的闭包,代码如下:
-			project.dependencies({
-				add('implementation','xxx.xx.xx:xx:1.0',{
-			
-			    })
-			})
-		* task
-			task hello {  // task代表一个独立的原子性操作
-			    doLast {
-			        println 'Hello world!' // doLast 代表task执行的最后一个action，通俗来讲就是task执行完毕后会回调doLast中的代码
-			    }
-			}
-			task hello << { // 操作符<< 是doLast方法的快捷版本
-			    println 'Hello world!'
-			}
-		* dependsOn
-			task task1 <<{
-			    println 'task1'
-			}
-			
-			task task2 <<{
-			    println 'task2'
-			}
-			task2.dependsOn task1
-			* gradlew task2同时执行两个任务，gradlew task1只执行task1任务
 			
 **Gradle常用命令**
 
@@ -84,6 +50,74 @@
     * assemble任务会编译程序中的源代码，并打包生成Jar文件，这个任务不执行单元测试
     * clean任务会删除构建目录
     * compileJava任务会编译程序中的源代码
+
+**Gradle任务**
+	* apply
+		* apply plugin: 'com.android.application'
+		* 底层调用了project对象的apply方法，传入了一个以plugin为key的map。完整写出来就是这样的：
+		* project.apply([plugin: 'com.android.application'])
+	* dependencies
+		dependencies {
+			implementation 'xxx.xx.xx:xx:1.0'
+		}
+		* 底层调用的时候会传入一个DependencyHandler的闭包,代码如下:
+		project.dependencies({
+			add('implementation','xxx.xx.xx:xx:1.0',{
+		
+		    })
+		})
+	* task
+		task hello {  // task代表一个独立的原子性操作
+		    doLast {
+		        println 'Hello world!' // doLast 代表task执行的最后一个action，通俗来讲就是task执行完毕后会回调doLast中的代码
+		    }
+		}
+		task hello << { // 操作符<< 是doLast方法的快捷版本
+		    println 'Hello world!'
+		}
+	* dependsOn
+		task task1 <<{
+		    println 'task1'
+		}
+		
+		task task2 <<{
+		    println 'task2'
+		}
+		task2.dependsOn task1
+		* gradlew task2同时执行两个任务，gradlew task1只执行task1任务
+	* apply
+		* apply plugin: 'com.android.application'
+		* 底层调用了project对象的apply方法，传入了一个以plugin为key的map。完整写出来就是这样的：
+		* project.apply([plugin: 'com.android.application'])
+	* dependencies
+		dependencies {
+			implementation 'xxx.xx.xx:xx:1.0'
+		}
+		* 底层调用的时候会传入一个DependencyHandler的闭包,代码如下:
+		project.dependencies({
+			add('implementation','xxx.xx.xx:xx:1.0',{
+		
+		    })
+		})
+	* task
+		task hello {  // task代表一个独立的原子性操作
+		    doLast {
+		        println 'Hello world!' // doLast 代表task执行的最后一个action，通俗来讲就是task执行完毕后会回调doLast中的代码
+		    }
+		}
+		task hello << { // 操作符<< 是doLast方法的快捷版本
+		    println 'Hello world!'
+		}
+	* dependsOn
+		task task1 <<{
+		    println 'task1'
+		}
+		
+		task task2 <<{
+		    println 'task2'
+		}
+		task2.dependsOn task1
+		* gradlew task2同时执行两个任务，gradlew task1只执行task1任务
 
 **Groovy in Gradle**
 

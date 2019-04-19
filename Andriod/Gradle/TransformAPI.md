@@ -3,10 +3,13 @@
 
 **概述**
 
-	* Transform API： 允许第三方 Plugin 在打包 dex 文件之前的编译过程中操作 .class 文件
-		* Transform API 是新引进的操作 class 的方式
+	* Transform API： 允许第三方 Plugin 在Android打包过程中，由class转换成dex文件之前的编译过程中，加入开发者自定义的处理逻辑操作
+		* Transform API 是新引进的获取 class 的方式
 		* Transform API 在编译之后，生成 dex 之前起作用
-		* 目前 jarMerge、proguard、multi-dex、Instant-Run 都已经换成 Transform 实现
+	* Transform 作用：
+		* 1、Transform 主要处理和转换两种资源流，一种是会被消费掉，一种只是参与了转换过程，并不会被消费掉
+		* 2、资源流存储在一个资源池，Transform 从这个资源池收集资源流，然后经过一定的规则转换生成新的资源流放在资源池里，
+		* 同时将未消耗的资源流也放回这个池子里去，下一个 Transform 重复之前的流程
 		
 **工作流程**
 
@@ -20,6 +23,7 @@
 		* 2、配置 Transform 的输入类型为 Class，作用域为全工程。 这样在 transform() 方法中，inputs 会传入工程内所有的 class 文件
 			 * 1、inputs 包含两个部分： jar 包和目录。子 module 的 java 文件在编译过程中也会生成一个 jar 包然后编译到主工程中。
 		 	 * 2、outputProvider 获取到输出目录，最后将修改的文件复制到输出目录，这一步必须做不然编译会报错
+		* 3、TransformAPI 无法直接操作 class 文件，需通过 ams 或 javassist 第三方框架操作
 	* 2、Transform 与 Gradle Task 之间的关系？
 		* Gradle 中有一个 TransformManage 的类，调用 addTransform() 管理所有的 Transform ，会将 Transform 包装成一个 AndroidTask 对象，
 		* 可以理解为一个Transform就是一个Task
@@ -81,16 +85,16 @@
 		* isIncremental()：判断当前编译是否是增量编译
 		* getInputs()：消费型输入，可以从中获取jar包和class文件夹路径。必须输出给下一个任务
 		* getReferencedInputs()：引用型输入，无需输出，则不应该被transform
-		* getOutputProvider()：OutputProvider管理输出路径，如果消费型输入为空，则OutputProvider == null
-   
-		* TransformInput：所谓Transform就是对输入的class文件转变成目标字节码文件，TransformInput就是这些输入文件的抽象。目前它包括两部分：DirectoryInput集合与JarInput集合。
-		* DirectoryInput：它代表着以源码方式参与项目编译的所有目录结构及其目录下的源码文件，可以借助于它来修改输出文件的目录结构、已经目标字节码文件。
-		* JarInput：它代表着以jar包方式参与项目编译的所有本地jar包或远程jar包，可以借助于它来动态添加jar包。
-		* TransformOutputProvider：它代表的是Transform的输出，例如可以通过它来获取输出路径。
+		
+		* TransformInput：所谓 Transform 就是对输入的class文件转变成目标字节码文件，TransformInput就是这些输入文件的抽象。包括：
+			* DirectoryInput：它代表着以源码方式参与项目编译的所有目录结构及其目录下的源码文件，可以借助于它来修改输出文件的目录结构、已经目标字节码文件
+			* JarInput：它代表着以jar包方式参与项目编译的所有本地jar包或远程jar包，可以借助于它来动态添加jar包
+		* TransformOutputProvider：它代表的是Transform的输出，例如可以通过它来获取输出路径
+			* getOutputProvider()：OutputProvider管理输出路径，如果消费型输入为空，则OutputProvider == null
+
 
 
 **Transform优化**
 
 	* 增量编译
 	* 并发编译
-	* include... exclude...缩小transform范围
