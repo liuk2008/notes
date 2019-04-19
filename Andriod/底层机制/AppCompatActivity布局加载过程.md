@@ -36,7 +36,7 @@
 			this.mOriginalWindowCallback.onContentChanged();
 		}
 		
-	* createSubDecor()方法：生成mSubDecor对象，替换 android.R.id.content 布局
+	* createSubDecor()方法：生成 mSubDecor 对象，替换 android.R.id.content 布局
 	
 		private ViewGroup createSubDecor() {
 			//在这里可设置主题样式
@@ -46,36 +46,64 @@
 			LayoutInflater inflater = LayoutInflater.from(this.mContext);
 			ViewGroup subDecor = null;
 			
-			//填充subDecor，不同的属性加载不同的XML布局
+			//填充 subDecor，不同的属性加载不同的XML布局
 			...
 			...
 			subDecor = (ViewGroup) inflater.inflate(R.layout.abc_screen_simple, null);
 			...
 				...
-			// 在subDecor中找到action_bar_activity_content
+			// 1、在 subDecor 中找到 id 为 action_bar_activity_content 布局 contentView
 			ContentFrameLayout contentView = (ContentFrameLayout) subDecor.findViewById( R.id.action_bar_activity_content);
-			// 找到Window中的 android.R.id.content 布局           
+
+			// 2、在 PhoneWindow 中找到 id 为 android.R.id.content 布局 windowContentView         
 			ViewGroup windowContentView = (ViewGroup) mWindow.findViewById(android.R.id.content);
+
 			if (windowContentView != null) {
 			        while(windowContentView.getChildCount() > 0) {
-						// 删除Window中的所有子View
+
+						// 3、删除 windowContentView 中的所有子View
 			            View child = windowContentView.getChildAt(0);
 			            windowContentView.removeViewAt(0);
-						// 将所有子View添加到subDecor中
+
+						// 4、 将所有 子View 添加到 subDecor 中的 contentView
 			            contentView.addView(child);
 			        }
-					// 清除Window中View中的id，并将subDecor中的id替换为Window中View中的id
+					// 5、 清除 PhoneWindow 中 windowContentView 的id，并将 subDecor 中 contentView 的id替换为 windowContentView 中的id
 			        windowContentView.setId(-1);
 			        contentView.setId(android.R.id.content);
 			        if (windowContentView instanceof FrameLayout) {
 			            ((FrameLayout)windowContentView).setForeground((Drawable)null);
 			        }
 			}
-			// 将 subDecor 添加到Window中
+			// 将 subDecor 添加到 PhoneWindow 中
 			this.mWindow.setContentView(subDecor);
 			...
 			return subDecor;
 		}
+
+		<android.support.v7.widget.FitWindowsLinearLayout
+		    xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:id="@+id/action_bar_root"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:orientation="vertical"
+		    android:fitsSystemWindows="true">
+		
+		    <android.support.v7.widget.ViewStubCompat
+		        android:id="@+id/action_mode_bar_stub"
+		        android:inflatedId="@+id/action_mode_bar"
+		        android:layout="@layout/abc_action_mode_bar"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content" />
+		
+		    <android.support.v7.widget.ContentFrameLayout
+	            android:id="@id/action_bar_activity_content"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:foregroundGravity="fill_horizontal|top"
+	            android:foreground="?android:attr/windowContentOverlay" />
+
+		</android.support.v7.widget.FitWindowsLinearLayout>
 
 	* 调用 Window 中的方法：
 	
