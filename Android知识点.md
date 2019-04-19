@@ -225,12 +225,18 @@
 **R文件**
 
     1、Android主项目R文件中控件id是常量，lib包中则不是常量
-       * Android在编译APK时会将lib包代码引入，为了防止主项目与lib包中的控件id值一样造成冲突，所以lib包中的控件id不是常量，方便Android编译时进行修改。
+       * Android在构建代码时会将lib包代码引入，为了防止主项目与lib包中的控件id值一样造成冲突，所以lib包中的控件id不是常量，方便Android编译时进行修改。
 
-    2、Android主项目与lib包同时生成R文件，但是里面的控件id值不同
-       * Android在不同的项目中都生成R文件，但在运行时控件id全部从主项目中的R文件取值
+    2、Android中lib包会在主项目与lib包同时生成R文件，但是里面的控件id值不同
+       * 在构建代码时编译器会修改lib包的R文件id值，重新在主项目中生成与lib包中同包名的R文件，同时主项目中R文件也会添加lib中相对应的控件id值，此处的id值与
+       * 主项目中新生成lib包同名R文件id值一致，全部为常量，控件id则取此处id值。
 
     3、Android中不同的布局文件中控件id可以一致
        * 因为在Android的框架设计中，每一个控件都隶属于一棵控件树，每个控件都被其父控件所管理与调配，而根控件是一个容器控件，所有的子控件都是构造在这个根
        * 控件之上，这样并形成了一个控件树的控件域，在这个控件域中是不允许重名的，超出了这个控件域则这些控件的ID是无效的，也就是说在容器控件中的子控件是不
        * 允许重名的，而不在同一容器控件中的两个控件重名也无所谓。
+    
+	4、Android R文件和BuildConfig文件	
+	   * 1、Android APK 以 applicationId 作为唯一标识，在编译APK的过程中，manifest中的package值会被修改成 applicationId
+       * 2、项目包名、applicationId、manifest package三者不一致时，在构建代码的过程中，R文件和 BuildConfig 文件会以manifest package值作为包名
+       * 而通过系统方法获取APP包名实际上获取的是applicationId，此时通过包名获取R文件相关信息会出现异常
