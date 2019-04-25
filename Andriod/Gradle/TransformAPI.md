@@ -29,7 +29,7 @@
 		* 可以理解为一个Transform就是一个Task
 	* 3、Gradle 是如何控制 Transform 的作用域的？
 		* TransformManage类调用 createPostCompilationTasks() 方法，此方法在 javaCompile 之后调用，会遍历所有的 transform，然后一一添加
-		* 进 TransformManager，先加载自定义的 Transform 之后，再添加 Proguard, JarMergeTransform, MultiDex, Dex 等 Transform
+		* 进 TransformManager，先加载自定义的 Transform 之后，再添加 Proguard，JarMergeTransform，MultiDex，Dex 等 Transform
 	* 4、为什么最后一定要把jar文件复制到输出目录呢？
 		* 因为Gradle 是通过一个一个 Task 执行完成整个流程（就像一个串起来的链表），而Task 有一个重要的概念：inputs 和 outputs。 Task 通过 inputs
 		* 拿到一些需要的参数，处理完毕之后就输出 outputs，而下一个 Task 的 inputs 则是上一个 Task 的outputs。 所以一定要复制到输出目录。
@@ -97,4 +97,9 @@
 **Transform优化**
 
 	* 增量编译
+		* 增量变异的触发机制
 	* 并发编译
+		* 并发编译的运行机制
+	* 字节码框架：javassist asm
+		* 修改dir中的class文件
+		* 修改jar包的class文件

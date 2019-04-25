@@ -1,0 +1,27 @@
+1月
+1、封装Activity和Fragment
+2、封装主题样式
+3、配置混淆功能
+4、自定义ViewInject工具
+5、封装Permission控件，Utils工具类
+
+2月
+1、网络框架v1.0
+   1、Retrofit2 + CallBack 
+   2、Retrofit2 + RxJava2
+   3、Http + Callback
+
+3月
+1、自定义WebView控件
+2、网络框架v2.0
+3、自定义refreshview控件
+4、自定义Photo相关控件
+5、配置bintray平台
+
+
+4月
+1、增加note文档，增加MVP、Java、RxJava2使用案例
+2、增加Python多渠道打包功能
+3、配置v1、v2签名功能
+4、编写Gradle Plugin插件
+5、增加TransformAPI、javassist使用案例
