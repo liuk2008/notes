@@ -36,8 +36,8 @@
 			* rootProject.ext.dependencies["appcompat-v7"] 
 			
 **Gradle常用命令**
-
-    * gradlew tasks：查看任务列表
+	
+	* gradlew tasks：查看任务列表
     * gradlew -v 版本号
     * gradlew clean 清除9GAG/app目录下的build文件夹
     * gradlew build 检查依赖并编译打包
@@ -51,7 +51,28 @@
     * clean任务会删除构建目录
     * compileJava任务会编译程序中的源代码
 
+**Gradle依赖**
+
+	* implementation：
+		* 1、在编译时不会将依赖的实现暴露给其他module，也就是只有在运行时其他module才能访问这个依赖中的实现（因为apk的所有dex都会放到classLoader的dexPathList中）
+		* 2、libA与libB之间使用implementation依赖，libB与libC之间使用implementation依赖，当libA接口修改后重新编译时，只会重新编译libA、libB
+	* api：
+		* 1、其他module无论在编译时和运行时都可以访问这个依赖
+		* 2、libA与libB之间使用api依赖，libB与libC之间使用implementation依赖，当libA接口修改后重新编译时，会重新编译libA、libB、libC（即使libC中并没有用到修改的libA的接口）
+	* 其存在冲突的module中的build.gradle文件中加入下面代码，原理就是通过遍历所有依赖，并修改指定库的版本号            
+		configurations.all {
+		    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+		        def requested = details.requested
+		        if (requested.group == 'com.android.support') { // com.android.support表示要修改的依赖库
+		            if (!requested.name.startsWith("multidex")) {
+		                details.useVersion '28.0.0' //  28.0.0表示要修改的版本号
+		            }
+		        }
+		    }
+		}	
+
 **Gradle任务**
+
 	* apply
 		* apply plugin: 'com.android.application'
 		* 底层调用了project对象的apply方法，传入了一个以plugin为key的map。完整写出来就是这样的：
