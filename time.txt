@@ -25,3 +25,11 @@
 3、配置v1、v2签名功能
 4、编写Gradle Plugin插件
 5、增加TransformAPI、javassist使用案例
+
+7月
+1、优化WebView：Cookie功能、Header功能
+2、增加数据库功能
+3、优化网络框架：Cookie功能、Header功能
+4、调整网络框架结构
+
+
