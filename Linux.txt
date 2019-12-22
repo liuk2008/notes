@@ -1,0 +1,21 @@
+
+Linux环境：
+
+常用命令：vi，sudo
+--vi：
+--sudo：下载文件：wget，安装软件：apt
+
+rpm包-在红帽LINUX、SUSE、Fedora可以直接进行安装，但在Ubuntu中却无法识别；
+
+deb包-是Ubuntu的专利，在Ubuntu中双击deb包就可以进入自动安装进程；
+
+tar.gz包-在所有的Linux版本中都能使用，但安装过程也最麻烦。
+
+环境搭建：
+
+1、在opt目录下建立Android、Java文件路径
+
+2、下载JDK、Android Studio、AndroidSDK
+   JDK下载地址：wget http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz
+
+3、
