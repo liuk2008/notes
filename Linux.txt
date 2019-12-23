@@ -1,21 +1,50 @@
 
 Linux环境：
 
+rpm包-在红帽LINUX、SUSE、Fedora可以直接进行安装，但在Ubuntu中却无法识别
+
+deb包-是Ubuntu的专利，在Ubuntu中双击deb包就可以进入自动安装进程
+
+tar.gz包-在所有的Linux版本中都能使用，但安装过程也最麻烦
+
+
 常用命令：vi，sudo
---vi：
---sudo：下载文件：wget，安装软件：apt
+1、下载文件：wget
+2、安装软件：apt
+3、查看环境变量：env 
+4、查看PATH变量：echo $PATH
+5、查看隐藏文件 ：ctrl+H
 
-rpm包-在红帽LINUX、SUSE、Fedora可以直接进行安装，但在Ubuntu中却无法识别；
-
-deb包-是Ubuntu的专利，在Ubuntu中双击deb包就可以进入自动安装进程；
-
-tar.gz包-在所有的Linux版本中都能使用，但安装过程也最麻烦。
 
 环境搭建：
 
-1、在opt目录下建立Android、Java文件路径
+1、在opt或home目录下建立Android、Java文件路径
 
-2、下载JDK、Android Studio、AndroidSDK
-   JDK下载地址：wget http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz
+2、配置Java环境变量
+   1、打开配置文件：sudo vim /etc/profile
+   2、添加环境变量
+	export JAVA_HOME=/home/{user}/develop/jdk1.8.0_231
+	export PATH=$PATH:${JAVA_HOME}/bin
+	# 可有可无
+	export JRE_HOME=${JAVA_HOME}/jre 
+	export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib  
+   3、更新配置文件：source /etc/profile
+   注意：
+   1、若系统默认设置为OpenJDK，需重新设置系统JDK版本
+   2、可使用wget下载JDK：wget http://download.oracle.com/otn-pub/java/jdk/xxxss/jdk-8u131-linux-x64.tar.gz
 
-3、
+3、配置Android Studio
+   1、在 /android-studio/bin 目录下，运行 sudo ./studio.sh 命令，启动 Android Studio
+   2、配置JDK、AndroidSDK 路径，下载SDK
+   3、添加环境变量
+	#Android Studio
+   	export ANDROID_HOME=/home/{user}/develop/android-studio/bin
+   	export PATH=$PATH:${ANDROID_HOME}
+	#Android SDK 
+	export ANDROID_SDK_HOME=/home/{user}/develop/AndroidSDK
+   	export PATH=$PATH:${ANDROID_SDK_HOME}/platform-tools
+   4、创建 Android Studio 快捷方式
+	~~~
+
+	~~~	
+      注意赋予快捷方式权限才能启动
