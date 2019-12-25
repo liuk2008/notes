@@ -1,4 +1,36 @@
 
+Webè¯­è¨€ï¼šHtml5 + Css + JavaScript
+Node.jsï¼šJavaScriptçš„è¿è¡Œç¯å¢ƒï¼Œç±»æ¯”Javaä¸­JVM
+å‰ç«¯æ¡†æ¶ï¼šReact.jsã€Vue.jsã€Angular.js 
+æ··åˆæ¡†æ¶ï¼šReact-Nativeã€Weex
+
+### RNç¯å¢ƒæ­å»º ###
+
+1ã€å®‰è£…JDKã€AndroidSDkã€Gitã€Pythonã€nodejs
+   æ³¨æ„ï¼šUbuntuä¸‹å®‰è£…nodejsï¼Œéœ€é…ç½®ç¯å¢ƒå˜é‡
+	export NODEJS_HOME=/home/xxx/develop/nodejs
+	export PATH=${NODEJS_HOME}/bin:$PATH
+
+2ã€è®¾ç½®npmé•œåƒ
+	npm config set registry https://registry.npm.taobao.org --global
+	npm config set disturl https://npm.taobao.org/dist --global
+   ä¹Ÿå¯ä»¥æ›´æ”¹é…ç½®æ–‡ä»¶ï¼Œè·¯å¾„ï¼šC:\Users\Administrator\AppData\Roaming\npm\etc\npmrc
+        registry=https://registry.npm.taobao.org/
+        disturl=https://npm.taobao.org/dist
+
+3ã€å®‰è£…react-nativeå‘½ä»¤è¡Œå·¥å…·
+	npm install -g react-native-cli
+
+4ã€åœ¨å·¥ä½œç›®å½•ä¸­åˆ›å»ºé¡¹ç›®ï¼Œè¿è¡Œ	
+        react-native init MyProject
+
+5ã€è¿è¡Œpackagerï¼Œåœ¨æµè§ˆå™¨è®¿é—®http://localhost:8081/index.bundle?platform=androidæŸ¥çœ‹æ˜¯å¦æ­£å¸¸å¯åŠ¨
+        react-native start
+
+6ã€è¿è¡ŒAndroidé¡¹ç›®ï¼Œåœ¨Chromeä¸­è®¿é—® http://localhost:8081/debugger-uiï¼Œå¯ä»¥è°ƒè¯•é¡µé¢
+        react-native run-android
+
+
 https://es6.ruanyifeng.com/
 
 https://juejin.im/post/5898388b128fe1006cb943e3
@@ -6,28 +38,3 @@ https://reactnative.cn/docs/getting-started/
 
 https://www.jianshu.com/p/97692b1c451d
 https://www.jianshu.com/p/c916757fa469
-
-
-WebÓïÑÔ£ºHtml5 + Css + JavaScript
-Node.js£ºJavaScriptµÄÔËĞĞ»·¾³£¬Àà±ÈJavaÖĞJVM
-Ç°¶Ë¿ò¼Ü£ºReact.js¡¢Vue.js¡¢Angular.js 
-»ìºÏ¿ò¼Ü£ºReact-Native¡¢Weex
-
-RN»·¾³´î½¨£º
-1¡¢JDK¡¢Android¡¢Git¡¢Python¡¢Node.js
-2¡¢ÉèÖÃnpm¾µÏñ
-	npm config set registry https://registry.npm.taobao.org --global
-	npm config set disturl https://npm.taobao.org/dist --global
-
-C:\Users\Administrator\AppData\Roaming\npm\etc\npmrc
-
-registry=https://registry.npm.taobao.org/
-disturl=https://npm.taobao.org/dist
-
-3¡¢°²×°react-nativeÃüÁîĞĞ¹¤¾ß
-	npm install -g react-native-cli
-3¡¢ÔÚ¹¤×÷Ä¿Â¼ÖĞ´´½¨ÏîÄ¿£¬
-	ÔËĞĞ	react-native init MyProject
-4¡¢ÔËĞĞpackager
-	react-native start
-
