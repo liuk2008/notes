@@ -1,4 +1,3 @@
-
 Linux环境：
 
 	rpm包-在红帽LINUX、SUSE、Fedora可以直接进行安装，但在Ubuntu中却无法识别
@@ -30,11 +29,24 @@ Linux环境：
 
 	which 会在PATH变量指定的路径中，搜索某个系统命令的位置
 	sudo：用来以其他身份来执行命令，预设的身份为root
+	add-apt-repository：是一个命令行工具，用于添加个人软件包归档（PPA）
+	     apt install python-software-properties（提供方）
+             apt install software-properties-common
+	     sudo add-apt-repository ppa:<PPA Name>（添加PPA存储库）
 	wget：从远程下载文件
-	rpm：软件管理，用于安装、卸载 .rpm软件
-	     rpm -hvi xxx.rpm（基于redhat）
-	apt：软件管理，用于安装、卸载 .deb软件
-	     apt install xxx.deb（基于Ubuntu）
+	rpm：软件管理，用于安装、卸载 .rpm软件（基于redhat）
+	     rpm -hvi xxx.rpm
+	apt：软件管理，用于安装、卸载 .deb软件（基于Ubuntu）
+	     apt install （安装软件包）
+	     apt remove （移除软件包）
+	     apt purge（移除软件包及配置文件）
+	     apt update（更新软件包列表）
+	     apt upgrade（升级所有可升级的软件包）
+	     apt full-upgrade（在升级软件包时自动处理依赖关系）
+	     更新git
+	     add-apt-repository ppa:git-core/ppa（添加PPA存储库）
+             apt update（更新软件包列表）
+             apt install git(安装软件)
 
 	env：查看环境变量
 	echo $PATH：查看PATH变量
@@ -82,6 +94,9 @@ Linux环境：
    5、生成SSH Key：ssh-keygen -t rsa，测试Github：ssh -T git@github.com
 
 2、常用命令
+  
+   https://www.cnblogs.com/kekec/p/9248487.html
+   https://www.cnblogs.com/my--sunshine/p/7093412.html
 
    # git 仓库管理
 	git clone git@github.com:xxx/xxx.git  拉项目 
@@ -89,30 +104,72 @@ Linux环境：
 	git init  初始化本地仓库
 	git push origin xx 推送至远程分支
 	git pull origin xx 从远程分支拉代码
+	git status 查询仓库状态
 
    # git 文件添加，提交
-	git add . 添加文件
+	git add . 添加文件至暂存区
 	git commit -m "xx" 提交至仓库
 	git commit -a -m "xx" 提交至仓库
-	git reset HEAD xx 取消变更
 
-	# git 分支查看与切换
+   # git 分支查看与切换
 	git branch -a 查看所有分支（包括远程分支）
 	git branch -r 查看远程分支
 	git branch 查看本地分支
-	git branch xx 依据当前分支创建新分支
-	git checkout xx 切换分支
+	git branch xx 依据当前本地分支创建新的本地分支
+	git branch xx origin/xxx 依据远程分支创建本地新分支
+	git checkout xx 切换本地分支，若没有可依据远程分支创建
+	git branch -d xx 删除未合并的本地分支
 	git merge xx 将xx分支合并到当前分支
+	git push origin --delete xxx  删除远程分支/标签
+	git push origin :xxx  删除远程分支/标签
+
+   # git 查看标签
+	git tag xx 创建本地tag分支 
+	git tag -a v1.0 v2.0 -m "tag v1.0 desc"  依据v2.0创建v1.0，并添加注释
+	git branch xx origin/xxx 依据远程分支创建本地新分支
+	git checkout xx 切换本地tag分支（只读）
+	git checkout -b branchname tagname  创建一个基于指定tag的分支
+	git tag -d xx  删除本地tag分支
+	git tag | xargs git tag -d 删除本地所有tag分支
+	git push origin --tags  将本地所有标签更新到对应的远端标签
+	git ls-remote -- 查看远程分支
+	git ls-remote --tags 查看远程tag分支	
 
    # git 解决冲突
 	1、先commit本地文件，在pull远程代码
-	2、手动修改本地文件解决冲突，然后commit，push文件
+	2、通过 git status 查看冲突文件
+	3、手动修改本地文件解决冲突，然后commit，push文件
 	
    # git 代码回退
+	git reset HEAD xx 取消add至暂存区xx文件的变更
+     	git rm --cached xxx 从暂存区移除文件，但留在工作目录中
+	git checkout -- . 恢复所有未add至暂存区的文件内容
+	git reset --hard xxx 回退到指定版本
+	git revert HEAD 撤销最近的一个commit
+
+   # git 日志查询 
+	git show 查询最新的commit信息	
+	git log 查询提交日志
+	git log --oneline --graph 查询图形化信息
+	git log --stat 查询代码改动信息
+	git reflog 查看操作记录
+   
+   # git 代码修改信息查询
+	git diff  查询当前文件与暂存区文件的差异
+	git diff --cached 查询已add未commit的文件差异
+	git diff origin/xxx 查询当前文件与本地分支/远程分支文件的差异
+
+   # git 添加.gitignore文件
+	1、创建文件，touch .gitignore
+	2、使用vim打开文件，添加忽略正则
+	3、提交到远程仓库
+	# 将已经push到github的文件删除, 但本地的文件不删除
+	1、在.gitignore文件中添加忽略文件
+	2、git rm --cached xxx  将文件从暂存区中删除
+	3、添加到远程仓库	
 	
 3、链接GitHub
    1、初始化仓库：git init
    2、添加文件：git add xx.txt，git commit -m "xxx"
    3、建立链接：git remote add origin git@github.com:xxx/xxx.git
    4、远程推送：git push -u origin master，第一次推送加上 -u 参数
-
