@@ -1,19 +1,90 @@
 
+### Ubuntu下Git使用 ###
 
-本地分支切换：
+1、基本配置
+   1、安装Git：sudo apt-get install git
+   2、查看Git所有配置 git config --list
+   3、编辑配置文件：git config --global --edit
+   4、配置用户信息：git config --global user.name "xxx"
+   5、生成SSH Key：ssh-keygen -t rsa，测试Github：ssh -T git@github.com
 
-1、从服务器remote/master分支上创建本地master分支
-2、依据本地master分支创建本地A分支
-3、切换到本地A分支，添加test文件
-4、将本地A分支push到服务器，创建remote/testA分支-----此时远程testA分支存在test文件
-5、从服务器remote/testA分支上创建本地testA分支
-6、切换到本地testA分支，删除test文件
-7、将本地testA分支push到服务器，此时remote/testA分支、本地testA分支不存在test文件
-8、切换到本地A分支，发现test文件存在，从remote/testA分支pull代码后，test文件不存在
+2、常用命令
+  
+   https://www.cnblogs.com/kekec/p/9248487.html
+   https://www.cnblogs.com/my--sunshine/p/7093412.html
 
+   # git 仓库管理
+	git clone git@github.com:xxx/xxx.git  拉项目 
+	git remote add origin git@github.com:xxx/xxx.git 与远程仓库建立连接
+	git init  初始化本地仓库
+	git push origin xx 推送至远程分支
+	git pull origin xx 从远程分支拉代码
+	git status 查询仓库状态
 
-合并分支：
+   # git 文件添加，提交
+	git add . 添加文件至暂存区
+	git commit -m "xx" 提交至仓库
+	git commit -a -m "xx" 提交至仓库
 
-1、本地合并分支后push到远程分支
-2、在远程分支上进行合并
+   # git 分支查看与切换
+	git branch -a 查看所有分支（包括远程分支）
+	git branch -r 查看远程分支
+	git branch 查看本地分支
+	git branch xx 依据当前本地分支创建新的本地分支
+	git branch xx origin/xxx 依据远程分支创建本地新分支
+	git checkout xx 切换本地分支，若没有可依据远程分支创建
+	git branch -d xx 删除未合并的本地分支
+	git merge xx 将xx分支合并到当前分支
+	git push origin --delete xxx  删除远程分支/标签
+	git push origin :xxx  删除远程分支/标签
 
+   # git 查看标签
+	git tag xx 创建本地tag分支 
+	git tag -a v1.0 v2.0 -m "tag v1.0 desc"  依据v2.0创建v1.0，并添加注释
+	git branch xx origin/xxx 依据远程分支创建本地新分支
+	git checkout xx 切换本地tag分支（只读）
+	git checkout -b branchname tagname  创建一个基于指定tag的分支
+	git tag -d xx  删除本地tag分支
+	git tag | xargs git tag -d 删除本地所有tag分支
+	git push origin --tags  将本地所有标签更新到对应的远端标签
+	git ls-remote -- 查看远程分支
+	git ls-remote --tags 查看远程tag分支	
+
+   # git 解决冲突
+	1、先commit本地文件，在pull远程代码
+	2、通过 git status 查看冲突文件
+	3、手动修改本地文件解决冲突，然后commit，push文件
+	
+   # git 代码回退
+	git reset HEAD xx 取消add至暂存区xx文件的变更
+     	git rm --cached xxx 从暂存区移除文件，但留在工作目录中
+	git checkout -- . 恢复所有未add至暂存区的文件内容
+	git reset --hard xxx 回退到指定版本
+	git revert HEAD 撤销最近的一个commit
+
+   # git 日志查询 
+	git show 查询最新的commit信息	
+	git log 查询提交日志
+	git log --oneline --graph 查询图形化信息
+	git log --stat 查询代码改动信息
+	git reflog 查看操作记录
+   
+   # git 代码修改信息查询
+	git diff  查询当前文件与暂存区文件的差异
+	git diff --cached 查询已add未commit的文件差异
+	git diff origin/xxx 查询当前文件与本地分支/远程分支文件的差异
+
+   # git 添加.gitignore文件
+	1、创建文件，touch .gitignore
+	2、使用vim打开文件，添加忽略正则
+	3、提交到远程仓库
+	# 将已经push到github的文件删除, 但本地的文件不删除
+	1、在.gitignore文件中添加忽略文件
+	2、git rm --cached xxx  将文件从暂存区中删除
+	3、添加到远程仓库	
+	
+3、链接GitHub
+   1、初始化仓库：git init
+   2、添加文件：git add xx.txt，git commit -m "xxx"
+   3、建立链接：git remote add origin git@github.com:xxx/xxx.git
+   4、远程推送：git push -u origin master，第一次推送加上 -u 参数

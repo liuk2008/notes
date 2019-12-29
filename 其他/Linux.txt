@@ -1,0 +1,85 @@
+Linux环境：
+
+	rpm包-在红帽LINUX、SUSE、Fedora可以直接进行安装，但在Ubuntu中却无法识别
+
+	deb包-是Ubuntu的专利，在Ubuntu中双击deb包就可以进入自动安装进程
+
+	tar.gz包-在所有的Linux版本中都能使用，但安装过程也最麻烦
+
+
+常用命令：
+
+	ls：列出目录
+	cd：切换目录
+	pwd：显示目前的目录
+	mkdir：创建一个新的目录
+	rmdir：删除一个空的目录
+	cp：复制文件或目录
+	rm：移除文件或目录
+	mv：移动文件与目录
+
+	tar：用于压缩解压，tar -xzvf test.tar.gz 
+	gzip：压缩文件或文件夹为 .gz文件
+	vi/vim：使用vi编辑器的命令
+	cat：用途是连接文件或标准输入并打印。这个命令常用来显示文件内容
+	grep：
+	chmod：修改文件权限，7代表rwx，r=4，w=2，x=1
+	       sudo chmod -R 777 xxx
+	chown：改变文件所有者
+
+	which 会在PATH变量指定的路径中，搜索某个系统命令的位置
+	sudo：用来以其他身份来执行命令，预设的身份为root
+	add-apt-repository：是一个命令行工具，用于添加个人软件包归档（PPA）
+	     apt install python-software-properties（提供方）
+             apt install software-properties-common
+	     sudo add-apt-repository ppa:<PPA Name>（添加PPA存储库）
+	wget：从远程下载文件
+	rpm：软件管理，用于安装、卸载 .rpm软件（基于redhat）
+	     rpm -hvi xxx.rpm
+	apt：软件管理，用于安装、卸载 .deb软件（基于Ubuntu）
+	     apt install （安装软件包）
+	     apt remove （移除软件包）
+	     apt purge（移除软件包及配置文件）
+	     apt update（更新软件包列表）
+	     apt upgrade（升级所有可升级的软件包）
+	     apt full-upgrade（在升级软件包时自动处理依赖关系）
+	     更新git
+	     add-apt-repository ppa:git-core/ppa（添加PPA存储库）
+             apt update（更新软件包列表）
+             apt install git(安装软件)
+
+	env：查看环境变量
+	echo $PATH：查看PATH变量
+	/etc/enviroment，~/.bahsrc，/etc/profile：系统环境配置文件
+
+### 环境搭建 ###
+
+1、在opt或home目录下建立Android、Java文件路径
+
+2、配置Java环境变量
+   1、打开配置文件：sudo vim /etc/profile
+   2、添加环境变量
+	export JAVA_HOME=/home/{user}/develop/jdk1.8.0_231
+	export PATH=${JAVA_HOME}/bin:$PATH
+	# 可有可无
+	export JRE_HOME=${JAVA_HOME}/jre 
+	export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib  
+   3、更新配置文件：source /etc/profile
+   注意：
+   1、若系统默认设置为OpenJDK，需重新设置系统JDK版本
+   2、可使用wget下载JDK：wget http://download.oracle.com/otn-pub/java/jdk/xxxss/jdk-8u131-linux-x64.tar.gz
+
+3、配置Android Studio
+   1、在 /android-studio/bin 目录下，运行 sudo ./studio.sh 命令，启动 Android Studio
+   2、配置JDK、AndroidSDK 路径，下载SDK
+   3、添加环境变量
+	#Android Studio
+	export ANDROID_HOME=/home/{user}/develop/android-studio/bin
+	export PATH=${ANDROID_HOME}:$PATH
+	#Android SDK 
+	export ANDROID_SDK_HOME=/home/{user}/develop/AndroidSDK
+	export PATH=${ANDROID_SDK_HOME}/platform-tools:$PATH
+	注意：AndroidSDK中adb与Ubuntu默认adb冲突
+   4、创建 Android Studio 快捷方式
+	1、通过Android Studio创建
+	2、通过Desktop Entry创建，注意赋予快捷方式权限才能启动
