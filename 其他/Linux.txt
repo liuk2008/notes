@@ -51,6 +51,13 @@ Linux环境：
 	env：查看环境变量
 	echo $PATH：查看PATH变量
 	/etc/enviroment，~/.bahsrc，/etc/profile：系统环境配置文件
+	update-alternatives：用于处理linux系统中软件版本的切换
+	     update-alternatives --install link name path priority（命令格式）
+	     link为系统中功能相同软件的公共链接目录，比如/usr/bin/java(需绝对目录)
+	     name为命令链接符名称，如java 
+             path为你所要使用新命令、新软件的所在目录
+             priority为优先级，当命令链接已存在时，需高于当前值，系统默认启用priority高的链接
+	     update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2（python命令）
 
 ### 环境搭建 ###
 
