@@ -1,9 +1,7 @@
 Linux环境：
 
 	rpm包-在红帽LINUX、SUSE、Fedora可以直接进行安装，但在Ubuntu中却无法识别
-
 	deb包-是Ubuntu的专利，在Ubuntu中双击deb包就可以进入自动安装进程
-
 	tar.gz包-在所有的Linux版本中都能使用，但安装过程也最麻烦
 
 
@@ -59,6 +57,7 @@ Linux环境：
              priority为优先级，当命令链接已存在时，需高于当前值，系统默认启用priority高的链接
 	     update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2（python命令）
 
+
 ### 环境搭建 ###
 
 1、在opt或home目录下建立Android、Java文件路径
@@ -90,3 +89,4 @@ Linux环境：
    4、创建 Android Studio 快捷方式
 	1、通过Android Studio创建
 	2、通过Desktop Entry创建，注意赋予快捷方式权限才能启动
+
