@@ -6,10 +6,10 @@
 5、封装Permission控件，Utils工具类
 
 2月
-1、网络框架v1.0
-   1、Retrofit2 + CallBack 
-   2、Retrofit2 + RxJava2
-   3、Http + Callback
+网络框架v1.0
+  1、Retrofit2 + CallBack 
+  2、Retrofit2 + RxJava2
+  3、Http + Callback
 
 3月
 1、自定义WebView控件
@@ -37,3 +37,12 @@
 中级：掌握一些常用的测试工具，进行接口，性能的测试验证，比如jmeter，lr
 高级：掌握一些语言，根据项目特点设计工具，框架，满足功能测试，自动化测试
 基础：网络，数据库，操作系统
+
+12月
+1、Linux常用命令
+2、Git常用命令
+3、搭建Android开发环境
+
+1月
+1、Python基础：语法、变量类型、运算符、条件语句
+2、Python高阶：迭代器、函数、装饰器、变量作用域、序列化、异常
