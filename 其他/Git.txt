@@ -1,90 +1,91 @@
 
-### UbuntuÏÂGitÊ¹ÓÃ ###
+### Ubuntuä¸‹Gitä½¿ç”¨ ###
 
-1¡¢»ù±¾ÅäÖÃ
-   1¡¢°²×°Git£ºsudo apt-get install git
-   2¡¢²é¿´GitËùÓĞÅäÖÃ git config --list
-   3¡¢±à¼­ÅäÖÃÎÄ¼ş£ºgit config --global --edit
-   4¡¢ÅäÖÃÓÃ»§ĞÅÏ¢£ºgit config --global user.name "xxx"
-   5¡¢Éú³ÉSSH Key£ºssh-keygen -t rsa£¬²âÊÔGithub£ºssh -T git@github.com
+1ã€åŸºæœ¬é…ç½®
+   1ã€å®‰è£…Gitï¼šsudo apt-get install git
+   2ã€æŸ¥çœ‹Gitæ‰€æœ‰é…ç½® git config --list
+   3ã€ç¼–è¾‘é…ç½®æ–‡ä»¶ï¼šgit config --global --edit
+   4ã€é…ç½®ç”¨æˆ·ä¿¡æ¯ï¼šgit config --global user.name "xxx"
+   5ã€ç”ŸæˆSSH Keyï¼šssh-keygen -t rsaï¼Œæµ‹è¯•Githubï¼šssh -T git@github.com
 
-2¡¢³£ÓÃÃüÁî
+2ã€å¸¸ç”¨å‘½ä»¤
   
    https://www.cnblogs.com/kekec/p/9248487.html
    https://www.cnblogs.com/my--sunshine/p/7093412.html
 
-   # git ²Ö¿â¹ÜÀí
-	git clone git@github.com:xxx/xxx.git  À­ÏîÄ¿ 
-	git remote add origin git@github.com:xxx/xxx.git ÓëÔ¶³Ì²Ö¿â½¨Á¢Á¬½Ó
-	git init  ³õÊ¼»¯±¾µØ²Ö¿â
-	git push origin xx ÍÆËÍÖÁÔ¶³Ì·ÖÖ§
-	git pull origin xx ´ÓÔ¶³Ì·ÖÖ§À­´úÂë
-	git status ²éÑ¯²Ö¿â×´Ì¬
+   # git ä»“åº“ç®¡ç†
+	git clone git@github.com:xxx/xxx.git  æ‹‰é¡¹ç›® 
+	git remote add origin git@github.com:xxx/xxx.git ä¸è¿œç¨‹ä»“åº“å»ºç«‹è¿æ¥
+	git init  åˆå§‹åŒ–æœ¬åœ°ä»“åº“
+	git push origin xx æ¨é€è‡³è¿œç¨‹åˆ†æ”¯
+	git pull origin xx ä»è¿œç¨‹åˆ†æ”¯æ‹‰ä»£ç 
+	git status æŸ¥è¯¢ä»“åº“çŠ¶æ€
 
-   # git ÎÄ¼şÌí¼Ó£¬Ìá½»
-	git add . Ìí¼ÓÎÄ¼şÖÁÔİ´æÇø
-	git commit -m "xx" Ìá½»ÖÁ²Ö¿â
-	git commit -a -m "xx" Ìá½»ÖÁ²Ö¿â
+   # git æ–‡ä»¶æ·»åŠ ï¼Œæäº¤
+	git add . æ·»åŠ æ–‡ä»¶è‡³æš‚å­˜åŒº
+	git commit -m "xx" æäº¤è‡³ä»“åº“
+	git commit -a -m "xx" æäº¤è‡³ä»“åº“
 
-   # git ·ÖÖ§²é¿´ÓëÇĞ»»
-	git branch -a ²é¿´ËùÓĞ·ÖÖ§£¨°üÀ¨Ô¶³Ì·ÖÖ§£©
-	git branch -r ²é¿´Ô¶³Ì·ÖÖ§
-	git branch ²é¿´±¾µØ·ÖÖ§
-	git branch xx ÒÀ¾İµ±Ç°±¾µØ·ÖÖ§´´½¨ĞÂµÄ±¾µØ·ÖÖ§
-	git branch xx origin/xxx ÒÀ¾İÔ¶³Ì·ÖÖ§´´½¨±¾µØĞÂ·ÖÖ§
-	git checkout xx ÇĞ»»±¾µØ·ÖÖ§£¬ÈôÃ»ÓĞ¿ÉÒÀ¾İÔ¶³Ì·ÖÖ§´´½¨
-	git branch -d xx É¾³ıÎ´ºÏ²¢µÄ±¾µØ·ÖÖ§
-	git merge xx ½«xx·ÖÖ§ºÏ²¢µ½µ±Ç°·ÖÖ§
-	git push origin --delete xxx  É¾³ıÔ¶³Ì·ÖÖ§/±êÇ©
-	git push origin :xxx  É¾³ıÔ¶³Ì·ÖÖ§/±êÇ©
+   # git åˆ†æ”¯æŸ¥çœ‹ä¸åˆ‡æ¢
+	git branch -a æŸ¥çœ‹æ‰€æœ‰åˆ†æ”¯ï¼ˆåŒ…æ‹¬è¿œç¨‹åˆ†æ”¯ï¼‰
+	git branch -r æŸ¥çœ‹è¿œç¨‹åˆ†æ”¯
+	git branch æŸ¥çœ‹æœ¬åœ°åˆ†æ”¯
+	git branch xx ä¾æ®å½“å‰æœ¬åœ°åˆ†æ”¯åˆ›å»ºæ–°çš„æœ¬åœ°åˆ†æ”¯
+	git branch xx origin/xxx ä¾æ®è¿œç¨‹åˆ†æ”¯åˆ›å»ºæœ¬åœ°æ–°åˆ†æ”¯
+	git checkout xx åˆ‡æ¢æœ¬åœ°åˆ†æ”¯ï¼Œè‹¥æ²¡æœ‰å¯ä¾æ®è¿œç¨‹åˆ†æ”¯åˆ›å»º
+	git branch -d xx åˆ é™¤æœªåˆå¹¶çš„æœ¬åœ°åˆ†æ”¯
+	git merge xx å°†xxåˆ†æ”¯åˆå¹¶åˆ°å½“å‰åˆ†æ”¯
+	git push origin --delete xxx  åˆ é™¤è¿œç¨‹åˆ†æ”¯/æ ‡ç­¾
+	git push origin :xxx  åˆ é™¤è¿œç¨‹åˆ†æ”¯/æ ‡ç­¾
 
-   # git ²é¿´±êÇ©
-	git tag xx ´´½¨±¾µØtag·ÖÖ§ 
-	git tag -a v1.0 v2.0 -m "tag v1.0 desc"  ÒÀ¾İv2.0´´½¨v1.0£¬²¢Ìí¼Ó×¢ÊÍ
-	git branch xx origin/xxx ÒÀ¾İÔ¶³Ì·ÖÖ§´´½¨±¾µØĞÂ·ÖÖ§
-	git checkout xx ÇĞ»»±¾µØtag·ÖÖ§£¨Ö»¶Á£©
-	git checkout -b branchname tagname  ´´½¨Ò»¸ö»ùÓÚÖ¸¶¨tagµÄ·ÖÖ§
-	git tag -d xx  É¾³ı±¾µØtag·ÖÖ§
-	git tag | xargs git tag -d É¾³ı±¾µØËùÓĞtag·ÖÖ§
-	git push origin --tags  ½«±¾µØËùÓĞ±êÇ©¸üĞÂµ½¶ÔÓ¦µÄÔ¶¶Ë±êÇ©
-	git ls-remote -- ²é¿´Ô¶³Ì·ÖÖ§
-	git ls-remote --tags ²é¿´Ô¶³Ìtag·ÖÖ§	
+   # git æŸ¥çœ‹æ ‡ç­¾
+	git tag xx åˆ›å»ºæœ¬åœ°tagåˆ†æ”¯ 
+	git tag -a v1.0 v2.0 -m "tag v1.0 desc"  ä¾æ®v2.0åˆ›å»ºv1.0ï¼Œå¹¶æ·»åŠ æ³¨é‡Š
+	git branch xx origin/xxx ä¾æ®è¿œç¨‹åˆ†æ”¯åˆ›å»ºæœ¬åœ°æ–°åˆ†æ”¯
+	git checkout xx åˆ‡æ¢æœ¬åœ°tagåˆ†æ”¯ï¼ˆåªè¯»ï¼‰
+	git checkout -b branchname tagname  åˆ›å»ºä¸€ä¸ªåŸºäºæŒ‡å®štagçš„åˆ†æ”¯
+	git tag -d xx  åˆ é™¤æœ¬åœ°tagåˆ†æ”¯
+	git tag | xargs git tag -d åˆ é™¤æœ¬åœ°æ‰€æœ‰tagåˆ†æ”¯
+	git push origin --tags  å°†æœ¬åœ°æ‰€æœ‰æ ‡ç­¾æ›´æ–°åˆ°å¯¹åº”çš„è¿œç«¯æ ‡ç­¾
+	git ls-remote -- æŸ¥çœ‹è¿œç¨‹åˆ†æ”¯
+	git ls-remote --tags æŸ¥çœ‹è¿œç¨‹tagåˆ†æ”¯	
 
-   # git ½â¾ö³åÍ»
-	1¡¢ÏÈcommit±¾µØÎÄ¼ş£¬ÔÚpullÔ¶³Ì´úÂë
-	2¡¢Í¨¹ı git status ²é¿´³åÍ»ÎÄ¼ş
-	3¡¢ÊÖ¶¯ĞŞ¸Ä±¾µØÎÄ¼ş½â¾ö³åÍ»£¬È»ºócommit£¬pushÎÄ¼ş
+   # git è§£å†³å†²çª
+	1ã€å…ˆcommitæœ¬åœ°æ–‡ä»¶ï¼Œåœ¨pullè¿œç¨‹ä»£ç 
+	2ã€é€šè¿‡ git status æŸ¥çœ‹å†²çªæ–‡ä»¶
+	3ã€æ‰‹åŠ¨ä¿®æ”¹æœ¬åœ°æ–‡ä»¶è§£å†³å†²çªï¼Œç„¶åcommitï¼Œpushæ–‡ä»¶
 	
-   # git ´úÂë»ØÍË
-	git reset HEAD xx È¡ÏûaddÖÁÔİ´æÇøxxÎÄ¼şµÄ±ä¸ü
-     	git rm --cached xxx ´ÓÔİ´æÇøÒÆ³ıÎÄ¼ş£¬µ«ÁôÔÚ¹¤×÷Ä¿Â¼ÖĞ
-	git checkout -- . »Ö¸´ËùÓĞÎ´addÖÁÔİ´æÇøµÄÎÄ¼şÄÚÈİ
-	git reset --hard xxx »ØÍËµ½Ö¸¶¨°æ±¾
-	git revert HEAD ³·Ïú×î½üµÄÒ»¸öcommit
+   # git ä»£ç å›é€€
+	git reset HEAD xx å–æ¶ˆaddè‡³æš‚å­˜åŒºxxæ–‡ä»¶çš„å˜æ›´
+     	git rm --cached xxx ä»æš‚å­˜åŒºç§»é™¤æ–‡ä»¶ï¼Œä½†ç•™åœ¨å·¥ä½œç›®å½•ä¸­
+	git checkout -- . æ¢å¤æ‰€æœ‰æœªaddè‡³æš‚å­˜åŒºçš„æ–‡ä»¶å†…å®¹
+	git reset --hard xxx å›é€€åˆ°æŒ‡å®šç‰ˆæœ¬
+	git revert HEAD æ’¤é”€æœ€è¿‘çš„ä¸€ä¸ªcommit
 
-   # git ÈÕÖ¾²éÑ¯ 
-	git show ²éÑ¯×îĞÂµÄcommitĞÅÏ¢	
-	git log ²éÑ¯Ìá½»ÈÕÖ¾
-	git log --oneline --graph ²éÑ¯Í¼ĞÎ»¯ĞÅÏ¢
-	git log --stat ²éÑ¯´úÂë¸Ä¶¯ĞÅÏ¢
-	git reflog ²é¿´²Ù×÷¼ÇÂ¼
+   # git æ—¥å¿—æŸ¥è¯¢ 
+	git show æŸ¥è¯¢æœ€æ–°çš„commitä¿¡æ¯	
+	git log æŸ¥è¯¢æäº¤æ—¥å¿—
+	git log -p xxx æŸ¥è¯¢æ–‡ä»¶ä¿®æ”¹è®°å½•
+	git log --oneline --graph æŸ¥è¯¢å›¾å½¢åŒ–ä¿¡æ¯
+	git log --stat æŸ¥è¯¢ä»£ç æ”¹åŠ¨ä¿¡æ¯
+	git reflog æŸ¥çœ‹æ“ä½œè®°å½•
    
-   # git ´úÂëĞŞ¸ÄĞÅÏ¢²éÑ¯
-	git diff  ²éÑ¯µ±Ç°ÎÄ¼şÓëÔİ´æÇøÎÄ¼şµÄ²îÒì
-	git diff --cached ²éÑ¯ÒÑaddÎ´commitµÄÎÄ¼ş²îÒì
-	git diff origin/xxx ²éÑ¯µ±Ç°ÎÄ¼şÓë±¾µØ·ÖÖ§/Ô¶³Ì·ÖÖ§ÎÄ¼şµÄ²îÒì
+   # git ä»£ç ä¿®æ”¹ä¿¡æ¯æŸ¥è¯¢
+	git diff  æŸ¥è¯¢å½“å‰æ–‡ä»¶ä¸æš‚å­˜åŒºæ–‡ä»¶çš„å·®å¼‚
+	git diff --cached æŸ¥è¯¢å·²addæœªcommitçš„æ–‡ä»¶å·®å¼‚
+	git diff origin/xxx æŸ¥è¯¢å½“å‰æ–‡ä»¶ä¸æœ¬åœ°åˆ†æ”¯/è¿œç¨‹åˆ†æ”¯æ–‡ä»¶çš„å·®å¼‚
 
-   # git Ìí¼Ó.gitignoreÎÄ¼ş
-	1¡¢´´½¨ÎÄ¼ş£¬touch .gitignore
-	2¡¢Ê¹ÓÃvim´ò¿ªÎÄ¼ş£¬Ìí¼ÓºöÂÔÕıÔò
-	3¡¢Ìá½»µ½Ô¶³Ì²Ö¿â
-	# ½«ÒÑ¾­pushµ½githubµÄÎÄ¼şÉ¾³ı, µ«±¾µØµÄÎÄ¼ş²»É¾³ı
-	1¡¢ÔÚ.gitignoreÎÄ¼şÖĞÌí¼ÓºöÂÔÎÄ¼ş
-	2¡¢git rm --cached xxx  ½«ÎÄ¼ş´ÓÔİ´æÇøÖĞÉ¾³ı
-	3¡¢Ìí¼Óµ½Ô¶³Ì²Ö¿â	
+   # git æ·»åŠ .gitignoreæ–‡ä»¶
+	1ã€åˆ›å»ºæ–‡ä»¶ï¼Œtouch .gitignore
+	2ã€ä½¿ç”¨vimæ‰“å¼€æ–‡ä»¶ï¼Œæ·»åŠ å¿½ç•¥æ­£åˆ™
+	3ã€æäº¤åˆ°è¿œç¨‹ä»“åº“
+	# å°†å·²ç»pushåˆ°githubçš„æ–‡ä»¶åˆ é™¤, ä½†æœ¬åœ°çš„æ–‡ä»¶ä¸åˆ é™¤
+	1ã€åœ¨.gitignoreæ–‡ä»¶ä¸­æ·»åŠ å¿½ç•¥æ–‡ä»¶
+	2ã€git rm --cached xxx  å°†æ–‡ä»¶ä»æš‚å­˜åŒºä¸­åˆ é™¤
+	3ã€æ·»åŠ åˆ°è¿œç¨‹ä»“åº“	
 	
-3¡¢Á´½ÓGitHub
-   1¡¢³õÊ¼»¯²Ö¿â£ºgit init
-   2¡¢Ìí¼ÓÎÄ¼ş£ºgit add xx.txt£¬git commit -m "xxx"
-   3¡¢½¨Á¢Á´½Ó£ºgit remote add origin git@github.com:xxx/xxx.git
-   4¡¢Ô¶³ÌÍÆËÍ£ºgit push -u origin master£¬µÚÒ»´ÎÍÆËÍ¼ÓÉÏ -u ²ÎÊı
+3ã€é“¾æ¥GitHub
+   1ã€åˆå§‹åŒ–ä»“åº“ï¼šgit init
+   2ã€æ·»åŠ æ–‡ä»¶ï¼šgit add xx.txtï¼Œgit commit -m "xxx"
+   3ã€å»ºç«‹é“¾æ¥ï¼šgit remote add origin git@github.com:xxx/xxx.git
+   4ã€è¿œç¨‹æ¨é€ï¼šgit push -u origin masterï¼Œç¬¬ä¸€æ¬¡æ¨é€åŠ ä¸Š -u å‚æ•°
