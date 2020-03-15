@@ -32,12 +32,6 @@
 3、优化网络框架：Cookie功能、Header功能
 4、调整网络框架结构
 
-
-初级：最基本就是能设计有效的用例，覆盖所有业务场景，单元测试，集成测试，系统测试等等
-中级：掌握一些常用的测试工具，进行接口，性能的测试验证，比如jmeter，lr
-高级：掌握一些语言，根据项目特点设计工具，框架，满足功能测试，自动化测试
-基础：网络，数据库，操作系统
-
 12月
 1、Linux常用命令
 2、Git常用命令
@@ -47,3 +41,33 @@
 1、Python基础：语法、变量类型、运算符、条件语句、函数
 2、Python高阶：迭代器、装饰器、变量作用域、序列化、异常、面向对象、日志模块 
 3、网络框架：urllib、requests
+
+
+
+
+Python：http://www.itheima.com/course/pythontext.html
+1、服务器：uWSGI
+2、Web框架：Django、Flask
+3、数据框架：pandas
+4、Python数据采集：requests
+5、Python自动化测试开发：Web自动化测试（Selenium、Appium、Unittest等使用）、JMeter接口测试、性能测试
+
+===============================================================
+
+Web后台：http://www.itheima.com/course/javaeetext.html
+1、服务器：Nginx、Tomcat
+2、数据库：Redis、MySQL、MongoDB
+3、Web框架：Spring、SpringMVC
+4、分布式服务框架：Dubbo、Zookeeper
+5、微服务框架：Spring Boot、Spring Cloud
+6、消息中间件：RabbitMQ、Kafka
+7、项目部署：Docker
+8、集群管理：Keepalived
+
+===============================================================
+
+测试技能：
+初级：最基本就是能设计有效的用例，覆盖所有业务场景，单元测试，集成测试，系统测试等等
+中级：掌握一些常用的测试工具，进行接口，性能的测试验证，比如jmeter，lr
+高级：掌握一些语言，根据项目特点设计工具，框架，满足功能测试，自动化测试
+基础：网络，数据库，操作系统

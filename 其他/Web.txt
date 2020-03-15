@@ -4,6 +4,8 @@ Node.js：JavaScript的运行环境，类比Java中JVM
 前端框架：React.js、Vue.js、Angular.js 
 混合框架：React-Native、Weex
 
+===============================================================
+
 ### RN环境搭建 ###
 
 1、安装JDK、AndroidSDk、Git、Python、nodejs
@@ -30,10 +32,34 @@ Node.js：JavaScript的运行环境，类比Java中JVM
 6、运行Android项目，在Chrome中访问 http://localhost:8081/debugger-ui，可以调试页面
         react-native run-android
 
+速成:
+1、环境部署, 项目能启动起来
+2、先学页面,模仿写个app(控件, flex布局). 路由(react-navigation)
+3、学习下如何和Android交互
+4、学习redux状态管理
 
+网站：
 https://es6.ruanyifeng.com/
-https://marketplace.visualstudio.com/items?itemName=xabikos.ReactSnippets
-
-https://juejin.im/post/5898388b128fe1006cb943e3
 https://reactnative.cn/docs/getting-started/
 https://www.jianshu.com/p/97692b1c451d
+https://juejin.im/post/5898388b128fe1006cb943e3
+
+
+===============================================================
+
+VSCode 插件
+
+JavaScript (ES6) code snippets：js代码提示插件
+Code Runner：运行js代码
+React Native Tools：RN调试工具
+Reactjs code snippets：react的代码提示插件
+Typings auto installer：根据package.json自动加载依赖
+Path Intellisense：文件路径提示补全
+Auto Close Tag：自动闭合标签
+Auto Rename Tag：自动重命名标签
+Babel ES6/ES7 ：ES6，ES7语法加亮检查插件
+ESLint：代码检查的插件
+Dash：在线文档
+
+
+
