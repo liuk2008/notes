@@ -1,73 +1,78 @@
-1ÔÂ
-1¡¢·â×°ActivityºÍFragment
-2¡¢·â×°Ö÷ÌâÑùÊ½
-3¡¢ÅäÖÃ»ìÏý¹¦ÄÜ
-4¡¢×Ô¶¨ÒåViewInject¹¤¾ß
-5¡¢·â×°Permission¿Ø¼þ£¬Utils¹¤¾ßÀà
+2019
+1æœˆ
+1ã€å°è£…Activityå’ŒFragment
+2ã€å°è£…ä¸»é¢˜æ ·å¼
+3ã€é…ç½®æ··æ·†åŠŸèƒ½
+4ã€è‡ªå®šä¹‰ViewInjectå·¥å…·
+5ã€å°è£…PermissionæŽ§ä»¶ï¼ŒUtilså·¥å…·ç±»
 
-2ÔÂ
-ÍøÂç¿ò¼Üv1.0
-  1¡¢Retrofit2 + CallBack 
-  2¡¢Retrofit2 + RxJava2
-  3¡¢Http + Callback
+2æœˆ
+ç½‘ç»œæ¡†æž¶v1.0
+  1ã€Retrofit2 + CallBack 
+  2ã€Retrofit2 + RxJava2
+  3ã€Http + Callback
 
-3ÔÂ
-1¡¢×Ô¶¨ÒåWebView¿Ø¼þ
-2¡¢ÍøÂç¿ò¼Üv2.0
-3¡¢×Ô¶¨Òårefreshview¿Ø¼þ
-4¡¢×Ô¶¨ÒåPhotoÏà¹Ø¿Ø¼þ
-5¡¢ÅäÖÃbintrayÆ½Ì¨
-
-
-4ÔÂ
-1¡¢Ôö¼ÓnoteÎÄµµ£¬Ôö¼ÓMVP¡¢Java¡¢RxJava2Ê¹ÓÃ°¸Àý
-2¡¢Ôö¼ÓPython¶àÇþµÀ´ò°ü¹¦ÄÜ
-3¡¢ÅäÖÃv1¡¢v2Ç©Ãû¹¦ÄÜ
-4¡¢±àÐ´Gradle Plugin²å¼þ
-5¡¢Ôö¼ÓTransformAPI¡¢javassistÊ¹ÓÃ°¸Àý
-
-7ÔÂ
-1¡¢ÓÅ»¯WebView£ºCookie¹¦ÄÜ¡¢Header¹¦ÄÜ
-2¡¢Ôö¼ÓÊý¾Ý¿â¹¦ÄÜ
-3¡¢ÓÅ»¯ÍøÂç¿ò¼Ü£ºCookie¹¦ÄÜ¡¢Header¹¦ÄÜ
-4¡¢µ÷ÕûÍøÂç¿ò¼Ü½á¹¹
-
-12ÔÂ
-1¡¢Linux³£ÓÃÃüÁî
-2¡¢Git³£ÓÃÃüÁî
-3¡¢´î½¨Android¿ª·¢»·¾³
-
-1ÔÂ
-1¡¢Python»ù´¡£ºÓï·¨¡¢±äÁ¿ÀàÐÍ¡¢ÔËËã·û¡¢Ìõ¼þÓï¾ä¡¢º¯Êý
-2¡¢Python¸ß½×£ºµü´úÆ÷¡¢×°ÊÎÆ÷¡¢±äÁ¿×÷ÓÃÓò¡¢ÐòÁÐ»¯¡¢Òì³£¡¢ÃæÏò¶ÔÏó¡¢ÈÕÖ¾Ä£¿é 
-3¡¢ÍøÂç¿ò¼Ü£ºurllib¡¢requests
+3æœˆ
+1ã€è‡ªå®šä¹‰WebViewæŽ§ä»¶
+2ã€ç½‘ç»œæ¡†æž¶v2.0
+3ã€è‡ªå®šä¹‰refreshviewæŽ§ä»¶
+4ã€è‡ªå®šä¹‰Photoç›¸å…³æŽ§ä»¶
+5ã€é…ç½®bintrayå¹³å°
 
 
+4æœˆ
+1ã€å¢žåŠ noteæ–‡æ¡£ï¼Œå¢žåŠ MVPã€Javaã€RxJava2ä½¿ç”¨æ¡ˆä¾‹
+2ã€å¢žåŠ Pythonå¤šæ¸ é“æ‰“åŒ…åŠŸèƒ½
+3ã€é…ç½®v1ã€v2ç­¾ååŠŸèƒ½
+4ã€ç¼–å†™Gradle Pluginæ’ä»¶
+5ã€å¢žåŠ TransformAPIã€javassistä½¿ç”¨æ¡ˆä¾‹
+
+7æœˆ
+1ã€ä¼˜åŒ–WebViewï¼šCookieåŠŸèƒ½ã€HeaderåŠŸèƒ½
+2ã€å¢žåŠ æ•°æ®åº“åŠŸèƒ½
+3ã€ä¼˜åŒ–ç½‘ç»œæ¡†æž¶ï¼šCookieåŠŸèƒ½ã€HeaderåŠŸèƒ½
+4ã€è°ƒæ•´ç½‘ç»œæ¡†æž¶ç»“æž„
+
+12æœˆ
+1ã€Linuxå¸¸ç”¨å‘½ä»¤
+2ã€Gitå¸¸ç”¨å‘½ä»¤
+3ã€UbuntuçŽ¯å¢ƒAndroidã€Pythonã€Nodejs
+
+2020
+1æœˆ
+1ã€PythonåŸºç¡€ï¼šåŸºç¡€è¯­æ³•ã€å‡½æ•°ã€è¿­ä»£å™¨ã€è£…é¥°å™¨ã€å˜é‡ä½œç”¨åŸŸã€åºåˆ—åŒ–ã€å¼‚å¸¸
+2ã€Pythoné«˜é˜¶ï¼šé¢å‘å¯¹è±¡ã€æ—¥å¿—æ¨¡å—ã€è¿›ç¨‹ä½¿ç”¨ã€çº¿ç¨‹ä½¿ç”¨ã€ç½‘ç»œæ¨¡å—
+3ã€å°è£…ç½‘ç»œæ¡†æž¶ï¼šurllibã€requests
+
+3æœˆ
+1ã€ä¼˜åŒ–ç½‘ç»œæ¡†æž¶ï¼šurllibã€requests
+2ã€ç¼–å†™æŽ¥å£è‡ªåŠ¨åŒ–æµ‹è¯•è„šæœ¬ï¼Œé…ç½®å‘é€é‚®ä»¶åŠŸèƒ½
+3ã€å…¼å®¹Windowsã€UbuntuçŽ¯å¢ƒä¸‹Pythonè„šæœ¬è¿è¡Œ
 
 
-Python£ºhttp://www.itheima.com/course/pythontext.html
-1¡¢·þÎñÆ÷£ºuWSGI
-2¡¢Web¿ò¼Ü£ºDjango¡¢Flask
-3¡¢Êý¾Ý¿ò¼Ü£ºpandas
-4¡¢PythonÊý¾Ý²É¼¯£ºrequests
-5¡¢Python×Ô¶¯»¯²âÊÔ¿ª·¢£ºWeb×Ô¶¯»¯²âÊÔ£¨Selenium¡¢Appium¡¢UnittestµÈÊ¹ÓÃ£©¡¢JMeter½Ó¿Ú²âÊÔ¡¢ÐÔÄÜ²âÊÔ
-
-===============================================================
-
-WebºóÌ¨£ºhttp://www.itheima.com/course/javaeetext.html
-1¡¢·þÎñÆ÷£ºNginx¡¢Tomcat
-2¡¢Êý¾Ý¿â£ºRedis¡¢MySQL¡¢MongoDB
-3¡¢Web¿ò¼Ü£ºSpring¡¢SpringMVC
-4¡¢·Ö²¼Ê½·þÎñ¿ò¼Ü£ºDubbo¡¢Zookeeper
-5¡¢Î¢·þÎñ¿ò¼Ü£ºSpring Boot¡¢Spring Cloud
-6¡¢ÏûÏ¢ÖÐ¼ä¼þ£ºRabbitMQ¡¢Kafka
-7¡¢ÏîÄ¿²¿Êð£ºDocker
-8¡¢¼¯Èº¹ÜÀí£ºKeepalived
+Pythonï¼šhttp://www.itheima.com/course/pythontext.html
+1ã€æœåŠ¡å™¨ï¼šuWSGI
+2ã€Webæ¡†æž¶ï¼šDjangoã€Flask
+3ã€æ•°æ®æ¡†æž¶ï¼špandas
+4ã€Pythonæ•°æ®é‡‡é›†ï¼šrequests
+5ã€Pythonè‡ªåŠ¨åŒ–æµ‹è¯•å¼€å‘ï¼šWebè‡ªåŠ¨åŒ–æµ‹è¯•ï¼ˆSeleniumã€Appiumã€Unittestç­‰ä½¿ç”¨ï¼‰ã€JMeteræŽ¥å£æµ‹è¯•ã€æ€§èƒ½æµ‹è¯•
 
 ===============================================================
 
-²âÊÔ¼¼ÄÜ£º
-³õ¼¶£º×î»ù±¾¾ÍÊÇÄÜÉè¼ÆÓÐÐ§µÄÓÃÀý£¬¸²¸ÇËùÓÐÒµÎñ³¡¾°£¬µ¥Ôª²âÊÔ£¬¼¯³É²âÊÔ£¬ÏµÍ³²âÊÔµÈµÈ
-ÖÐ¼¶£ºÕÆÎÕÒ»Ð©³£ÓÃµÄ²âÊÔ¹¤¾ß£¬½øÐÐ½Ó¿Ú£¬ÐÔÄÜµÄ²âÊÔÑéÖ¤£¬±ÈÈçjmeter£¬lr
-¸ß¼¶£ºÕÆÎÕÒ»Ð©ÓïÑÔ£¬¸ù¾ÝÏîÄ¿ÌØµãÉè¼Æ¹¤¾ß£¬¿ò¼Ü£¬Âú×ã¹¦ÄÜ²âÊÔ£¬×Ô¶¯»¯²âÊÔ
-»ù´¡£ºÍøÂç£¬Êý¾Ý¿â£¬²Ù×÷ÏµÍ³
+WebåŽå°ï¼šhttp://www.itheima.com/course/javaeetext.html
+1ã€æœåŠ¡å™¨ï¼šNginxã€Tomcat
+2ã€æ•°æ®åº“ï¼šRedisã€MySQLã€MongoDB
+3ã€Webæ¡†æž¶ï¼šSpringã€SpringMVC
+4ã€åˆ†å¸ƒå¼æœåŠ¡æ¡†æž¶ï¼šDubboã€Zookeeper
+5ã€å¾®æœåŠ¡æ¡†æž¶ï¼šSpring Bootã€Spring Cloud
+6ã€æ¶ˆæ¯ä¸­é—´ä»¶ï¼šRabbitMQã€Kafka
+7ã€é¡¹ç›®éƒ¨ç½²ï¼šDocker
+8ã€é›†ç¾¤ç®¡ç†ï¼šKeepalived
+
+===============================================================
+
+æµ‹è¯•æŠ€èƒ½ï¼š
+åˆçº§ï¼šæœ€åŸºæœ¬å°±æ˜¯èƒ½è®¾è®¡æœ‰æ•ˆçš„ç”¨ä¾‹ï¼Œè¦†ç›–æ‰€æœ‰ä¸šåŠ¡åœºæ™¯ï¼Œå•å…ƒæµ‹è¯•ï¼Œé›†æˆæµ‹è¯•ï¼Œç³»ç»Ÿæµ‹è¯•ç­‰ç­‰
+ä¸­çº§ï¼šæŽŒæ¡ä¸€äº›å¸¸ç”¨çš„æµ‹è¯•å·¥å…·ï¼Œè¿›è¡ŒæŽ¥å£ï¼Œæ€§èƒ½çš„æµ‹è¯•éªŒè¯ï¼Œæ¯”å¦‚jmeterï¼Œlr
+é«˜çº§ï¼šæŽŒæ¡ä¸€äº›è¯­è¨€ï¼Œæ ¹æ®é¡¹ç›®ç‰¹ç‚¹è®¾è®¡å·¥å…·ï¼Œæ¡†æž¶ï¼Œæ»¡è¶³åŠŸèƒ½æµ‹è¯•ï¼Œè‡ªåŠ¨åŒ–æµ‹è¯•
+åŸºç¡€ï¼šç½‘ç»œï¼Œæ•°æ®åº“ï¼Œæ“ä½œç³»ç»Ÿ
