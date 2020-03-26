@@ -23,8 +23,9 @@
 
    # git 文件添加，提交
 	git add . 添加文件至暂存区
-	git commit -m "xx" 提交至仓库
-	git commit -a -m "xx" 提交至仓库
+	git commit xx -m "xx" 提交至仓库
+	git commit xx -a -m "xx" 提交至仓库
+	git commit xx -i -m “xx”  解决冲突合并保留部分文件不提交
 
    # git 分支查看与切换
 	git branch -a 查看所有分支（包括远程分支）
@@ -54,7 +55,7 @@
 	1、先commit本地文件，在pull远程代码
 	2、通过 git status 查看冲突文件
 	3、手动修改本地文件解决冲突，然后commit，push文件
-	
+       
    # git 代码回退
 	git reset HEAD xx 取消add至暂存区xx文件的变更
      	git rm --cached xxx 从暂存区移除文件，但留在工作目录中
@@ -89,3 +90,8 @@
    2、添加文件：git add xx.txt，git commit -m "xxx"
    3、建立链接：git remote add origin git@github.com:xxx/xxx.git
    4、远程推送：git push -u origin master，第一次推送加上 -u 参数
+   
+4、注意：
+   1、在本地修改与远程代码无冲突的情况下，优先使用：pull->commit->push
+   如果commit->pull的话，Git会主动merge，这样没有必要
+   2、在本地修改与远程代码有冲突的情况下，优先使用：commit->pull->push
