@@ -48,6 +48,7 @@
 1、优化网络框架：urllib、requests
 2、编写接口自动化测试脚本，配置发送邮件功能
 3、兼容Windows、Ubuntu环境下Python脚本运行
+4、异步IO、协程函数、asyncio模块
 
 
 Python：http://www.itheima.com/course/pythontext.html
