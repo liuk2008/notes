@@ -177,8 +177,8 @@
        * 允许重名的，而不在同一容器控件中的两个控件重名也无所谓。
     
 	4、Android R文件和BuildConfig文件	
-	   * 1、Android APK 以 applicationId 作为唯一标识，在编译APK的过程中，manifest中的package值会被修改成 applicationId
-       * 2、项目包名、applicationId、manifest package三者不一致时，在构建代码的过程中，R文件和 BuildConfig 文件会以manifest package值作为包名
+	   * 1、Android APK以applicationId作为唯一标识，在编译APK的过程中，系统会将manifest中的package值修改成applicationId
+       * 2、项目包名、applicationId、manifest package三者不一致时，在构建代码的过程中，生成R文件、BuildConfig文件的目录还是以未修改前的manifest package作为包名，构建完成后manifest package被修改为applicationId
        * 而通过系统方法获取APP包名实际上获取的是applicationId，此时通过包名获取R文件相关信息会出现异常
 
 **dex分包机制**
