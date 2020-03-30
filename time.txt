@@ -55,8 +55,7 @@ Python：http://www.itheima.com/course/pythontext.html
 1、服务器：uWSGI
 2、Web框架：Django、Flask
 3、数据框架：pandas
-4、Python数据采集：requests
-5、Python自动化测试开发：Web自动化测试（Selenium、Appium、Unittest等使用）、JMeter接口测试、性能测试
+4、数据采集、自动化测试开发、Web开发
 
 ===============================================================
 
@@ -74,6 +73,18 @@ Web后台：http://www.itheima.com/course/javaeetext.html
 
 测试技能：
 初级：最基本就是能设计有效的用例，覆盖所有业务场景，单元测试，集成测试，系统测试等等
-中级：掌握一些常用的测试工具，进行接口，性能的测试验证，比如jmeter，lr
+中级：掌握一些常用的测试工具，进行接口，性能的测试验证，比如 loadrunner、jmeter
 高级：掌握一些语言，根据项目特点设计工具，框架，满足功能测试，自动化测试
 基础：网络，数据库，操作系统
+
+Web自动化：Selenium、Unittest
+APP自动化：Appium
+性能测试：JMeter、loadrunner
+
+===============================================================
+
+重点学习：
+1、混合开发（rn、vue、flutter）
+2、Python，自动化测试，大数据，web前端
+3、Android原生，Kotlin
+4、Linux，英语
