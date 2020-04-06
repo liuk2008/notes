@@ -157,12 +157,12 @@
 
 **Gradle 多渠道打包**	
 	
-	* 配置两个维度
+* 配置两个维度
 
 		flavorDimensions "company","channel"
 
-	* 配置产品的多维度
-	
+* 配置产品的多维度
+
 		productFlavors{
 	        companyA{
 	            dimension "company"
@@ -182,4 +182,4 @@
 	        }
 	    }
 
-	* 通过productFlavors配置，会修改buildConfig类中的FLAVOR字段，这会导致生成的不同渠道包的dex是不一样，不过可以单独配置各个渠道参数（无法使用热修复功能）
+* 通过productFlavors配置，会修改buildConfig类中的FLAVOR字段，这会导致生成的不同渠道包的dex是不一样，不过可以单独配置各个渠道参数（无法使用热修复功能）
