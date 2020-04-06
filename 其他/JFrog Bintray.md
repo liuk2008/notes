@@ -1,18 +1,12 @@
 # 配置JFrog Bintray 
 
-	jcenter是一个由bintray.com维护的Maven仓库。你可以在这里看到整个仓库的内容。
-	
-	我们在项目的根目录 build.gradle 文件中如下定义仓库，就能使用jcenter了：
-	
-	    allprojects {
-	        repositories {
-	            jcenter()
-	        }
-	    }
-	
-	Maven Central
-	Maven Central 则是由sonatype.org维护的Maven仓库。你可以在这里看到整个仓库。
-	注：不管是jcenter还是Maven Central ，两者都是Maven仓库
+jcenter是一个由bintray.com维护的Maven仓库。你可以在这里看到整个仓库的内容。我们在项目的根目录 build.gradle 文件中如下定义仓库，就能使用jcenter了：
+
+    allprojects {
+        repositories {
+            jcenter()
+        }
+    }
 
 1、https://bintray.com/signup/oss 中注册个人账号，注意使用gmail邮箱
 
