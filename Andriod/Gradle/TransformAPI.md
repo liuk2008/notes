@@ -3,13 +3,10 @@
 
 **概述**
 
-* Transform API： 允许第三方 Plugin 在Android打包过程中，由class转换成dex文件之前的编译过程中，加入开发者自定义的处理逻辑操作
-	* Transform API 是新引进的获取 class 的方式
-	* Transform API 在编译之后，生成 dex 之前起作用
+* Transform API： 允许第三方 Plugin 在Android打包过程中，由class转换成dex文件之前的编译过程中，加入开发者自定义的处理逻辑操作，它是一种获取 class的方式，在代码编译之后，生成dex之前起作用。
 * Transform 作用：
 	* 1、Transform 主要处理和转换两种资源流，一种是会被消费掉，一种只是参与了转换过程，并不会被消费掉
-	* 2、资源流存储在一个资源池，Transform 从这个资源池收集资源流，然后经过一定的规则转换生成新的资源流放在资源池里，
-	* 同时将未消耗的资源流也放回这个池子里去，下一个 Transform 重复之前的流程
+	* 2、资源流存储在一个资源池，Transform 从这个资源池收集资源流，然后经过一定的规则转换生成新的资源流放在资源池里，同时将未消耗的资源流也放回这个池子里去，下一个 Transform 重复之前的流程
 	
 	
 **工作流程**
@@ -87,11 +84,10 @@
 	* getOutputProvider()：OutputProvider管理输出路径，如果消费型输入为空，则OutputProvider == null
 	
 	* TransformInput：所谓 Transform 就是对输入的class文件转变成目标字节码文件，TransformInput就是这些输入文件的抽象。包括：
-		* DirectoryInput：它代表着以源码方式参与项目编译的所有目录结构及其目录下的源码文件，可以借助于它来修改输出文件的目录结构、已经目标字节码文件
-		* JarInput：它代表着以jar包方式参与项目编译的所有本地jar包或远程jar包，可以借助于它来动态添加jar包
+		* DirectoryInput：以源码方式参与项目编译的所有目录结构及其目录下的源码文件，可借助它来修改输出文件的目录结构、目标字节码文件
+		* JarInput：以jar包方式参与项目编译的所有本地jar包或远程jar包，可以借助于它来动态添加jar包
 		
 	* TransformOutputProvider：它代表的是Transform的输出，例如可以通过它来获取输出路径
-
 
 
 **Transform优化**
