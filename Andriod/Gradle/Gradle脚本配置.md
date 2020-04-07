@@ -43,11 +43,11 @@
 		// 配置不同版本的签名
 	    signingConfigs {  						 		
 	        release {  							
-	            storeFile file("fk.keystore")   			 // 密钥库路径，当前module路径下
-	            storePassword  "123" 						 // 密钥库密码
-	            keyAlias       "fk" 						 // 密钥别名
-	            keyPassword    "123" 						 // 密钥密码
-				v2SigningEnabled false                       // 禁止7.0 以上版本进行V2签名校验，兼容python多渠道打包
+	            storeFile file("fk.keystore")  // 密钥库路径，当前module路径下
+	            storePassword  "123" 		   // 密钥库密码
+	            keyAlias       "fk" 		   // 密钥别名
+	            keyPassword    "123" 		   // 密钥密码
+				v2SigningEnabled false         // 禁止7.0 以上版本进行V2签名校验，兼容python多渠道打包                  
 	        }
 	        debug { 										 
 	            storeFile file("../debug.keystore")          // 根目录下
@@ -70,7 +70,7 @@
                 applicationIdSuffix ".release"               // 配置applicationId的后缀
                 buildConfigField "String", "server_url", "\"http://10.30.50.152:8071/qingqinew\""    // 配置服务器地址
                 manifestPlaceholders = [
-                    mapbar_push_key: "test-769b0e2dcb354bf99ed73f4ab23a2f30"                //在 AndroidManifest 配置引用 ${mapbar_push_key}
+                    mapbar_push_key: "test-769b0e2dcb354bf99ed73f4ab23a2f30"  //在 AndroidManifest 配置引用 ${mapbar_push_key}               
            		]
 				jniDebuggable    fale                        // 表示是否可以调试NDK代码
                 multiDexEnabled  false                       // 是否启用自动拆分多个Dex的功能

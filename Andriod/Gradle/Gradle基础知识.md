@@ -16,8 +16,11 @@
 **Gradle插件**
 
 * 脚本插件：其实就是一个普通的build.gradle
+
 * 对象插件：也叫二进制插件，是实现了org.gradle.api.Plugins<Project>接口的插件，对象插件可以分为内部插件和第三方插件
+
 * 全局配置
+
 	* 使用ext块配置，在项目build.gradle中使用ext块，如下
 	
 			ext {
@@ -36,6 +39,7 @@
 			}
 
 	* 在module中，引用方式：
+	
 		* rootProject.ext.date 
 		* rootProject.ext.android.minSdkVersion
 		* rootProject.ext.dependencies["appcompat-v7"] 
@@ -123,4 +127,5 @@
 		    println 'task2'
 		}
 		task2.dependsOn task1
-		* gradlew task2同时执行两个任务，gradlew task1只执行task1任务
+		
+		gradlew task2同时执行两个任务，gradlew task1只执行task1任务

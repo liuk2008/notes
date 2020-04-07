@@ -75,12 +75,14 @@
 					// 4、 将所有 子View 添加到 subDecor 中的 contentView
 					contentView.addView(child);
 				}
+
 				// 5、 清除 PhoneWindow 中 windowContentView 的id，并将 subDecor 中 contentView 的id替换为 windowContentView 中的id
 				windowContentView.setId(-1);
 				contentView.setId(android.R.id.content);
 				if (windowContentView instanceof FrameLayout) {
 				    ((FrameLayout)windowContentView).setForeground((Drawable)null);
 				}
+
 			}
 			// 将 subDecor 添加到 PhoneWindow 中
 			this.mWindow.setContentView(subDecor);

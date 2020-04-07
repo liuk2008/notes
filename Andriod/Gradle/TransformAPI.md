@@ -4,8 +4,11 @@
 **概述**
 
 * Transform API： 允许第三方 Plugin 在Android打包过程中，由class转换成dex文件之前的编译过程中，加入开发者自定义的处理逻辑操作，它是一种获取 class的方式，在代码编译之后，生成dex之前起作用。
+
 * Transform 作用：
+
 	* 1、Transform 主要处理和转换两种资源流，一种是会被消费掉，一种只是参与了转换过程，并不会被消费掉
+	
 	* 2、资源流存储在一个资源池，Transform 从这个资源池收集资源流，然后经过一定的规则转换生成新的资源流放在资源池里，同时将未消耗的资源流也放回这个池子里去，下一个 Transform 重复之前的流程
 	
 	
@@ -14,16 +17,27 @@
 * 每个Transform其实都是一个gradle task，Android编译器中的TaskManager将每个Transform串连起来，第一个Transform接收来自javac编译的结果，以及已经拉取到在本地的第三方依赖（jar. aar），还有resource资源，注意，这里的resource并非android项目中的res资源，而是asset目录下的资源。这些编译的中间产物，在 Transform组成的链条上流动，每个Transform节点可以对class进行处理再传递给下一个Transform。我们常见的混淆，Desugar等逻辑，它们的实现如今都是封装在一个个Transform中，而我们自定义的Transform，会插入到这个Transform链条的最前面。
 
 * 1、如何获取 class 文件
+
 	* 1、Transform 将输入进行处理，然后写入到指定的目录下作为下一个 Transform 的输入源
+	
 	* 2、配置 Transform 的输入类型为 Class，作用域为全工程。 这样在 transform() 方法中，inputs 会传入工程内所有的 class 文件
+	
 		 * 1、inputs 包含两个部分： jar 包和目录。子 module 的 java 文件在编译过程中也会生成一个 jar 包然后编译到主工程中。
+		 
 	 	 * 2、outputProvider 获取到输出目录，最后将修改的文件复制到输出目录，这一步必须做不然编译会报错
+	 
 	* 3、TransformAPI 无法直接操作 class 文件，需通过 ams 或 javassist 第三方框架操作
+	
 * 2、Transform 与 Gradle Task 之间的关系？
+
 	* Gradle 中有一个 TransformManage 的类，调用 addTransform() 管理所有的 Transform ，会将 Transform 包装成一个 AndroidTask 对象，可以理解为一个Transform就是一个Task
+	
 * 3、Gradle 是如何控制 Transform 的作用域的？
+
 	* TransformManage类调用 createPostCompilationTasks() 方法，此方法在javaCompile 之后调用，会遍历所有的 transform，然后一一添加进TransformManager，先加载自定义的Transform 之后，再添加 Proguard，JarMergeTransform，MultiDex，Dex 等 Transform
+	
 * 4、为什么最后一定要把jar文件复制到输出目录呢？
+
 	* 因为Gradle 是通过一个一个 Task 执行完成整个流程（就像一个串起来的链表），而Task 有一个重要的概念：inputs 和 outputs。 Task 通过 inputs拿到一些需要的参数，处理完毕之后就输出 outputs，而下一个 Task 的 inputs 则是上一个 Task 的outputs。 所以一定要复制到输出目录。
 
 

@@ -16,16 +16,19 @@
 * 创建子线程中的Looper对象
 
 		public void run(){ 
+
 		   /**
 		   * 1、创建Looper对象，通过Looper对象创建其成员变量MessageQueue对象
 		   * 2、通过TheadLocal将Looper对象与当前线程进行绑定
 		   */
 		   Looper.prepare();  
+
 		   /**
 		   * 1、创建Handler对象，从当前线程中找到之前绑定的Looper对象，获取Looper对象中的MessageQueue对象
 		   * 2、底层发送消息，同时将Handler对象与每一个Message对象进行绑定，绑定后Message对象会被添加到消息队列中
-		   */
+		   */ 
 		   handler=new MyHandler();  
+
 		   /**
 		   * 1、从当前线程中找到之前绑定的Looper对象，获取Looper对象中的MessageQueue对象
 		   * 2、开启死循环，遍历MessageQueue
