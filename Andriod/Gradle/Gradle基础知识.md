@@ -1,5 +1,5 @@
 
-##Gradle基础知识##
+## Gradle基础知识 ##
 
 **Gradle构建工具**
 
@@ -55,7 +55,7 @@
 * build：任务会执行一个完整的项目构建，执行自动化测试。
 * assemble：任务会编译程序中的源代码，并打包生成Jar文件，这个任务不执行单元测试
 * clean：任务会删除构建目录
-* compileJavav任务会编译程序中的源代码
+* compileJava：任务会编译程序中的源代码
 
 
 **Gradle依赖**
@@ -104,8 +104,9 @@
 * task
 
 		task hello {  // task代表一个独立的原子性操作
+		// doLast 代表task执行的最后一个action，通俗来讲就是task执行完毕后会回调doLast中的代码
 		    doLast {
-		        println 'Hello world!' // doLast 代表task执行的最后一个action，通俗来讲就是task执行完毕后会回调doLast中的代码
+		        println 'Hello world!' 
 		    }
 		}
 		task hello << { // 操作符<< 是doLast方法的快捷版本
