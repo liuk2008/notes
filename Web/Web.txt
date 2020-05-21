@@ -1,12 +1,34 @@
 
+Web结构
+
 Web语言：Html5 + Css + JavaScript
 Node.js：JavaScript的运行环境，类比Java中JVM
 前端框架：React.js、Vue.js、Angular.js 
 混合框架：React-Native、Weex
 
+1、浏览器内核
+
+   组成：渲染引擎，js引擎
+
+   常见内核；
+	IE-->Trident
+	fireFox-->Gecko
+	Safari-->webkit
+	chrome-->blink
+	Opera-->blink
+
+2、Web标准（w3c）
+   
+   意义：浏览器不同的内核遵循统一的Web标准，所显示的效果基本一致。
+
+   标准三层：1、结构，2、表现，3、行为	
+	结构：用于对网页元素进行整理和分类，比如html
+	表现：用于设置网页元素的外观样式，比如css
+	行为：网页模型的定义及交互，比如js
+
 ===============================================================
 
-### RN环境搭建 ###
+RN环境搭建
 
 1、安装JDK、AndroidSDk、Git、Python、nodejs
    注意：Ubuntu下安装nodejs，需配置环境变量
@@ -32,19 +54,6 @@ Node.js：JavaScript的运行环境，类比Java中JVM
 6、运行Android项目，在Chrome中访问 http://localhost:8081/debugger-ui，可以调试页面
         react-native run-android
 
-速成:
-1、环境部署, 项目能启动起来
-2、先学页面,模仿写个app(控件, flex布局). 路由(react-navigation)
-3、学习下如何和Android交互
-4、学习redux状态管理
-
-网站：
-https://es6.ruanyifeng.com/
-https://reactnative.cn/docs/getting-started/
-https://www.jianshu.com/p/97692b1c451d
-https://juejin.im/post/5898388b128fe1006cb943e3
-
-
 ===============================================================
 
 VSCode 插件
@@ -60,6 +69,3 @@ Auto Rename Tag：自动重命名标签
 Babel ES6/ES7 ：ES6，ES7语法加亮检查插件
 ESLint：代码检查的插件
 Dash：在线文档
-
-
-

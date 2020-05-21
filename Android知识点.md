@@ -164,8 +164,9 @@
 * 3、Android中不同的布局文件中控件id可以一致
     * 因为在Android的框架设计中，每一个控件都隶属于一棵控件树，每个控件都被其父控件所管理与调配，而根控件是一个容器控件，所有的子控件都是构造在这个根控件之上，这样并形成了一个控件树的控件域，在这个控件域中是不允许重名的，超出了这个控件域则这些控件的ID是无效的，也就是说在容器控件中的子控件是不允许重名的，而不在同一容器控件中的两个控件重名也无所谓。
 * 4、Android R文件和BuildConfig文件	
-    * 1、Android APK以applicationId作为唯一标识，在编译APK的过程中，系统会将manifest中的package值修改成applicationId
-    * 2、项目包名、applicationId、manifest package三者不一致时，在构建代码的过程中，生成R文件、BuildConfig文件的目录还是以未修改前的manifest package作为包名，构建完成后manifest package被修改为applicationId，而通过系统方法获取APP包名实际上获取的是applicationId，此时通过包名获取R文件相关信息会出现异常
+	* 1、系统以manifest package作为R文件、BuildConfig文件的目录路径	 	
+    * 2、Android APK以applicationId作为唯一标识，在编译APK的过程中，系统会将manifest中的package值修改成applicationId
+    * 3、项目包名、applicationId、manifest package三者不一致时，在构建代码的过程中，生成R文件、BuildConfig文件的目录还是以未修改前的manifest package作为包名，构建完成后manifest package被修改为applicationId，而通过系统方法获取APP包名实际上获取的是applicationId，此时通过包名获取R文件相关信息会出现异常
 
 **dex分包机制**
 	
