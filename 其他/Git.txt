@@ -20,6 +20,7 @@
 	git push origin xx 推送至远程分支
 	git pull origin xx 从远程分支拉代码
 	git status 查询仓库状态
+	git remote set-head origin xxx  切换git的HEAD分支
 
    # git 文件添加，提交
 	git add . 添加文件至暂存区
