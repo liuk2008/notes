@@ -20,6 +20,7 @@
 	git push origin xx 推送至远程分支
 	git pull origin xx 从远程分支拉代码
 	git status 查询仓库状态
+	git remote set-head origin xxx  切换git的HEAD分支
 
    # git 文件添加，提交
 	git add . 添加文件至暂存区
@@ -33,6 +34,8 @@
 	git branch 查看本地分支
 	git branch xx 依据当前本地分支创建新的本地分支
 	git branch xx origin/xxx 依据远程分支创建本地新分支
+        git branch -u origin/xxx 设置当前分支跟踪远程分支
+        git branch -vv 查看本地分支和远程分支的跟踪关系
 	git checkout xx 切换本地分支，若没有可依据远程分支创建
 	git branch -d xx 删除未合并的本地分支
 	git merge xx 将xx分支合并到当前分支
