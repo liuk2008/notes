@@ -170,8 +170,7 @@
 
 **dex分包机制**
 	
-* Android 应用 (APK) 文件包含 Dalvik Executable (DEX) 文件形式的可执行字节码文件，其中包含用来运行您的应用的已编译代码。
-Dalvik Executable 规范将可在单个 DEX 文件内可引用的方法总数限制在 65,536（64 X 1024），其中包括 Android 框架方法、库方法以及您自己代码中的方法。
+* Android 应用 (APK) 文件包含 Dalvik Executable (DEX) 文件形式的可执行字节码文件，其中包含用来运行您的应用的已编译代码。Dalvik Executable 规范将可在单个 DEX 文件内可引用的方法总数限制在 65,536（64 X 1024），其中包括 Android 框架方法、库方法以及您自己代码中的方法。
 
 * Android 5.0（API<21） 以下：
 	* 1、之前的平台版本使用 Dalvik 运行时来执行应用代码。默认情况下，Dalvik 限制应用的每个 APK 只能使用单个 classes.dex 字节码文件。要想绕过这一限制，您可以使用 Dalvik 可执行文件分包支持库，它会成为您的应用主要 DEX 文件的一部分，然后管理对其他 DEX 文件及其所包含代码的访问
@@ -192,6 +191,19 @@ Dalvik Executable 规范将可在单个 DEX 文件内可引用的方法总数限
 * 2、Dalvik和ART平台区别
 	* 在Dalvik下，应用每次运行都需要通过即时编译器（JIT）将字节码转换为机器码，即每次都要编译加运行
 	* 在ART环境中，应用在第一次安装的时候，字节码就会预编译（AOT）成机器码
+
+**APK构建过程**
+
+* Android Studio编译过程其中使用到的编译工具：aapt、aidl、Java Compiler、dex、 zipalign
+
+* 主要步骤描述：
+    * 1、通过aapt打包res资源文件，生成R.java、resources.arsc和res文件（二进制 & 非二进制如res/raw和pic保持原样）
+	* 2、处理aidl文件，生成对应的Java接口文件
+	* 3、通过Java Compiler编译R.java、Java接口文件、Java源文件，生成.class文件
+	* 4、通过dex命令，将.class文件和第三方库中的.class文件处理生成classes.dex
+	* 5、通过apkbuilder工具，将aapt生成的resources.arsc和res文件、assets文件和classes.dex一起打包生成apk
+	* 6、通过Jarsigner工具，对上面的apk进行debug或release签名
+	* 7、通过zipalign工具，将签名后的apk进行对齐处理。
 
 ## APP性能相关 ##
 
@@ -255,3 +267,13 @@ Dalvik Executable 规范将可在单个 DEX 文件内可引用的方法总数限
 	* 1、初始化值。
 	* 2、调用构造函数。
 	* 3、调用回调方法，例如 Activity.onCreate()，对应Activity的当前生命周期状态。
+
+**开发调试各种工具**
+
+* 1、性能分析工具：Memory Monitor
+* 2、性能追踪及方法执行分析：TraceView
+* 3、视图分析：Hierarchy Viewer
+* 4、ApkTool：用于反向工程Android Apk文件的工具
+* 5、Lint- Android：lint工具是一个静态代码分析工具
+* 6、Dex2Jar：使用android .dex和java .class文件的工具
+

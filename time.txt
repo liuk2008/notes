@@ -84,7 +84,9 @@ APP自动化：Appium
 ===============================================================
 
 重点学习：
-1、混合开发（rn、vue、flutter）
-2、Python，自动化测试，大数据，web前端
-3、Android原生，Kotlin
+1、Android原生：
+	1、组件化、路由框架、热修复、Jetpack框架、Gradle插件
+	2、性能优化、安全性、保活机制、自动化测试
+2、混合开发：RN、Vue、Flutter，Kotlin
+3、Web开发、Python开发、大数据、自动化测试
 4、Linux，英语
