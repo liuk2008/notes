@@ -3,6 +3,9 @@
 **常见问题**
 	
 	1、String、StringBuffer、StringBuilder的区别
+		String：String的值是不可变的，每次对String的操作都会生成新的String对象，可以空赋值
+		StringBuffer：StringBuffer类的对象能够被多次的修改，并且不产生新的未使用对象，线程安全
+		StringBuilder：StringBuffer类的对象能够被多次的修改，并且不产生新的未使用对象，线程不安全
 	2、创建对象的方式
 	3、如何判断两个对象是否相等
 	4、序列化、反序列化操作
@@ -24,6 +27,9 @@
 	* 2、hashCode()不相等，两个对象equals()方法一定不相等
 	* 3、equals()相等，两个对象的hashCode()方法一定相等
 	* 4、equals()不相等，两个对象的hashCode()方法可能相等，也可能不相等
+* 6、默认情况下equals方法都是调用Object类的equals方法，而Object的equals方法主要用于判断对象的内存地址引用是不是同一个地址（是不是同一个对象），equals方法对于字符串来说是比较内容的，而对于非字符串来说是比较，其指向的对象是否相同的。
+
+2 、要是类中覆盖了equals方法，那么就要根据具体的代码来确定equals方法的作用了，覆盖后一般都是通过对象的内容是否相等来判断对象是否相等。
 * 注意：
 	* 使用场景，当两个不同对象的某些属性值相同时就认为他们相同，所以重写equals()方法，未复写HashCode()方法
    	* 1、在使用HashSet集合过程中，hashCode()方法返回值不同，equals()返回true,这时HashSet会把这两个对象都存进去，这就和Set集合不重复的规则相悖
@@ -141,10 +147,41 @@
    * 堆内存溢出
    * 栈内存溢出
 
+
 **集合与数组之间的转换**
 
-    // 分配一个长度与list的长度相等的字符串数组
+* 1、基本类型不能作为 Arrays.asList方法的参数，否则会被当做一个参数
+* 2、Arrays.asList 返回的 List 不支持增删操作
+* 3、使用Arrays.asLis的时候，对原始数组的修改会影响到我们获得的那个List
+
+	// 分配一个长度与list的长度相等的字符串数组
     String[] array2 = (String[]) list.toArray(new String[list.size()]);
 
     // 将数组装换为list，直接使用Arrays的asList方法
     ArrayList<String> list = Arrays.asList(array);
+
+	
+**合理使用异常**
+
+* 1、不要把异常定义为静态变量
+* 2、生产环境不要使用e.printStackTrace()，因为它占用太多内存，造成锁死，并且，日志交错混合，也不易读。正确使用：log.error("异常日志正常打印方式",e)
+* 3、如果是使用submit方法提交到线程池的异步任务，异常会被吞掉的，所以在日常发现中，如果会有可预见的异常，可以采取这几种方案处理：
+	* 1、在任务代码try/catch捕获异常
+	* 2、通过Future对象的get方法接收抛出的异常，再处理
+	* 3、为工作者线程设置UncaughtExceptionHandler，在uncaughtException方法中处理异常
+	* 4、重写ThreadPoolExecutor的afterExecute方法，处理传递的异常引用 
+* 4、一个方法是不会出现两个异常的呢，所以finally的异常会把try的异常覆盖。正确的使用方式应该是，finally 代码块负责自己的异常捕获和处理。
+
+		public void right() {
+		    try {
+		        log.info("try");
+		        throw new RuntimeException("try");
+		    } finally {
+		        log.info("finally");
+		        try {
+		            throw new RuntimeException("finally");
+		        } catch (Exception ex) {
+		            log.error("finally", ex);
+		        }
+		    }
+		}
