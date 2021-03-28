@@ -85,8 +85,11 @@ APP自动化：Appium
 
 重点学习：
 1、Android原生：
-	1、组件化、路由框架、热修复、Jetpack框架、Gradle插件
-	2、性能优化、安全性、保活机制、自动化测试
+	1、MVC、MVP、MVVM模式
+	2、性能优化、安全性、APk机制
+	3、进程间通讯、保活机制
+	4、Jetpack组件、Gradle插件
+	5、组件化、路由框架、热修复
 2、混合开发：RN、Vue、Flutter，Kotlin
 3、Web开发、Python开发、大数据、自动化测试
 4、Linux，英语
